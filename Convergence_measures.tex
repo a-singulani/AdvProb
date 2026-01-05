@@ -421,7 +421,7 @@ P(F)\le R(F^{\alpha+\gamma})+(\alpha+\gamma)\qquad\forall\text{ closed }F.
 Therefore $\beta(P,R)\le \alpha+\gamma$. Letting $\alpha\downarrow\beta(P,Q)$ and $\gamma\downarrow\beta(Q,R)$ gives the triangle inequality.
 \end{proof}
 
-The next theorem (stated without proof) clarifies the geometric and topological structure of the space of probability measures equipped with the Prokhorov metric.
+The next theorem (stated without a formal proof) clarifies the geometric and topological structure of the space of probability measures equipped with the Prokhorov metric.
 Once weak convergence has been metrized by $\beta$, it becomes essential to know whether the resulting metric space is well behaved:
 separability ensures that convergence can be tested on countable families and enables diagonal arguments,
 while completeness guarantees that Cauchy sequences of probability measures admit limits.
@@ -484,6 +484,10 @@ On Polish spaces, Borel probability measures are Radon, hence tight: for each $\
 For a finite set $\{P_1,\dots,P_m\}$, choose compacts $K_i$ with $P_i(K_i)>1-\varepsilon$, and take $K:=\cap_{i=1}^m K_i$.
 Then $K$ is compact and $P_i(K)\ge 1-\varepsilon$ for all $i$.
 \end{proof}
+
+\begin{remark}[Alternative definition of tightness]
+    Another reading of tightness is: for every tolerance $\epsilon > 0$, there exists a single compact set $K$ such that all measures in the family place \emph{at least} $1-\epsilon$ of their mass inside $K$, i.e., \emph{all} measures in the family have its mass inside $K$ except for a (small) $\epsilon$. Therefore, we can think in the other way around and define tightness on the part left out using $\sup_{P\in\mathcal{K}}P(K^c) < \epsilon$.
+\end{remark}
 
 \paragraph{Intuition behind the proof of Prokhorov’s theorem.}
 The proof of Prokhorov’s theorem hinges on the idea that tightness provides exactly the compactness needed to extract convergent subsequences.
