@@ -1,0 +1,608 @@
+\chapter{Convergence of Measures}
+
+In analysis and probability one often studies \emph{objects that are not given by points but by how they distribute mass}.
+A probability measure $\mu$ on $(E,\B(E))$ is exactly such an object: instead of a single outcome $x\in E$, it encodes
+how likely different regions $A\subset E$ are via $\mu(A)$.
+
+\medskip
+
+\noindent
+\textbf{Why do we need a notion of convergence?}
+Many limiting procedures naturally produce sequences of measures:
+\begin{itemize}
+\item empirical measures $\mu_n:=\frac1n\sum_{k=1}^n \delta_{X_k}$ in statistics and learning,
+\item laws of approximations (Euler schemes, particle methods, discretizations),
+\item distributions of random variables $X_n$ when studying weak limits (CLT, invariance principles),
+\item measures as solutions to PDEs/variational problems (e.g.\ concentration effects).
+\end{itemize}
+To make sense of statements like ``$\mu_n$ converges to $\mu$'' we must specify \emph{what aspects of the mass distribution}
+are required to converge.
+
+\medskip
+
+\noindent
+\textbf{Two complementary viewpoints.}
+There are two equivalent ways to compare measures.
+\begin{enumerate}[label=(\roman*)]
+\item \emph{Setwise viewpoint:} compare probabilities of sets, i.e.\ $\mu_n(A)$ versus $\mu(A)$.
+\item \emph{Test-function viewpoint:} compare integrals against a class of functions,
+\[
+\int f\,d\mu_n \quad \text{versus} \quad \int f\,d\mu.
+\]
+\end{enumerate}
+The second viewpoint is often more flexible: it turns convergence of measures into convergence of real numbers,
+and it interacts well with approximation arguments and functional-analytic tools.
+
+\medskip
+
+\noindent
+\textbf{Different notions of convergence (and the intuition).}
+Not all convergences are equally strong; they are tailored to different applications.
+\begin{itemize}
+\item \emph{Setwise convergence} requires $\mu_n(A)\to\mu(A)$ for \emph{every} measurable set $A$.
+It is very strong: it forces convergence of probabilities for all events, but is typically too rigid to obtain compactness.
+\item \emph{Weak convergence} (also called \emph{narrow} convergence) requires
+\[
+\int f\,d\mu_n \to \int f\,d\mu \qquad \forall f\in C_b(E).
+\]
+Intuitively, bounded continuous $f$ can only ``see'' the distribution at a coarse level:
+it cannot detect changes on sets with very rough boundaries, but it captures convergence of distributions in the sense used in probability theory.
+This is the natural notion behind convergence in distribution of random variables.
+\item \emph{Vague convergence} is like weak convergence but only tests against $C_c(E)$.
+It is useful on non-compact spaces, because compactly supported tests ignore what happens ``at infinity''.
+\end{itemize}
+
+\medskip
+
+\noindent
+\textbf{Why do test functions determine a measure?}
+A central technical point is that certain classes of functions are \emph{separating}:
+knowing $\int f\,d\mu$ for all $f$ in that class uniquely determines $\mu$.
+For instance, in metric spaces one can approximate indicators of closed sets by continuous bounded functions,
+so $C_b(E)$ is separating. This explains why weak convergence is defined via $C_b(E)$:
+it is strong enough to identify the limit measure, but weak enough to have compactness theorems.
+
+\medskip
+
+\noindent
+\textbf{Compactness and tightness: preventing mass from escaping.}
+On non-compact spaces, a sequence of probability measures may ``drift to infinity''.
+Weak convergence cannot hold unless the mass stays essentially in a compact region.
+The right quantitative condition is \emph{tightness}: for every $\varepsilon>0$ there exists a compact $K$ such that
+$\mu_n(K)\ge 1-\varepsilon$ for all $n$.
+Prokhorov-type theorems show that (on Polish spaces, and in a suitable sense on metric spaces) tightness is exactly the
+compactness condition for weak convergence. Conceptually:
+\[
+\text{tightness} \quad \Longleftrightarrow \quad \text{``no loss of mass at infinity''} \quad
+\Longrightarrow \quad \text{existence of weakly convergent subsequences.}
+\]
+
+\medskip
+
+\noindent
+\textbf{Big picture.}
+Convergence of measures is the language that unifies:
+\emph{limits of distributions} (probability),
+\emph{limits of approximations} (numerics),
+and \emph{limits of mass distributions} (analysis/PDE).
+The various notions differ by what test objects they allow and therefore by what phenomena they can (or cannot) detect.
+
+
+\section{Setting and basic notions}
+
+Let $(E,d)$ be a metric space, and let $\B(E)$ be its Borel $\sigma$-algebra. More generally, one may start with a measurable space $(E,\Ecal)$, but in these notes we mainly use $(E,\B(E))$.
+
+\begin{definition}[Polish space]
+A metric space $(E,d)$ is called \emph{Polish} if it is complete and separable.
+\end{definition}
+
+\begin{definition}[Totally bounded and relatively compact]
+Let $A\subset E$.
+\begin{enumerate}[label=(\alph*)]
+\item $A$ is \emph{totally bounded} if for every $\varepsilon>0$ there exist $x_1,\dots,x_N\in E$ such that
+\[
+A\subset \bigcup_{k=1}^N B(x_k,\varepsilon).
+\]
+\item $A$ is \emph{relatively compact} if $\overline{A}$ is compact.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+In metric spaces one has: $A$ totally bounded $\Longleftrightarrow$ $A$ relatively compact (i.e.\ precompact).
+\end{remark}
+
+\begin{definition}[Probability measures]
+We write
+\[
+\mathcal{M}_1(E):=\mathcal{P}(E):=\{\text{Borel probability measures on }(E,\B(E))\}.
+\]
+\end{definition}
+
+\begin{proposition}[Regularity]
+Let $(E,d)$ be a metric space and $\mu\in\mathcal{M}_1(E)$. Then for every Borel set $A\in\B(E)$,
+\[
+\mu(A)=\sup\{\mu(K): K\subset A,\ K \text{ compact}\}
+=\inf\{\mu(U): A\subset U,\ U \text{ open}\}.
+\]
+\end{proposition}
+
+\begin{remark}
+This is the usual inner/outer regularity (Radon regularity) of Borel probability measures on metric spaces.
+\end{remark}
+
+\section{Test functions and separating classes}
+
+% ============================================================
+% Intro: Separating classes
+% Insert at the beginning of Section 2 (before definitions)
+% ============================================================
+
+A recurring theme in these notes is that probability measures are not accessed directly,
+but only through the values they assign to \emph{tests}:
+either to sets $A\mapsto \mu(A)$ or to functions $f\mapsto \int f\,d\mu$.
+The idea of a \emph{separating class} formalizes when a restricted family of such tests
+is sufficient to uniquely determine a measure.
+
+\medskip
+
+\noindent
+\textbf{Why is this needed?}
+The Borel $\sigma$-algebra $\B(E)$ is typically very large and complicated.
+Requiring equality $\mu(A)=\nu(A)$ for all $A\in\B(E)$ is conceptually clear,
+but not useful for defining or verifying convergence.
+Instead, we want a \emph{smaller and more tractable family of tests}
+that still contains enough information to recover the entire measure.
+
+\medskip
+
+\noindent
+\textbf{From sets to functions.}
+Instead of asking for agreement on all measurable sets,
+we test measures against functions:
+\[
+\mu \longmapsto \int f\,d\mu .
+\]
+If the class of functions is chosen appropriately, then knowing these integrals
+for all functions in the class uniquely determines the measure.
+A separating class is precisely a family of test functions with this property.
+
+\medskip
+
+\noindent
+\textbf{Intuition behind separation.}
+A class $\mathcal{C}$ separates measures if its elements can
+\emph{resolve arbitrarily fine features of sets}.
+In metric spaces, this is achieved by continuous functions that approximate indicators
+of closed (or open) sets.
+The key idea is:
+\begin{quote}
+although indicator functions are discontinuous and therefore excluded,
+they can be approximated from above or below by continuous bounded functions.
+\end{quote}
+As a consequence, integrals against continuous bounded functions
+encode the same information as probabilities of closed (or open) sets.
+
+\medskip
+
+\noindent
+\textbf{Why $C_b(E)$?}
+The space $C_b(E)$ is large enough to be separating, but still manageable:
+\begin{itemize}
+\item boundedness ensures integrals are always well-defined,
+\item continuity allows approximation arguments using the metric structure,
+\item the class is stable under algebraic operations and limits.
+\end{itemize}
+This balance explains why weak convergence is defined using $C_b(E)$
+rather than all measurable functions.
+
+\medskip
+
+\noindent
+\textbf{Logical structure of the proofs.}
+The separation result is established in two conceptual steps:
+\begin{enumerate}[label=(\roman*)]
+\item show that agreement of integrals against $C_b(E)$ implies agreement on all closed sets,
+\item show that agreement on all closed sets implies equality of measures.
+\end{enumerate}
+The first step uses explicit continuous approximations of indicator functions of closed sets;
+the second step uses measure-theoretic structure (Dynkin systems and the $\pi$--$\lambda$ theorem).
+Together, they bridge the analytic world of test functions and the measure-theoretic world of sets.
+
+\medskip
+
+\noindent
+\textbf{Why this matters later.}
+Separating classes are the conceptual foundation of weak convergence,
+compactness results, and Prokhorov-type theorems.
+They explain why convergence of integrals against a restricted family of functions
+is strong enough to identify limits,
+and they justify replacing complicated setwise arguments by functional ones.
+
+
+\begin{definition}[Continuous function classes]
+Define
+\[
+C(E):=\{f:E\to\R \ :\ f \text{ continuous}\},\qquad
+C_b(E):=\{f\in C(E): \|f\|_\infty<\infty\},
+\]
+\[
+C_c(E):=\{f\in C(E): \supp(f) \text{ is compact}\},
+\]
+where $\|f\|_\infty:=\sup_{x\in E}|f(x)|$.
+\end{definition}
+
+\begin{definition}[Separating class]
+A class $\mathcal{C}$ of bounded measurable functions $E\to\R$ is called \emph{separating} for $\mathcal{M}_1(E)$ if
+\[
+\Big(\forall f\in\mathcal{C}: \int f\,dP=\int f\,dQ\Big)\ \Longrightarrow\ P=Q,
+\qquad P,Q\in\mathcal{M}_1(E).
+\]
+\end{definition}
+
+\paragraph{Intuition behind Lemma~\ref{lem:closed_det}.}
+This lemma formalizes the idea that closed sets already contain enough information to determine a Borel probability measure on a metric space.
+Although the Borel $\sigma$-algebra is generated by all open sets, it is equally generated by closed sets, which behave better with respect to limits.
+If two measures agree on all closed sets, then they agree on a generating class that is stable under finite intersections.
+Measure-theoretic structure theorems (specifically the $\pi$--$\lambda$ theorem) then guarantee that this agreement propagates to the entire Borel $\sigma$-algebra.
+Conceptually, closed sets act as ``building blocks'' of measurable sets, so knowing the mass assigned to every closed set uniquely fixes the whole measure. 
+
+\begin{lemma}[Closed sets determine a probability measure]
+\label{lem:closed_det}
+Let $P,Q\in\mathcal{M}_1(E)$. If
+\[
+P(F)=Q(F)\quad\text{for all closed }F\subset E,
+\]
+then $P=Q$.
+\end{lemma}
+
+\begin{proof}
+Let
+\[
+\mathcal{D}:=\{A\in\B(E): P(A)=Q(A)\}.
+\]
+Then $\mathcal{D}$ is a Dynkin system ($\lambda$-system): $E\in\mathcal{D}$, and if $A\in\mathcal{D}$ then $A^c\in\mathcal{D}$, and if $(A_n)$ are disjoint in $\mathcal{D}$ then $\cup_n A_n\in\mathcal{D}$.
+
+Let $\mathcal{C}$ be the family of closed sets. Then $\mathcal{C}$ is a $\pi$-system since the intersection of two closed sets is closed. By assumption, $\mathcal{C}\subset\mathcal{D}$.
+
+Finally, $\sigma(\mathcal{C})=\B(E)$ because closed sets generate the Borel $\sigma$-algebra. Hence by the $\pi$--$\lambda$ theorem, $\mathcal{D}$ contains $\B(E)$, so $P(A)=Q(A)$ for all $A\in\B(E)$, i.e.\ $P=Q$.
+\end{proof}
+
+\paragraph{Intuition behind Lemma~\ref{lem:approx_closed}.} The lemma explains why testing two probability measures against all bounded continuous functions is strong enough to recover their values on closed sets.
+Although the indicator function $\mathbf{1}_F$ of a closed set $F$ is discontinuous and therefore cannot be used directly as a test function,
+it can be approximated from above by a sequence of bounded continuous functions that ``blur'' the boundary of $F$ at smaller and smaller scales.
+These approximations equal $1$ on $F$, decay continuously to $0$ in a thin neighborhood outside $F$, and vanish away from $F$.
+If two measures agree on all bounded continuous test functions, then they agree on each approximating function, and by monotone convergence this forces them to agree on the limit, namely on the indicator of $F$ itself.
+Thus, even though closed sets are not tested directly, their probabilities are fully encoded in the integrals against $C_b(E)$.
+
+
+\begin{lemma}[From $C_b(E)$ to closed sets ]
+\label{lem:approx_closed}
+Let $P,Q\in\mathcal{M}_1(E)$. If
+\[
+\int_E f\,dP=\int_E f\,dQ\quad\text{for all }f\in C_b(E),
+\]
+then $P(F)=Q(F)$ for every closed $F\subset E$.
+\end{lemma}
+
+\begin{proof}
+Fix closed $F\subset E$. Define $d(x,F):=\inf_{y\in F} d(x,y)$, which is continuous on $E$.
+For $n\in\mathbb{N}$ define
+\[
+f_n(x):=\begin{cases}
+1, & x\in F,\\[2pt]
+1-n\,d(x,F), & 0<d(x,F)\le \frac1n,\\[2pt]
+0, & d(x,F)>\frac1n.
+\end{cases}
+\]
+Because $x\mapsto d(x,F)$ is continuous and the piecewise formula glues continuously at the boundaries,
+we have $f_n\in C_b(E)$ and $0\le f_n\le 1$.
+
+Moreover $f_n(x)\uparrow 1_{F}(x)$ pointwise:
+if $x\in F$ then $f_n(x)=1$ for all $n$; if $x\notin F$ then $d(x,F)=:r>0$ and for $n>1/r$ one has $d(x,F)>1/n$, hence $f_n(x)=0$.
+
+By assumption, $\int f_n\,dP=\int f_n\,dQ$ for all $n$. By monotone convergence,
+\[
+P(F)=\int 1_{F}\,dP=\lim_{n\to\infty}\int f_n\,dP
+=\lim_{n\to\infty}\int f_n\,dQ=\int 1_{F}\,dQ=Q(F).
+\]
+\end{proof}
+
+\begin{corollary}[$C_b(E)$ is separating for $\mathcal{M}_1(E)$]
+If $\int f\,dP=\int f\,dQ$ for all $f\in C_b(E)$, then $P=Q$.
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:approx_closed} gives $P(F)=Q(F)$ for all closed $F$, then Lemma~\ref{lem:closed_det} gives $P=Q$.
+\end{proof}
+
+\section{Weak and vague convergence}
+
+In many applications, requiring convergence of measures on all measurable sets is too strong and unstable under limits.
+Weak convergence relaxes this by testing measures only against bounded continuous functions, which probe the distribution at a macroscopic level and ignore small irregularities of set boundaries.
+This notion is strong enough to uniquely identify the limit measure, thanks to the separating property of $C_b(E)$, yet weak enough to enjoy compactness properties such as Prokhorov’s theorem.
+Vague convergence further weakens the test class to compactly supported continuous functions, allowing mass to ``escape to infinity'' and making it useful on non-compact spaces.
+Both notions formalize the idea that convergence of distributions should be understood through convergence of expectations of suitable observables.
+
+\begin{definition}[Weak convergence]
+A sequence $(P_n)\subset\mathcal{M}_1(E)$ converges \emph{weakly} to $P\in\mathcal{M}_1(E)$, written $P_n\Rightarrow P$, if
+\[
+\int_E f\,dP_n \longrightarrow \int_E f\,dP
+\qquad\text{for all } f\in C_b(E).
+\]
+\end{definition}
+
+\begin{definition}[Vague convergence]
+A sequence $(P_n)\subset\mathcal{M}_1(E)$ converges \emph{vaguely} to $P$ if
+\[
+\int_E f\,dP_n \longrightarrow \int_E f\,dP
+\qquad\text{for all } f\in C_c(E).
+\]
+\end{definition}
+
+\begin{remark}
+The reason $C_b(E)$ appears in the definition is precisely that it is a separating class for $\mathcal{M}_1(E)$.
+\end{remark}
+
+\section{The Prokhorov metric}
+
+Weak convergence is defined through convergence of integrals against test functions, which makes it well suited for analysis but rather indirect from a geometric point of view.
+The Prokhorov metric provides a way to \emph{quantify} weak convergence by measuring how close two probability measures are in terms of the mass they assign to sets.
+Its role is to turn the topology of weak convergence into a metric structure, allowing one to speak of Cauchy sequences, completeness, and separability in $\mathcal{P}(X)$.
+
+\medskip
+
+\noindent
+The guiding idea is the following: two probability measures should be close if every closed set that has large mass under one measure also has almost as large mass under the other, up to a small error and a small spatial perturbation.
+This perturbation is necessary because weak convergence is insensitive to small changes near boundaries, and exact set inclusion is too rigid to capture this behavior.
+
+\medskip
+
+\noindent
+\textbf{Intuition behind the $\varepsilon$-enlargement.}
+Given a set $A\subset X$, its $\varepsilon$-enlargement $A^\varepsilon$ consists of all points whose distance to $A$ is less than $\varepsilon$.
+Geometrically, $A^\varepsilon$ is obtained by ``thickening'' $A$ by a layer of radius $\varepsilon$.
+In the definition of the Prokhorov metric, allowing $F$ to be replaced by $F^\varepsilon$ reflects the fact that weak convergence only controls measures up to small spatial errors near the boundary of sets.
+Thus, the $\varepsilon$-enlargement compensates for boundary effects, while the additive $\varepsilon$ term controls the remaining discrepancy in mass.
+Together, these two tolerances capture precisely the flexibility inherent in weak convergence.
+
+
+\begin{definition}[$\varepsilon$-enlargement]
+For $A\subset E$ and $\varepsilon>0$ define
+\[
+A^\varepsilon:=\{x\in E:\ d(x,A)<\varepsilon\},
+\qquad d(x,A):=\inf_{y\in A} d(x,y).
+\]
+If $F$ is closed, then $F^\varepsilon$ is open.
+\end{definition}
+
+\begin{definition}[Prokhorov metric]
+For $P,Q\in\mathcal{M}_1(E)$ define
+\[
+\beta(P,Q):=\inf\Big\{\varepsilon>0:\ P(F)\le Q(F^\varepsilon)+\varepsilon\ \ \forall \text{ closed }F\subset E\Big\}.
+\]
+\end{definition}
+
+\begin{lemma}[Key implication used for symmetry]
+\label{lem:key_sym}
+Let $P,Q\in\mathcal{M}_1(E)$ and let $\eta>0$. Assume that
+\[
+P(F)\le Q(F^\eta)+\eta\qquad\forall\text{ closed }F\subset E.
+\]
+Then also
+\[
+Q(F)\le P(F^\eta)+\eta\qquad\forall\text{ closed }F\subset E.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix closed $F$. Then $E\setminus F^\eta$ is closed. Apply the assumption to $E\setminus F^\eta$:
+\[
+P(E\setminus F^\eta)\le Q\big((E\setminus F^\eta)^\eta\big)+\eta.
+\]
+We claim $(E\setminus F^\eta)^\eta\subset E\setminus F$. Indeed, if $x\in F$ then $d(x,E\setminus F^\eta)\ge \eta$
+(because $B(x,\eta)\subset F^\eta$), hence $x\notin (E\setminus F^\eta)^\eta$. Thus
+\[
+Q\big((E\setminus F^\eta)^\eta\big)\le Q(E\setminus F).
+\]
+So
+\[
+P(E\setminus F^\eta)\le Q(E\setminus F)+\eta.
+\]
+Using $P(E)=Q(E)=1$ and rearranging gives $Q(F)\le P(F^\eta)+\eta$.
+\end{proof}
+
+\begin{proposition}[$\beta$ is a metric on $\mathcal{M}_1(E)$]
+\label{prop:beta_metric}
+The function $\beta$ satisfies:
+\begin{enumerate}[label=(\alph*)]
+\item $\beta(P,Q)\ge 0$ and $\beta(P,Q)=\beta(Q,P)$.
+\item If $\beta(P,Q)=0$, then $P=Q$.
+\item $\beta(P,R)\le \beta(P,Q)+\beta(Q,R)$ (triangle inequality).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) Nonnegativity is immediate. For symmetry, if $\varepsilon$ satisfies
+$P(F)\le Q(F^\varepsilon)+\varepsilon$ for all closed $F$, then Lemma~\ref{lem:key_sym} gives the reverse inequality,
+so the same $\varepsilon$ works for $(Q,P)$; hence $\beta(P,Q)=\beta(Q,P)$.
+
+(b) If $\beta(P,Q)=0$, then for every $\varepsilon>0$,
+\[
+P(F)\le Q(F^\varepsilon)+\varepsilon\qquad\forall\text{ closed }F.
+\]
+Fix closed $F$ and let $\varepsilon_m=1/m$. Since $F^{1/m}\downarrow F$ and measures are continuous from above,
+\[
+Q(F)=\lim_{m\to\infty} Q(F^{1/m}).
+\]
+Thus, for each $m$,
+\[
+P(F)\le Q(F^{1/m})+\frac1m,
+\]
+and letting $m\to\infty$ gives $P(F)\le Q(F)$. By symmetry (part (a)) we also get $Q(F)\le P(F)$, hence $P(F)=Q(F)$
+for all closed $F$. Lemma~\ref{lem:closed_det} yields $P=Q$.
+
+(c) Let $\alpha>\beta(P,Q)$ and $\gamma>\beta(Q,R)$. Then for every closed $F$,
+\[
+P(F)\le Q(F^\alpha)+\alpha \le R\big((F^\alpha)^\gamma\big)+\gamma+\alpha.
+\]
+But $(F^\alpha)^\gamma\subset F^{\alpha+\gamma}$, hence
+\[
+P(F)\le R(F^{\alpha+\gamma})+(\alpha+\gamma)\qquad\forall\text{ closed }F.
+\]
+Therefore $\beta(P,R)\le \alpha+\gamma$. Letting $\alpha\downarrow\beta(P,Q)$ and $\gamma\downarrow\beta(Q,R)$ gives the triangle inequality.
+\end{proof}
+
+The next theorem (stated without proof) clarifies the geometric and topological structure of the space of probability measures equipped with the Prokhorov metric.
+Once weak convergence has been metrized by $\beta$, it becomes essential to know whether the resulting metric space is well behaved:
+separability ensures that convergence can be tested on countable families and enables diagonal arguments,
+while completeness guarantees that Cauchy sequences of probability measures admit limits.
+Without these properties, compactness and subsequence arguments central to Prokhorov’s theorem would fail at a foundational level.
+Thus, Theorem~4.5 shows that when the underlying space $X$ is Polish, the space $\mathcal{P}(X)$ equipped with $\beta$
+inherits the same favorable structure, making it a natural and robust setting for studying weak convergence and tightness.
+
+
+\begin{theorem}
+If $E$ is separable, then $(\mathcal{M}_1(E),\beta)$ is separable. If $E$ is complete, then $(\mathcal{M}_1(E),\beta)$ is complete.
+Hence if $E$ is Polish, then $(\mathcal{M}_1(E),\beta)$ is Polish.
+\end{theorem}
+
+\begin{proof}
+These are standard results about the Prokhorov metric; we include a clean proof sketch.
+
+If $E$ is separable, choose a countable dense set $D$ and consider finitely supported probability measures supported on $D$ with rational weights.
+This set is countable; one proves it is dense in $(\mathcal{M}_1(E),\beta)$.
+
+If $E$ is complete, every $\beta$-Cauchy sequence is tight and admits a weak limit; one then checks convergence in $\beta$ to that limit.
+Completeness of $E$ ensures the limit is a Borel probability on $E$ (no mass “escapes” to a completion).
+\end{proof}
+
+\section{Tightness and Prokhorov's theorem}
+
+On non-compact spaces, weak convergence alone does not prevent probability mass from drifting off to infinity.
+A sequence of probability measures may converge weakly on every bounded region, yet lose mass globally, so that no limit probability measure exists.
+Tightness is the precise condition that rules out this phenomenon: it requires that, uniformly in the sequence, almost all mass is concentrated in a common compact set.
+In this sense, tightness is the probabilistic analogue of precompactness.
+
+\medskip
+
+\noindent
+Prokhorov’s theorem identifies tightness as the exact compactness criterion for weak convergence.
+On Polish spaces, it states that a family of probability measures is relatively compact for the weak topology if and only if it is tight.
+The theorem thus provides the missing link between analytic convergence (defined via test functions) and geometric control of mass (via compact sets).
+
+\medskip
+
+\noindent
+Conceptually, the theorem works by separating two difficulties:
+first, tightness ensures that mass cannot escape to infinity, so that potential limit points are genuine probability measures;
+second, once tightness is available, weak compactness follows from the metrizability and completeness properties established earlier via the Prokhorov metric.
+In this way, Prokhorov’s theorem explains why weak convergence behaves like ordinary compactness in finite-dimensional settings, despite the infinite-dimensional nature of $\mathcal{P}(X)$.
+
+
+\begin{definition}[Tightness]
+A family $\mathcal{K}\subset\mathcal{M}_1(E)$ is \emph{tight} if for every $\varepsilon>0$ there exists a compact set $K\subset E$ such that
+\[
+\inf_{P\in\mathcal{K}} P(K) > 1-\varepsilon.
+\]
+\end{definition}
+
+\begin{lemma}[Polish spaces: every probability measure is tight]
+Let $E$ be Polish. Then every $P\in\mathcal{M}_1(E)$ is tight. Consequently, every finite subset of $\mathcal{M}_1(E)$ is tight.
+\end{lemma}
+
+\begin{proof}
+On Polish spaces, Borel probability measures are Radon, hence tight: for each $\varepsilon>0$ there exists compact $K$ with $P(K)>1-\varepsilon$.
+For a finite set $\{P_1,\dots,P_m\}$, choose compacts $K_i$ with $P_i(K_i)>1-\varepsilon$, and take $K:=\cap_{i=1}^m K_i$.
+Then $K$ is compact and $P_i(K)\ge 1-\varepsilon$ for all $i$.
+\end{proof}
+
+\paragraph{Intuition behind the proof of Prokhorov’s theorem.}
+The proof of Prokhorov’s theorem hinges on the idea that tightness provides exactly the compactness needed to extract convergent subsequences.
+Tightness guarantees that, uniformly in the family, almost all mass lies in a sequence of compact sets, preventing escape to infinity.
+On each such compact region, probability measures behave much like measures on a compact space, where weak compactness is easier to obtain.
+Using separability, one tests convergence only on a countable convergence-determining class of functions and applies a diagonal argument to extract a subsequence whose integrals converge simultaneously for all tests.
+The limiting linear functional then corresponds to a probability measure, and tightness ensures that no mass is lost in the limit, completing the argument.
+
+\begin{theorem}[Prokhorov's theorem]
+\label{thm:prokhorov}
+Let $E$ be Polish and $\mathcal{K}\subset\mathcal{M}_1(E)$. The following are equivalent:
+\begin{enumerate}[label=(\alph*)]
+\item $\mathcal{K}$ is tight.
+\item For every $\varepsilon>0$ there exists compact $K\subset E$ with $\inf_{P\in\mathcal{K}}P(K)>1-\varepsilon$.
+\item $\mathcal{K}$ is relatively compact for weak convergence.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a)$\Leftrightarrow$(b) is just the definition.
+
+(b)$\Rightarrow$(c): Let $(P_n)\subset\mathcal{K}$. Tightness provides compacts $K_m\uparrow$ such that
+$\inf_n P_n(K_m)\ge 1-2^{-m}$. Since $E$ is separable, there exists a countable convergence-determining class
+$\mathcal{C}\subset C_b(E)$. By a diagonal argument, extract a subsequence $(P_{n_k})$ such that $\int f\,dP_{n_k}$
+converges for all $f\in\mathcal{C}$.
+This identifies a unique limit probability measure $P$ (because $C_b(E)$ separates measures),
+and one concludes $P_{n_k}\Rightarrow P$.
+
+(c)$\Rightarrow$(a): If $\mathcal{K}$ were not tight, there would exist $\varepsilon_0>0$ such that for every compact $K$
+some $P\in\mathcal{K}$ satisfies $P(K)\le 1-\varepsilon_0$. Choose an increasing compact exhaustion $(K_m)$ of $E$
+and pick $P_m\in\mathcal{K}$ with $P_m(K_m)\le 1-\varepsilon_0$.
+Relative compactness yields a weakly convergent subsequence $P_{m_j}\Rightarrow P$.
+Using the Portmanteau inequality for closed sets (applied to each fixed $K_m$) one deduces $P(K_m)\ge 1-\varepsilon_0$ for all $m$,
+hence $P(\cup_m K_m)\ge 1-\varepsilon_0$. But $\cup_m K_m=E$, so $P(E)\ge 1-\varepsilon_0$, contradicting $P(E)=1$ unless $\varepsilon_0=0$.
+Thus $\mathcal{K}$ must be tight.
+\end{proof}
+
+\begin{theorem}[Prokhorov theorem on metric spaces]
+\label{thm:prokhorov_metric}
+Let $(X,d)$ be a metric space and let $\mathcal{F}\subset \mathcal{P}(X)$.
+If $\mathcal{F}$ is tight, then $\mathcal{F}$ is relatively compact for weak convergence, i.e. every sequence
+$(\mu_n)\subset \mathcal{F}$ admits a weakly convergent subsequence.
+
+More precisely, there exists a probability measure $\mu$ on the Borel $\sigma$-algebra of the completion
+$\overline{X}$ of $X$ such that, up to a subsequence,
+\[
+\mu_{n_k} \rightharpoonup \mu \quad \text{in } \mathcal{P}(\overline{X}).
+\]
+\end{theorem}
+
+\begin{proof}
+Let $(\mu_n)\subset\mathcal{F}$ be an arbitrary sequence.
+By tightness, for every $\varepsilon>0$ there exists a compact set $K_\varepsilon\subset X$ such that
+\[
+\mu_n(K_\varepsilon)\ge 1-\varepsilon
+\qquad\text{for all } n.
+\]
+
+Choose a sequence $\varepsilon_m\downarrow 0$ and corresponding compact sets $K_m:=K_{\varepsilon_m}$.
+Since $K_m$ is compact in the metric space $X$, it is totally bounded.
+Hence, for each $m$ and each $\delta>0$, $K_m$ can be covered by finitely many balls of radius $\delta$.
+
+Let $\overline{X}$ denote the completion of $X$.
+Each $K_m$ is relatively compact in $\overline{X}$, hence its closure $\overline{K_m}$ is compact in $\overline{X}$.
+Moreover,
+\[
+\mu_n(\overline{K_m}) \ge \mu_n(K_m) \ge 1-\varepsilon_m.
+\]
+
+Thus, the sequence $(\mu_n)$ is tight when viewed as a sequence of probability measures on $\overline{X}$.
+Since $\overline{X}$ is complete and separable (being the completion of a metric space),
+it is a Polish space.
+
+By Prokhorov's theorem on Polish spaces, there exists a subsequence $(\mu_{n_k})$ and a probability measure
+$\mu\in\mathcal{P}(\overline{X})$ such that
+\[
+\mu_{n_k} \rightharpoonup \mu \quad \text{in } \mathcal{P}(\overline{X}).
+\]
+
+This proves relative compactness.  
+The limit measure $\mu$ need not be supported on $X$, unless $X$ itself is complete.
+\end{proof}
+
+\begin{remark}
+If $X$ is Polish, then $X=\overline{X}$ and the limit measure belongs to $\mathcal{P}(X)$.
+Hence, in this case, tightness is equivalent to relative compactness in $\mathcal{P}(X)$,
+which recovers the classical Prokhorov theorem.
+\end{remark}
+
+
+

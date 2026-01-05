@@ -1,0 +1,221 @@
+\documentclass[11pt,a4paper]{book}
+
+% -------------------------------------------------
+% Packages
+% -------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+
+% -------------------------------------------------
+% Fancy colored theorem environments with tcolorbox
+% + optional titles: \begin{theorem}[Name] ... \end{theorem}
+% Title text = white for readability
+% -------------------------------------------------
+\usepackage{xcolor}
+\usepackage{xparse}
+\usepackage[most]{tcolorbox}
+\usepackage{etoolbox}
+
+
+\tcbuselibrary{theorems,breakable,skins}
+
+% --- Color palette (tweak RGB if you like) ---
+\definecolor{ThmNavy}{RGB}{12, 35, 64}     % theorem (darkest)
+\definecolor{PropBlue}{RGB}{23, 79, 145}   % proposition
+\definecolor{LemBlue}{RGB}{70, 130, 180}   % lemma
+\definecolor{CorNavy}{RGB}{18, 55, 95}     % corollary
+
+\definecolor{DefBlue}{RGB}{40, 95, 140}    % definition
+\definecolor{ExBlue}{RGB}{55, 115, 165}    % example
+\definecolor{RemGray}{RGB}{90, 90, 90}     % remark
+
+% --- Common box geometry ---
+\tcbset{
+  mybox/.style={
+    enhanced, breakable,
+    boxrule=0.9pt, arc=2mm,
+    left=2mm, right=2mm, top=1mm, bottom=1mm,
+    fonttitle=\bfseries,
+    coltitle=white,        % <-- white title text
+    coltext=black!95,      % <-- readable body text
+  },
+  % helper: light body background + dark title bar
+  mycolors/.style={
+    colframe=#1,
+    colback=#1!4,
+    colbacktitle=#1,       % dark title background
+  }
+}
+
+% ---------- Boxed base environments (do NOT use directly) ----------
+
+\newtcbtheorem[number within=chapter]{theorembox}{Theorem}%
+{mybox, mycolors=ThmNavy}{thm}
+
+\newtcbtheorem[use counter from=theorembox]{lemmabox}{Lemma}%
+{mybox, mycolors=LemBlue}{lem}
+
+\newtcbtheorem[use counter from=theorembox]{propositionbox}{Proposition}%
+{mybox, mycolors=PropBlue}{prop}
+
+\newtcbtheorem[use counter from=theorembox]{corollarybox}{Corollary}%
+{mybox, mycolors=CorNavy}{cor}
+
+\newtcbtheorem[use counter from=theorembox]{definitionbox}{Definition}%
+{mybox, mycolors=DefBlue, fontupper=\normalfont}{def}
+
+\newtcbtheorem[use counter from=theorembox]{examplebox}{Example}%
+{mybox, mycolors=ExBlue, fontupper=\normalfont}{ex}
+
+\newtcbtheorem[use counter from=theorembox]{remarkbox}{Remark}%
+{enhanced, breakable,
+  boxrule=0pt, frame hidden,   % no border
+  colback=white,               % no background tint
+  left=0pt, right=0pt, top=0.5mm, bottom=0.5mm,
+  fonttitle=\itshape,
+  coltitle=black!70,
+  fontupper=\normalfont,
+}{rem}
+
+
+% Define a borderless proof box
+\newtcolorbox{proofboxauto}[1][]{%
+  enhanced, breakable,
+  boxrule=0pt, frame hidden,
+  arc=2mm,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  colback=blue!12,
+  coltext=black!95,
+  #1
+}
+
+% Patch amsthm proof to be inside the box
+\AtBeginEnvironment{proof}{\begin{proofboxauto}}
+\AtEndEnvironment{proof}{\end{proofboxauto}}
+
+% ---------- User-facing environments with optional [title] ----------
+
+\NewDocumentEnvironment{theorem}{o}
+{\begin{theorembox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{theorembox}}
+
+\NewDocumentEnvironment{lemma}{o}
+{\begin{lemmabox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{lemmabox}}
+
+\NewDocumentEnvironment{proposition}{o}
+{\begin{propositionbox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{propositionbox}}
+
+\NewDocumentEnvironment{corollary}{o}
+{\begin{corollarybox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{corollarybox}}
+
+\NewDocumentEnvironment{definition}{o}
+{\begin{definitionbox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{definitionbox}}
+
+\NewDocumentEnvironment{example}{o}
+{\begin{examplebox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{examplebox}}
+
+\NewDocumentEnvironment{remark}{o}
+{\begin{remarkbox}{\IfValueTF{#1}{#1}{}}{}}
+{\end{remarkbox}}
+
+
+
+
+
+
+
+\geometry{margin=1in}
+
+% -------------------------------------------------
+% Theorem environments (numbered by chapter)
+% -------------------------------------------------
+%\newtheorem{theorem}{Theorem}[chapter]
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{corollary}[theorem]{Corollary}
+
+%\theoremstyle{definition}
+%\newtheorem{definition}[theorem]{Definition}
+%\newtheorem{example}[theorem]{Example}
+
+%\theoremstyle{remark}
+%\newtheorem{remark}[theorem]{Remark}
+
+% -------------------------------------------------
+% Notation / macros
+% -------------------------------------------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Pp}{\Prob}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\Ecal}{\mathcal{E}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Ind}{\mathbf{1}} % indicator symbol (use as \Ind_{A})
+\newcommand{\pos}{^{+}} % Positive part
+
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\F}{\mathcal{F}}
+
+\newcommand{\transpose}{\mathsf{T}}
+\newcommand{\pinv}{^{+}} % pseudo-inverse
+
+
+\newcommand{\esssup}{\operatorname*{ess\,sup}}
+\newcommand{\essinf}{\operatorname*{ess\,inf}}
+
+
+
+% -------------------------------------------------
+\begin{document}
+
+\frontmatter
+\begin{titlepage}
+\centering
+{\Large \textbf{Notes on Advanced Probability}\par}
+\end{titlepage}
+
+\tableofcontents
+
+\mainmatter
+
+\part{Conditional Expectation}
+\input{Conditional_Expectation}
+\input{Optimal_Stop_Prob}
+\input{Kalman_Filter}
+
+\part{Markov Decision Processes}
+
+\input{Intro_MDP}
+\input{Bellman_eq}
+
+% =========================
+% Part I
+% =========================
+\part{Stochastic Processes}
+
+
+\input{Intro_SP}
+\input{BM_construction}
+\input{Prop_BM}
+
+% =========================
+% Part II
+% =========================
+\part{Convergence of Measures}
+
+\input{Convergence_measures}
+
+\end{document}

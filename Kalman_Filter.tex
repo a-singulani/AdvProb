@@ -1,0 +1,530 @@
+
+\chapter{Kalman Filter}
+
+% ==========================================================
+\section{The filtering problem}
+
+% --- Add this at the end of Section 1 (after "The filtering problem in the course notation") ---
+
+\paragraph{Motivation and intuition: what filtering is trying to achieve}
+Think of a pair \((\theta_t,\xi_t)\), which we will name \emph{hidden state} and \emph{measurement}, respectively.
+At each time \(t\), the state \(\theta_t\) contains what we would really like to know (e.g.\ position/velocity, a temperature field coefficient, a parameter vector), but we do not observe it directly.
+Instead we only observe \(\xi_0,\dots,\xi_t\), which are corrupted by noise and often contain only partial information about \(\theta_t\).
+The \emph{filtering problem} is to turn the data stream \(\xi_0,\xi_1,\dots\) into a running estimate of the current state.
+
+Mathematically, ``using all information available up to time \(t\)'' is expressed by restricting ourselves to \(\F_t^\xi\)-measurable estimators.
+Among all such estimators, the conditional expectation
+\[
+m(t)=\E[\theta_t\mid \F_t^\xi]
+\]
+is optimal in the mean-square sense: it is the unique (a.s.) estimator that minimizes the expected squared error
+\(\E[\|\theta_t-\hat\theta\|^2]\) over all \(\F_t^\xi\)-measurable \(\hat\theta\).
+So the filter does not guess \(\theta_t\); it computes the best possible estimate given exactly what has been observed so far.
+
+Intuitively, filtering is a repeated \emph{predict--correct} cycle.
+From the model dynamics we can \emph{predict} what \(\theta_{t+1}\) should look like given \(\F_t^\xi\) (a ``prior'' belief).
+Then the new measurement \(\xi_{t+1}\) arrives and we \emph{correct} this prediction by comparing \(\xi_{t+1}\) to what the model expected to see.
+This comparison is encoded by the \emph{innovation} (or residual)
+\[
+\nu_{t+1}=\xi_{t+1}-\E[\xi_{t+1}\mid \F_t^\xi],
+\]
+which measures the genuinely new information in \(\xi_{t+1}\) that was not predictable from past data.
+The conditional covariance
+\[
+Y(t)=\Cov(\theta_t\mid \F_t^\xi)
+\]
+quantifies the remaining uncertainty: large \(Y(t)\) means the observations so far do not pin down the state well, while small \(Y(t)\) means the filter is confident.
+In the (conditionally) Gaussian setting of these notes, keeping track of the pair \((m(t),Y(t))\) is enough to describe the entire conditional law of \(\theta_t\mid \F_t^\xi\), so the infinite-dimensional problem ``update a distribution'' reduces to a finite-dimensional recursion for mean and covariance. The key idea is that if, conditional on the observation
+history, the next-step pair \((\theta_{t+1},\xi_{t+1})\) is Gaussian, then the full filter reduces to
+updating the conditional mean \(m(t)=\E[\theta_t\mid \F_t^\xi]\) and conditional covariance
+\(Y(t)=\Cov(\theta_t\mid \F_t^\xi)\) via the normal-correlation (Gaussian conditioning) formulas.
+A pseudo-inverse is used so the update still makes sense when conditional observation covariances are singular.
+
+
+\subsection{State, observations, and information}
+Let \((\Omega,\F,\mathbb{P})\) be a probability space.
+We consider two processes:
+\begin{itemize}
+  \item an \emph{unobserved state} \(\theta_t\in\R^k\),
+  \item an \emph{observation/measurement} \(\xi_t\in\R^\ell\),
+\end{itemize}
+indexed by discrete time \(t=0,1,2,\dots\).
+The information available up to time \(t\) is the observation filtration
+\[
+\F_t^\xi \coloneqq \sigma(\xi_0,\xi_1,\dots,\xi_t).
+\]
+The goal of filtering is to estimate \(\theta_t\) from \(\F_t^\xi\).
+
+\subsection{The model}
+% --- Add this paragraph right after Assumption 2.1 (Course model for (\theta_t,\xi_t)) ---
+
+Consider a linear system driven by Gaussian noises, but allow the \emph{coefficients}
+to be random and adapted to the observation history.
+
+For \(t\ge 0\),
+\begin{align}
+\theta_{t+1} &= a_0(t) + a_1(t)\theta_t + b_1(t)\,\varepsilon_1(t+1)+b_2(t)\,\varepsilon_2(t+1), \label{eq:theta}\\
+\xi_{t+1} &= A_0(t) + A_1(t)\theta_t + B_1(t)\,\varepsilon_1(t+1)+B_2(t)\,\varepsilon_2(t+1). \label{eq:xi}
+\end{align}
+Here:
+\begin{itemize}
+  \item \(\varepsilon_1(t)\in\R^{r_1}\) and \(\varepsilon_2(t)\in\R^{r_2}\) are i.i.d.\ standard Gaussian vectors,
+        independent across time and mutually independent;
+  \item for each \(t\), the coefficients \(a_0(t),a_1(t),b_1(t),b_2(t),A_0(t),A_1(t),B_1(t),B_2(t)\)
+        are \(\F_t^\xi\)-measurable (i.e.\ can depend on past observations).
+\end{itemize}
+
+\paragraph{Why the model takes the form \eqref{eq:theta}--\eqref{eq:xi} (intuition).}
+The two equations \eqref{eq:theta}--\eqref{eq:xi} are a concise way to encode the standard ingredients of a
+\emph{state--space model}: (i) a \emph{dynamical law} describing how the hidden state evolves from time \(t\) to \(t+1\),
+and (ii) an \emph{observation law} describing how the measurement is generated from the current state.
+The evolution equation \eqref{eq:theta} says: starting from \(\theta_t\), we apply a linear ``propagation''
+\(a_1(t)\theta_t\) plus a drift/offset \(a_0(t)\), and then we add random perturbations
+\(b_1(t)\varepsilon_1(t+1)+b_2(t)\varepsilon_2(t+1)\) which model unmodeled dynamics (process noise).
+The measurement equation \eqref{eq:xi} says: the sensor sees a linear function \(A_1(t)\theta_t\) of the state
+(with possible bias \(A_0(t)\)), and it is corrupted by noise
+\(B_1(t)\varepsilon_1(t+1)+B_2(t)\varepsilon_2(t+1)\).
+Allowing the coefficients to be \(\F_t^\xi\)-measurable means the system can be \emph{adaptive}:
+at time \(t\) the model parameters may depend on past observations (e.g.\ regime switching, time-varying calibration,
+feedback control), but crucially the dependence is only on information already available at time \(t\).
+Finally, the use of Gaussian noises and linear combinations is exactly what preserves (conditional) Gaussianity,
+which is why the filter can be propagated using only conditional means and covariances.
+
+\begin{remark}[Why this is ``more general'' than the standard Kalman filter]
+In the classical linear-Gaussian state space model the matrices are deterministic (or at least independent of the observations).
+Here, they may depend on the observation history (e.g.\ switching regimes, adaptive control, random coefficients).
+Nevertheless, \eqref{eq:theta}--\eqref{eq:xi} remain \emph{linear} in the hidden state and the driving Gaussian noises,
+so Gaussian conditioning still applies.
+\end{remark}
+
+\begin{remark}[Optimal (mean-square) estimate]
+A basic fact from conditional expectation is:
+\[
+m(t)\coloneqq \E[\theta_t\mid \F_t^\xi]
+\quad\text{minimizes}\quad
+\E\bigl[\|\theta_t-\hat\theta\|^2\bigr]
+\ \text{over all }\ \F_t^\xi\text{-measurable }\hat\theta.
+\]
+The associated conditional error covariance is
+\[
+Y(t)\coloneqq \Cov(\theta_t\mid \F_t^\xi)
+= \E\!\left[(\theta_t-m(t))(\theta_t-m(t))^\transpose\,\middle|\,\F_t^\xi\right].
+\]
+In the classical Kalman filter, \((m(t),Y(t))\) evolve by a simple recursion.
+\end{remark}
+
+
+% ==========================================================
+\section{Conditionally Gaussian sequences (Lipster--Shiryayev framework)}
+
+\paragraph{Intuition and motivation (why conditional Gaussianity matters).}
+Filtering is, at its core, a problem of updating a \emph{conditional distribution}:
+after observing \(\xi_0,\dots,\xi_t\), our knowledge about the hidden state \(\theta_t\) is encoded by the law of
+\(\theta_t\mid \F_t^\xi\).
+In a general nonlinear/non-Gaussian model this conditional law is an infinite-dimensional object (a full density or measure),
+so an ``exact'' filter would require propagating an entire function over time (which is why particle filters exist).
+The point of Theorem~2.2 is that for the model \eqref{eq:theta}--\eqref{eq:xi} this complexity collapses:
+\emph{given the observation history, the state remains Gaussian}.
+A Gaussian law is completely determined by its mean and covariance, so instead of propagating an entire distribution we only
+need to propagate the finite-dimensional pair \(\bigl(m(t),Y(t)\bigr)\).
+This is precisely the structural reason the Kalman filter is computationally simple.
+
+Why is conditional Gaussianity plausible here?
+Start from a Gaussian prior (or, more generally, assume \(\theta_0\) has a Gaussian conditional law given \(\F_0^\xi\)).
+Then each step takes linear combinations of the previous state \(\theta_t\) and fresh Gaussian noises
+\(\varepsilon_1(t+1),\varepsilon_2(t+1)\).
+Conditional on \(\F_t^\xi\), the coefficients \(a_0(t),a_1(t),\dots\) are just \emph{known numbers/matrices}
+(because they are \(\F_t^\xi\)-measurable), so \(\theta_{t+1}\) becomes an affine transformation of Gaussian variables,
+hence Gaussian.
+Moreover, the pair \((\theta_{t+1},\xi_{t+1})\) is jointly Gaussian given \(\F_t^\xi\), because \(\xi_{t+1}\) is built from
+the same Gaussian ingredients in \eqref{eq:xi}.
+Once we have joint (conditional) Gaussianity, the update step
+\(\theta_{t+1}\mid \F_{t+1}^\xi=\sigma(\F_t^\xi,\xi_{t+1})\)
+is obtained by the standard Gaussian conditioning (normal-correlation) formulas,
+which is exactly what produces the recursion for \(m(t+1)\) and \(Y(t+1)\).
+So Theorem~2.2 is the bridge that justifies replacing the abstract filtering problem
+``compute \(\mathcal{L}(\theta_t\mid \F_t^\xi)\)'' by the concrete matrix recursion of the generalized Kalman filter.
+
+
+Under mild square-integrability and boundedness assumptions on the coefficients (as stated in your notes),
+one can show that for each \(t\) the conditional distribution of \(\theta_t\) given \(\F_t^\xi\) is Gaussian a.s.
+This is one of the main structural results used to justify that it is enough to propagate \((m(t),Y(t))\).
+
+\begin{theorem}[Conditional Gaussianity: informal statement]
+Assume the coefficients in \eqref{eq:theta}--\eqref{eq:xi} are square-integrable and uniformly bounded in \(t\) in probability,
+and \(\E(\|\theta_0\|^2+\|\xi_0\|^2)<\infty\).
+Then for each \(t\ge 0\),
+\[
+\theta_t\mid \F_t^\xi \ \sim\ \mathcal{N}\bigl(m(t),\,Y(t)\bigr)
+\quad\text{(almost surely)}.
+\]
+\end{theorem}
+
+% --- Paste this right after Theorem 2.2 in your notes (or right after its statement) ---
+
+\begin{proof}[Proof (split into steps, following Lipster--Shiryayev)]
+We prove by induction on $t$ that the conditional law of $\theta_t$ given $\F_t^\xi$ is (a.s.) Gaussian.
+
+\medskip
+\noindent\textbf{Step 0: Base case.}
+We assume the initial condition is \emph{conditionally Gaussian} in the sense that
+\[
+\theta_0 \mid \F_0^\xi \sim \mathcal{N}(m(0),Y(0)) \quad \text{a.s.}
+\]
+(For instance, this holds if $(\theta_0,\xi_0)$ is jointly Gaussian; then $\theta_0\mid \xi_0$
+is Gaussian by the normal-correlation formula.)
+
+\medskip
+\noindent\textbf{Step 1: Induction hypothesis.}
+Fix $t\ge 0$ and assume
+\[
+\theta_t \mid \F_t^\xi \sim \mathcal{N}(m(t),Y(t)) \quad \text{a.s.}
+\]
+We show that then $\theta_{t+1}\mid \F_{t+1}^\xi$ is also Gaussian.
+
+\medskip
+\noindent\textbf{Step 2: Write $(\theta_{t+1},\xi_{t+1})$ as an affine function of Gaussian variables.}
+Recall the model
+\begin{align*}
+\theta_{t+1} &= a_0(t) + a_1(t)\theta_t + b_1(t)\varepsilon_1(t+1)+b_2(t)\varepsilon_2(t+1),\\
+\xi_{t+1} &= A_0(t) + A_1(t)\theta_t + B_1(t)\varepsilon_1(t+1)+B_2(t)\varepsilon_2(t+1),
+\end{align*}
+where all coefficients are $\F_t^\xi$-measurable and $\varepsilon_1,\varepsilon_2$ are i.i.d.\ standard Gaussian,
+independent of $\F_t^\xi$.
+
+Define the stacked Gaussian vector
+\[
+U_{t+1}\coloneqq
+\begin{pmatrix}
+\theta_t\\ \varepsilon_1(t+1)\\ \varepsilon_2(t+1)
+\end{pmatrix}.
+\]
+Conditional on $\F_t^\xi$, the vector $U_{t+1}$ is Gaussian because:
+(i) $\theta_t\mid \F_t^\xi$ is Gaussian by the induction hypothesis, and
+(ii) $\varepsilon_1(t+1),\varepsilon_2(t+1)$ are Gaussian and independent of $\F_t^\xi$.
+Moreover,
+\[
+\E[U_{t+1}\mid \F_t^\xi]=
+\begin{pmatrix}
+m(t)\\ 0\\ 0
+\end{pmatrix},
+\qquad
+\Cov(U_{t+1}\mid \F_t^\xi)=
+\begin{pmatrix}
+Y(t) & 0 & 0\\
+0 & I & 0\\
+0 & 0 & I
+\end{pmatrix}.
+\]
+
+Now introduce the $\F_t^\xi$-measurable affine map
+\[
+\begin{pmatrix}
+\theta_{t+1}\\ \xi_{t+1}
+\end{pmatrix}
+=
+\underbrace{\begin{pmatrix} a_0(t)\\ A_0(t)\end{pmatrix}}_{=:c(t)}
++
+\underbrace{\begin{pmatrix}
+a_1(t) & b_1(t) & b_2(t)\\
+A_1(t) & B_1(t) & B_2(t)
+\end{pmatrix}}_{=:M(t)}
+\begin{pmatrix}
+\theta_t\\ \varepsilon_1(t+1)\\ \varepsilon_2(t+1)
+\end{pmatrix}
+=
+c(t)+M(t)U_{t+1}.
+\]
+Since $U_{t+1}\mid \F_t^\xi$ is Gaussian and $(c(t),M(t))$ are $\F_t^\xi$-measurable (hence ``constants'' under the conditioning),
+it follows that the pair $(\theta_{t+1},\xi_{t+1})\mid \F_t^\xi$ is \emph{jointly Gaussian}.
+
+\medskip
+\noindent\textbf{Step 3: Identify the conditional mean/covariance blocks.}
+From the affine representation above (or by direct expansion using independence of the noises), we obtain
+\[
+\E[\theta_{t+1}\mid \F_t^\xi]=a_0(t)+a_1(t)m(t),\qquad
+\E[\xi_{t+1}\mid \F_t^\xi]=A_0(t)+A_1(t)m(t),
+\]
+and the conditional covariance blocks
+\begin{align*}
+d_{11}^\xi(t)&\coloneqq \Cov(\theta_{t+1}\mid \F_t^\xi)
+= a_1(t)Y(t)a_1(t)^\transpose + b_1(t)b_1(t)^\transpose + b_2(t)b_2(t)^\transpose,\\
+d_{22}^\xi(t)&\coloneqq \Cov(\xi_{t+1}\mid \F_t^\xi)
+= A_1(t)Y(t)A_1(t)^\transpose + B_1(t)B_1(t)^\transpose + B_2(t)B_2(t)^\transpose,\\
+d_{12}^\xi(t)&\coloneqq \Cov(\theta_{t+1},\xi_{t+1}\mid \F_t^\xi)
+= a_1(t)Y(t)A_1(t)^\transpose + b_1(t)B_1(t)^\transpose + b_2(t)B_2(t)^\transpose.
+\end{align*}
+
+\medskip
+\noindent\textbf{Step 4: Condition on the new observation (normal correlation).}
+Because $(\theta_{t+1},\xi_{t+1})\mid \F_t^\xi$ is jointly Gaussian, we can condition on $\xi_{t+1}$ using the
+Gaussian regression (normal-correlation) formula. Since
+\(
+\F_{t+1}^\xi=\sigma(\F_t^\xi,\xi_{t+1}),
+\)
+this is exactly conditioning on the available information at time $t+1$.
+
+Let $\nu_{t+1}\coloneqq \xi_{t+1}-\E[\xi_{t+1}\mid \F_t^\xi]$ be the innovation.
+Then (allowing $d_{22}^\xi(t)$ to be singular) the conditional law of $\theta_{t+1}$ given $\F_{t+1}^\xi$ is Gaussian with
+\begin{align*}
+m(t+1)
+&\coloneqq \E[\theta_{t+1}\mid \F_{t+1}^\xi]
+= \E[\theta_{t+1}\mid \F_t^\xi] + d_{12}^\xi(t)\bigl(d_{22}^\xi(t)\bigr)^{+}\,\nu_{t+1},\\
+Y(t+1)
+&\coloneqq \Cov(\theta_{t+1}\mid \F_{t+1}^\xi)
+= d_{11}^\xi(t) - d_{12}^\xi(t)\bigl(d_{22}^\xi(t)\bigr)^{+} d_{12}^\xi(t)^\transpose.
+\end{align*}
+In particular, $\theta_{t+1}\mid \F_{t+1}^\xi$ is (a.s.) Gaussian.
+
+\medskip
+\noindent\textbf{Step 5: Conclude the induction.}
+Steps 2--4 show that the Gaussianity property propagates from time $t$ to time $t+1$.
+Together with the base case (Step 0), this proves that for every $t\ge 0$ the conditional distribution
+$\theta_t\mid \F_t^\xi$ is (a.s.) Gaussian.
+\end{proof}
+
+
+\begin{remark}
+The paper by Lipster--Shiryayev develops this point of view systematically and calls such processes
+\emph{conditionally Gaussian sequences}.
+The entire filtering problem then reduces to finding recursion relations for \(m(t)\) and \(Y(t)\).
+\end{remark}
+
+% ==========================================================
+\section{Gaussian conditioning and the pseudo-inverse}
+
+We learned that under certain conditions we know that $(\theta_{t+1},\xi{t+1})$ are jointly Gaussian, the only thing remaining is to compute them. The next theorem shows how we can perform this step.
+The only twist is that the conditional covariance of \(\xi\) may be singular; then one uses a pseudo-inverse.
+
+\begin{theorem}[Normal correlation / Gaussian regression with pseudo-inverse]
+Let \(X\in\R^k\), \(Z\in\R^\ell\) be jointly Gaussian with mean
+\(\E[X]=m_X\), \(\E[Z]=m_Z\) and block covariance
+\[
+\Sigma=
+\begin{pmatrix}
+\Sigma_{XX} & \Sigma_{XZ}\\
+\Sigma_{ZX} & \Sigma_{ZZ}
+\end{pmatrix},
+\qquad \Sigma_{ZZ}\ \text{symmetric, nonnegative definite (possibly singular)}.
+\]
+Then
+\begin{align*}
+\E[X\mid Z] &= m_X + \Sigma_{XZ}\,\Sigma_{ZZ}\pinv\,(Z-m_Z),\\
+\Cov(X\mid Z) &= \Sigma_{XX} - \Sigma_{XZ}\,\Sigma_{ZZ}\pinv\,\Sigma_{ZX}.
+\end{align*}
+If \(\Sigma_{ZZ}\) is invertible, then \(\Sigma_{ZZ}\pinv=\Sigma_{ZZ}^{-1}\) and we recover the familiar formulas.
+\end{theorem}
+
+\begin{remark}[Interpretation]
+\(\Sigma_{XZ}\Sigma_{ZZ}\pinv\) is the optimal linear gain mapping a measurement residual \((Z-m_Z)\)
+to a correction of the mean of \(X\).
+Using a pseudo-inverse allows the formula to remain valid if some linear combinations of the measurement are noiseless
+or redundant (hence \(\Sigma_{ZZ}\) becomes singular).
+\end{remark}
+
+\paragraph{Motivation and intuition.}
+Theorem~3.1 is the mathematical engine behind the Kalman update.
+In filtering, after time \(t\) we have a \emph{prior} joint (conditional) Gaussian law for the pair
+\((X,Z)=(\theta_{t+1},\xi_{t+1})\) given the past \(\F_t^\xi\); when the new measurement \(Z\) is revealed,
+we need the \emph{posterior} law of \(X\mid Z\).
+For Gaussian vectors, this posterior stays Gaussian, and its mean is obtained by the best linear
+least-squares correction of the prior mean: one takes the residual \((Z-m_Z)\) and maps it to a correction of \(X\)
+through a gain matrix \( \Sigma_{XZ}\Sigma_{ZZ}\pinv \).
+Geometrically, this is the orthogonal projection of \(X\) onto the affine space generated by \(Z\)
+(in \(L^2\)), so only the part of \(X\) that is correlated with \(Z\) is ``explained'' by the observation;
+the covariance update subtracts precisely that explained part.
+The pseudo-inverse appears because \(\Sigma_{ZZ}\) may fail to be invertible (e.g.\ redundant sensors,
+noiseless components, or linear dependencies), but the regression/projection viewpoint still makes sense:
+\(\Sigma_{ZZ}\pinv\) selects the minimum-norm gain consistent with the information contained in \(Z\),
+and the formulas remain valid for any positive semidefinite \(\Sigma_{ZZ}\).
+
+% --- Add this paragraph right after the motivation for Theorem 3.1 (or at the end of Section 3) ---
+
+\paragraph{Relation to Theorem~2.2 (Conditional Gaussianity).}
+Theorem~2.2 is the \emph{structural} statement that makes Theorem~3.1 applicable at every time step:
+it tells us that, under the model \eqref{eq:theta}--\eqref{eq:xi}, the relevant random objects remain Gaussian after conditioning on the
+available information. More precisely, Theorem~2.2 implies that given \(\F_t^\xi\) the pair
+\((\theta_{t+1},\xi_{t+1})\) is \emph{jointly Gaussian} (because it is an affine function of the conditionally Gaussian \(\theta_t\)
+and fresh Gaussian noises with \(\F_t^\xi\)-measurable coefficients). Once this joint (conditional) Gaussianity holds,
+updating from time \(t\) to \(t+1\) is exactly the problem of computing
+\(\theta_{t+1}\mid \sigma(\F_t^\xi,\xi_{t+1})\), i.e.\ conditioning one component of a jointly Gaussian vector on the other.
+That is precisely what Theorem~3.1 provides, producing the Kalman-type ``mean + gain $\times$ innovation'' update and the corresponding covariance reduction.
+
+
+
+
+
+% ==========================================================
+\section{Deriving the recursive filter}
+
+Fix \(t\ge 0\) and suppose \(m(t)\) and \(Y(t)\) are known.
+We derive \(m(t+1)\) and \(Y(t+1)\) from the model \eqref{eq:theta}--\eqref{eq:xi}.
+
+\subsection{Prediction (conditional means)}
+Taking \(\E[\cdot\mid \F_t^\xi]\) and using that \(\varepsilon_1(t+1),\varepsilon_2(t+1)\) are independent of \(\F_t^\xi\)
+with zero mean, we get the \emph{one-step predictions}
+\begin{align}
+\E[\theta_{t+1}\mid \F_t^\xi] &= a_0(t) + a_1(t)m(t), \label{eq:predtheta}\\
+\E[\xi_{t+1}\mid \F_t^\xi] &= A_0(t) + A_1(t)m(t). \label{eq:predxi}
+\end{align}
+Define the \emph{innovation} (measurement residual)
+\[
+\nu_{t+1}\coloneqq \xi_{t+1}-\E[\xi_{t+1}\mid \F_t^\xi]
+= \xi_{t+1}-A_0(t)-A_1(t)m(t).
+\]
+
+\subsection{Prediction (conditional covariances)}
+Write the centered ``prediction errors''
+\begin{align*}
+\theta_{t+1}-\E[\theta_{t+1}\mid \F_t^\xi]
+&= a_1(t)\bigl(\theta_t-m(t)\bigr)
+  + b_1(t)\varepsilon_1(t+1)+b_2(t)\varepsilon_2(t+1),\\
+\xi_{t+1}-\E[\xi_{t+1}\mid \F_t^\xi]
+&= A_1(t)\bigl(\theta_t-m(t)\bigr)
+  + B_1(t)\varepsilon_1(t+1)+B_2(t)\varepsilon_2(t+1).
+\end{align*}
+Using independence and \(\Var(\varepsilon_i)=I\), the conditional covariance blocks of
+\((\theta_{t+1},\xi_{t+1})\) given \(\F_t^\xi\) are
+\begin{align}
+d_{11}^\xi(t) &\coloneqq \Cov(\theta_{t+1}\mid \F_t^\xi)
+= a_1(t)Y(t)a_1(t)^\transpose + b_1(t)b_1(t)^\transpose + b_2(t)b_2(t)^\transpose,\label{eq:d11}\\
+d_{22}^\xi(t) &\coloneqq \Cov(\xi_{t+1}\mid \F_t^\xi)
+= A_1(t)Y(t)A_1(t)^\transpose + B_1(t)B_1(t)^\transpose + B_2(t)B_2(t)^\transpose,\label{eq:d22}\\
+d_{12}^\xi(t) &\coloneqq \Cov(\theta_{t+1},\xi_{t+1}\mid \F_t^\xi)
+= a_1(t)Y(t)A_1(t)^\transpose + b_1(t)B_1(t)^\transpose + b_2(t)B_2(t)^\transpose.\label{eq:d12}
+\end{align}
+
+\subsection{Update (conditioning on the new measurement)}
+Now \(\F_{t+1}^\xi = \sigma(\F_t^\xi,\xi_{t+1})\), so we update by conditioning the (conditionally) Gaussian vector
+\((\theta_{t+1},\xi_{t+1})\) on \(\xi_{t+1}\).
+Applying the Gaussian regression theorem with pseudo-inverse yields:
+
+\begin{proposition}[Generalized Kalman update]
+Define the (possibly random) \emph{Kalman gain}
+\[
+K(t)\coloneqq d_{12}^\xi(t)\, \bigl(d_{22}^\xi(t)\bigr)\pinv.
+\]
+Then the filtered mean and covariance satisfy
+\begin{align}
+m(t+1)
+&= \E[\theta_{t+1}\mid \F_{t+1}^\xi] \nonumber\\
+&= a_0(t)+a_1(t)m(t)\;+\;K(t)\,\nu_{t+1}, \label{eq:update_m}\\[2mm]
+Y(t+1)
+&= \Cov(\theta_{t+1}\mid \F_{t+1}^\xi)
+= d_{11}^\xi(t) - K(t)\,d_{22}^\xi(t)\,K(t)^\transpose. \label{eq:update_Y}
+\end{align}
+Equivalently, using the blocks directly,
+\[
+Y(t+1)= d_{11}^\xi(t)- d_{12}^\xi(t)\bigl(d_{22}^\xi(t)\bigr)\pinv d_{12}^\xi(t)^\transpose.
+\]
+\end{proposition}
+
+\begin{remark}[Why the recursion is fast]
+Each step consists of:
+(i) a prediction of a mean and covariance using matrix multiplications,
+(ii) one pseudo-inverse of the (conditional) observation covariance \(d_{22}^\xi(t)\),
+(iii) a linear correction by the innovation \(\nu_{t+1}\).
+\end{remark}
+
+% ==========================================================
+\section{Recovering the classical Kalman filter (M\"uller lectures notes)}
+
+The lecture note (M\"uller) treats the standard linear-Gaussian state space model
+\[
+X_k = A X_{k-1} + B u_{k-1} + W_k,\qquad
+Z_k = H X_k + R_k,
+\]
+with independent Gaussian noises \(W_k\sim \mathcal{N}(0,\Sigma_W)\), \(R_k\sim\mathcal{N}(0,\Sigma_R)\),
+and information \(\F_k=\sigma(Z_1,\dots,Z_k)\).
+In that setting \(d_{22}^\xi(t)\) is typically invertible and the pseudo-inverse becomes an inverse.
+
+To match notations, set \(\theta_k=X_k\), \(\xi_k=Z_k\),
+\(a_0(k-1)=B u_{k-1}\), \(a_1(k-1)=A\), \(A_0(k-1)=0\), \(A_1(k-1)=H\),
+and choose matrices \(b_i,B_i\) so that
+\(
+b_1b_1^\transpose+b_2b_2^\transpose=\Sigma_W
+\)
+and
+\(
+B_1B_1^\transpose+B_2B_2^\transpose=\Sigma_R
+\),
+with \(b_1B_1^\transpose+b_2B_2^\transpose=0\) (uncorrelated state/measurement noise).
+Then \eqref{eq:update_m}--\eqref{eq:update_Y} become the familiar Kalman filter:
+\[
+\hat X_k^- = A\hat X_{k-1}+B u_{k-1},\qquad
+\Sigma_k^- = A\Sigma_{k-1}A^\transpose+\Sigma_W,
+\]
+and
+\[
+K_k = \Sigma_k^- H^\transpose\,(H\Sigma_k^-H^\transpose+\Sigma_R)^{-1},
+\qquad
+\hat X_k = \hat X_k^- + K_k(Z_k-H\hat X_k^-),
+\qquad
+\Sigma_k = \Sigma_k^- - K_k(H\Sigma_k^-H^\transpose+\Sigma_R)K_k^\transpose.
+\]
+
+% ==========================================================
+\section{Example: 1D vehicle tracking (position \& velocity)}
+
+In the lecture note example, the state is
+\(
+X_k=(p_k,v_k)^\transpose
+\)
+(position and velocity), with sampling interval \(\Delta>0\).
+The (deterministic) kinematics under commanded acceleration \(u_k\) are
+\[
+p_k = p_{k-1}+\Delta v_{k-1}+\tfrac12 \Delta^2 u_{k-1},\qquad
+v_k = v_{k-1}+\Delta u_{k-1}.
+\]
+Random acceleration noise is modeled by replacing \(u_{k-1}\) with \(u_{k-1}+E_{k-1}\),
+where \(E_k\sim \mathcal{N}(0,\sigma_E^2)\) i.i.d.
+This yields the state equation
+\[
+X_k =
+\begin{pmatrix}
+1 & \Delta\\
+0 & 1
+\end{pmatrix}
+X_{k-1}+
+\begin{pmatrix}
+\tfrac12\Delta^2\\
+\Delta
+\end{pmatrix}
+u_{k-1}
++W_k,
+\quad
+W_k=
+\begin{pmatrix}
+\tfrac12\Delta^2 E_{k-1}\\
+\Delta E_{k-1}
+\end{pmatrix}
+\sim \mathcal{N}(0,\Sigma_W),
+\]
+with
+\[
+\Sigma_W=\sigma_E^2
+\begin{pmatrix}
+\tfrac14\Delta^4 & \tfrac12\Delta^3\\
+\tfrac12\Delta^3 & \Delta^2
+\end{pmatrix}.
+\]
+Only the position is observed with noise:
+\[
+Z_k = H X_k + R_k,\qquad H=\begin{pmatrix}1&0\end{pmatrix},
+\qquad R_k\sim \mathcal{N}(0,\sigma_R^2).
+\]
+The filter then follows the classical recursion in the previous section.
+
+% ==========================================================
+\section{What to take away conceptually}
+
+\begin{itemize}
+\item The \textbf{core mathematical tool} is Gaussian conditioning (normal correlation). The update is
+      always ``prior mean + gain $\times$ innovation'' and ``prior covariance minus explained part''.
+\item The \textbf{generalization} in your course notes is to allow random/adaptive coefficients that are
+      measurable w.r.t.\ the past observations, while preserving conditional Gaussianity.
+\item The \textbf{pseudo-inverse} appears naturally when the conditional observation covariance is only
+      positive semidefinite; the regression formulas remain valid without requiring invertibility.
+\end{itemize}
+
+

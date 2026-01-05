@@ -1,0 +1,201 @@
+
+% =================================================
+\chapter{Markov Decision Processes}
+% =================================================
+
+Markov Decision Processes (MDPs) formalize \emph{sequential decision-making under uncertainty}. At each stage, a controller observes the current state of a stochastic system and selects an action. The action produces an immediate reward and influences the (random) next state. The objective is to choose actions so as to maximize the expected total reward over a fixed planning horizon.
+
+The key structural property is the \emph{Markov property}: given the current state and chosen action, the future evolution is conditionally independent of the past. This permits a ``local-to-global'' principle: instead of optimizing over entire sequences of actions at once, one can solve the problem recursively by reducing a multi-stage optimization to a sequence of one-stage optimizations. This principle is \emph{dynamic programming}.
+
+These notes develop the finite-horizon theory for general (possibly uncountable) state and action spaces, in the notation of the lecture notes. The exposition is written to be both rigorous and memorable: before each major theorem we give an intuitive explanation, and proofs are split into small steps.
+
+\section{Basic definitions}
+Before anything else we must define the elements that formalize the description of a Markov process. Although this section is rather dry and technical, it serves as a cornerstone to establish notation for discussion of the far more interesting Finite-Horizon Optimization (decision) Problem .    
+
+\begin{definition}[Markov Decision Model]
+A (non-stationary) Markov Decision Model with planning horizon $N \in \mathbb{N}$ consists of data
+\[
+(E,\mathcal{E},\; A,\mathcal{A},\; D_n,\; Q_n,\; r_n,\; g_N), \qquad n=0,1,\dots,N-1,
+\]
+with the following meaning:
+\begin{itemize}[leftmargin=*]
+  \item $E$ is the state space equipped with a $\sigma$-algebra $\mathcal{E}$; states are denoted by $x\in E$.
+  \item $A$ is the action space equipped with a $\sigma$-algebra $\mathcal{A}$; actions are denoted by $a\in A$.
+  \item $D_n\subset E\times A$ is a measurable set of admissible state--action pairs at time $n$.
+  For $x\in E$ we set
+  \[
+  D_n(x) := \{a\in A : (x,a)\in D_n\},
+  \]
+  the set of admissible actions when the current state is $x$.
+  \item $Q_n$ is a stochastic transition kernel from $D_n$ to $(E,\mathcal{E})$:
+  for fixed $(x,a)\in D_n$, the map $B\mapsto Q_n(B\mid x,a)$ is a probability measure on $(E,\mathcal{E})$; and for fixed $B\in\mathcal{E}$, the map $(x,a)\mapsto Q_n(B\mid x,a)$ is measurable on $D_n$.
+  \item $r_n:D_n\to\mathbb{R}$ is the one-stage reward.
+  \item $g_N:E\to\mathbb{R}$ is the terminal reward.
+\end{itemize}
+\end{definition}
+
+\begin{remark}
+In many applications $E$ and $A$ are Borel subsets of Polish spaces (complete separable metric spaces), equipped with their Borel $\sigma$-algebras.
+\end{remark}
+
+\begin{remark}
+We assume throughout that for each $n$, the admissible set $D_n$ contains the graph of at least one measurable function $f_n:E\to A$ (so $f_n(x)\in D_n(x)$ for all $x$). This ensures that admissible decision rules exist.
+\end{remark}
+
+\paragraph{Equivalent description (System functions and disturbances)}
+
+A transition kernel is sometimes specified via an explicit system update of the form
+\(
+x_{n+1}=T_n(x_n,a_n,z_{n+1})
+\),
+where $z_{n+1}$ is a random disturbance.
+
+\begin{theorem}[Equivalent disturbance representation]
+A Markov Decision Model is equivalently described by data
+\[
+(E,\mathcal{E},\; A,\mathcal{A},\; D_n,\; Z,\mathcal{Z},\; T_n,\; Q_n^Z,\; r_n,\; g_N)
+\]
+where:
+\begin{itemize}[leftmargin=*]
+  \item $(Z,\mathcal{Z})$ is a measurable disturbance space,
+  \item $Q_n^Z(\cdot\mid x,a)$ is a stochastic kernel on $(Z,\mathcal{Z})$ for $(x,a)\in D_n$,
+  \item $T_n:D_n\times Z\to E$ is measurable,
+\end{itemize}
+and the original kernel is recovered by
+\[
+Q_n(B\mid x,a) := Q_n^Z\big(\{z\in Z: T_n(x,a,z)\in B\}\mid x,a\big),\qquad B\in\mathcal{E}.
+\]
+Conversely, given $Q_n$ one can take $Z=E$, $T_n(x,a,z)=z$, and $Q_n^Z=Q_n$.
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1 (From $Q_n$ to disturbances).}
+Given $Q_n$, set $Z:=E$, $\mathcal{Z}:=\mathcal{E}$, define $T_n(x,a,z):=z$, and set $Q_n^Z(B\mid x,a):=Q_n(B\mid x,a)$.
+Then the reconstruction formula holds trivially.
+
+\textbf{Step 2 (From disturbances to $Q_n$).}
+Given $(T_n,Q_n^Z)$, define $Q_n$ by the reconstruction formula.
+For fixed $(x,a)$, the map $B\mapsto Q_n(B\mid x,a)$ is a probability measure as the pushforward of $Q_n^Z(\cdot\mid x,a)$ under the measurable map $z\mapsto T_n(x,a,z)$.
+For fixed $B\in\mathcal{E}$, measurability of $(x,a)\mapsto Q_n(B\mid x,a)$ follows from measurability of $T_n$ and of the kernel $Q_n^Z$.
+\end{proof}
+
+\subsection{Policies}
+
+A policy is simply the controller's ``rulebook'': it tells you what action to take when you find yourself in a given state, at each time step. Since the system evolves randomly, you cannot plan a single deterministic trajectory in advance; instead, you specify a \emph{feedback rule} that reacts to whatever state actually occurs. In the finite-horizon Markov setting, it is enough to let the decision at time $n$ depend only on the current state $x$ (and not on the whole past), because the Markov property ensures that the future distribution---and hence the remaining expected reward---is fully determined by the pair $(x,a)$ chosen now.
+
+
+\begin{definition}[Decision rules and Markov policies]
+\leavevmode
+\begin{enumerate}[label=(\alph*)]
+  \item A \emph{decision rule} at time $n$ is a measurable map $f_n:E\to A$ such that $f_n(x)\in D_n(x)$ for all $x\in E$.
+  The set of all decision rules at time $n$ is denoted by $F_n$.
+  \item A sequence $\pi=(f_0,f_1,\dots,f_{N-1})$ with $f_n\in F_n$ is called an $N$-stage \emph{Markov policy}.
+\end{enumerate}
+
+\end{definition}
+
+\begin{remark}[Randomized policies]
+Sometimes one allows randomized decision rules: kernels $f_n(\cdot\mid x)$ on $A$ satisfying $f_n(D_n(x)\mid x)=1$ for all $x$.
+Such rules are related to relaxed controls and can be useful for existence theory.
+\end{remark}
+
+\subsection{Canonical construction of the controlled process}
+To speak rigorously about the expected reward under a policy, we must first construct a probability space on which the whole controlled trajectory $(X_0,\dots,X_N)$ lives. The \emph{canonical construction} does this in the cleanest possible way: we take the sample space to be the set of all state sequences $\omega=(x_0,\dots,x_N)\in E^{N+1}$ and define $X_n(\omega)=x_n$ as coordinate maps. Then a policy $\pi=(f_0,\dots,f_{N-1})$ together with the transition kernels $(Q_n)$ uniquely determines a probability measure $\mathbb{P}_x^\pi$ on this path space: it fixes $X_0=x$ and prescribes the conditional law of each next state $X_{n+1}$ given the current state $X_n$ (and the chosen action $f_n(X_n)$). In this way, the dynamics are encoded directly into a single measure on trajectories, and quantities like $\mathbb{E}_x^\pi[\sum r_n(\cdot)+g_N(\cdot)]$ become standard expectations with respect to $\mathbb{P}_x^\pi$.
+
+
+We realize the controlled state process on the canonical path space
+\[
+\Omega = E^{N+1},\qquad \mathcal{F}=\mathcal{E}^{\otimes(N+1)},
+\]
+with coordinate process $X_n(\omega)=x_n$ for $\omega=(x_0,\dots,x_N)\in\Omega$.
+
+Fix a Markov policy $\pi=(f_0,\dots,f_{N-1})$ and an initial state $x\in E$.
+By the Ionescu--Tulcea theorem, there exists a unique probability measure $\mathbb{P}_x^\pi$ on $(\Omega,\mathcal{F})$ such that
+\begin{align*}
+\mathbb{P}_x^\pi(X_0\in B) &= \delta_x(B),\qquad B\in\mathcal{E},\\
+\mathbb{P}_x^\pi(X_{n+1}\in B\mid X_0,\dots,X_n) &= \mathbb{P}_x^\pi(X_{n+1}\in B\mid X_n)
+= Q_n\big(B\mid X_n,f_n(X_n)\big),\qquad B\in\mathcal{E}.
+\end{align*}
+We write $\mathbb{E}_x^\pi$ for expectation under $\mathbb{P}_x^\pi$. For $n\in\{0,\dots,N\}$ we also use the conditional laws $\mathbb{P}_{n,x}^\pi(\cdot):=\mathbb{P}_x^\pi(\cdot\mid X_n=x)$ and expectations $\mathbb{E}_{n,x}^\pi$.
+
+We can interpret $\mathbb{P}_{x}^\pi$ as the probability of the full path under the policy $\pi$, i.e., the probability of ${X1\in B_1,\cdots,X_N \in B_N}$ to happen following the policy ${\pi_1,\cdots,\pi_N \in B_N}$
+
+% =================================================
+\section{Finite-Horizon Optimization Problem}
+% =================================================
+\paragraph{Intuition.} In the finite-horizon optimization problem we fix a terminal time $N$ and ask: starting from a state $x$ (and possibly from an intermediate time $n$), which policy $\pi$ maximizes the expected cumulative reward earned up to time $N$? A policy determines a probability law $\mathbb{P}_x^\pi$ for the entire controlled trajectory, so the total performance of $\pi$ is simply an expectation under this law of the running rewards plus the terminal reward. 
+
+\subsection{Value of a policy and value functions}
+To quantify our profit, we define two variables, namely, the value $V_n^\pi(x)$ which measures how good a \emph{fixed} policy is when starting from $x$ at time $n$ and the value function $V_n(x)$ which takes the supremum over all policies and thus represents the best achievable expected reward from that point on. 
+
+\begin{definition}[Value of a policy]
+Let $\pi=(f_0,\dots,f_{N-1})$ be a Markov policy. For $n=0,\dots,N$ define
+\[
+V_n^{\pi}(x) := \mathbb{E}_{n,x}^{\pi}\Big[\,\sum_{k=n}^{N-1} r_k\big(X_k,f_k(X_k)\big) + g_N(X_N)\,\Big],\qquad x\in E.
+\]
+(We have $V_N^{\pi}=g_N$.)
+\end{definition}
+
+\begin{definition}[Value function and optimal policy]
+For $n=0,\dots,N$ define the value function
+\[
+V_n(x) := \sup_{\pi} V_n^{\pi}(x),\qquad x\in E.
+\]
+A policy $\pi^*$ is called \emph{optimal} if $V_0^{\pi^*}(x)=V_0(x)$ for all $x\in E$.
+\end{definition}
+
+\subsection{Integrability Assumption}
+The integrability assumption $(A_N)$ is a technical but important safeguard: it guarantees that $V_n^{\pi}$ is finite (at least for the positive parts) for all $n \leq N$, so that comparing policies and taking suprema is mathematically meaningful.
+
+\begin{definition}[Integrability Assumption $(A_N)$]
+For $n=0,1,\dots,N$ define
+\[
+\delta_n^N(x) := \sup_{\pi}\, \mathbb{E}_{n,x}^{\pi}\Big[\,\sum_{k=n}^{N-1} r_k\pos(X_k,f_k(X_k)) + g_N\pos(X_N)\,\Big],\qquad x\in E.
+\]
+We assume that
+\[
+\delta_n^N(x)<\infty\qquad \text{for all }x\in E\text{ and all }n=0,\dots,N.
+\]
+\end{definition}
+
+\begin{remark}
+If all rewards $r_n$ and $g_N$ are bounded from above, then $(A_N)$ holds trivially.
+\end{remark}
+\begin{remark}
+Assumption $(A_N)$ implies $V_n(x)\le \delta_n^N(x)<\infty$ for all $x$ and $n$.
+\end{remark}
+
+\section{History-dependent policies do not improve the value}
+
+\paragraph{Motivation.}
+Allowing decisions to depend on the full history $(X_0,A_0,\dots,X_n)$ looks more powerful than depending only on the current state $X_n$, because the controller seems to have ``more information.'' However, in a Markov decision model the past influences the future \emph{only through} the current state: once you know $X_n=x$ and choose an action $a$, the law of $X_{n+1}$ is $Q_n(\cdot\mid x,a)$ and does not remember how you arrived at $x$. Since the objective is an expectation of future rewards, any history-dependent policy can be replaced by a Markov policy that, at each state $x$, mimics the original policy’s conditional choice of action given $X_n=x$; the resulting state-transition law from time $n$ onward is the same, hence the expected total reward is unchanged. In this sense, $X_n$ is a sufficient statistic for optimal control, so ``remembering the whole past'' cannot increase the maximal achievable value.
+
+
+Define the history spaces
+\[
+H_0:=E,\qquad H_n := H_{n-1}\times A\times E\quad (n\ge 1),
+\]
+so a history up to time $n$ is $h_n=(x_0,a_0,x_1,\dots,x_n)\in H_n$.
+\begin{definition}[History-dependent decision rules and policies]
+\leavevmode
+\begin{enumerate}[label=(\alph*)]  
+  \item A \emph{history-dependent decision rule} at time $n$ is a measurable map $f_n:H_n\to A$ such that $f_n(h_n)\in D_n(x_n)$ for all $h_n\in H_n$.
+  \item A sequence $\pi=(f_0,\dots,f_{N-1})$ of such decision rules is a history-dependent $N$-stage policy.
+  We denote the class of all such policies by $\Pi^N$.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[History dependence does not improve the value]
+For each $n\in\{0,\dots,N\}$ and each history $h_n=(x_0,a_0,x_1,\dots,x_n)$,
+\[
+V_n(x_n) = \sup_{\pi\in \Pi^N} V_n^{\pi}(h_n).
+\]
+In particular, restricting to Markov policies does not reduce the maximal expected total reward.
+\end{theorem}
+
+\begin{remark}
+This is a standard ``Markovization'' result: conditional on the current state, the future is independent of the past under any policy, so the state $X_n$ is a sufficient statistic for future optimization.
+\end{remark}
+
+
+

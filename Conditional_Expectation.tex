@@ -1,0 +1,446 @@
+%===========================================================
+% Conditional Expectation — self-contained summary (LaTeX)
+% Based on lecture notes :contentReference[oaicite:0]{index=0}
+%===========================================================
+
+\chapter{Conditional Expectation}
+
+In many problems, the random variable $X$ we care about is not fully observable, while we only have access to
+some partial information represented by a sub-$\sigma$-algebra $\mathcal F\subseteq\mathcal A$
+(or equivalently by an ``observation'' random variable $Y$ with $\mathcal F=\sigma(Y)$).
+The role of the conditional expectation $\E(X\mid \mathcal F)$ is to turn this partial information into the
+best possible \emph{data-driven prediction} of $X$: it is a random variable that depends only on what is known
+(i.e.\ it is $\mathcal F$-measurable), and it matches $X$ on average on every event that can be decided with the
+available information (i.e.\ $\int_F \E(X\mid\mathcal F)\,d\Prob=\int_F X\,d\Prob$ for all $F\in\mathcal F$).
+Thus, $\E(X\mid\mathcal F)$ is the canonical way to ``compress'' the full randomness of $X$ down to the level of
+information contained in $\mathcal F$ without losing any average information measurable at that level.
+
+A helpful picture is the following: partition $\Omega$ into the finest pieces that $\mathcal F$ can distinguish.
+On each such piece, you are not allowed to see the finer details of $\omega$, so you cannot recover $X(\omega)$ exactly.
+The best you can do is replace $X$ by a quantity that is constant (or at least $\mathcal F$-measurable) on those pieces,
+namely the \emph{average value of $X$ within each information cell}. Conditional expectation is precisely this averaging.
+This intuition becomes exact in the discrete case, where $\E(X\mid\mathcal F)$ is literally a weighted average of $X$ over
+the atoms of $\mathcal F$, and in general it is the continuous analogue of the same idea.
+
+Finally, conditional expectation is not just an averaging device; it is also the correct notion of ``best approximation'':
+when $X\in L^2$, the conditional expectation $\E(X\mid\mathcal F)$ is the orthogonal projection of $X$ onto the space of
+$\mathcal F$-measurable square-integrable random variables. In other words, among all predictors that only use the available
+information, $\E(X\mid\mathcal F)$ minimizes the mean squared error. This connects the measure-theoretic definition to the
+statistical idea of optimal prediction and explains why conditional expectations appear throughout probability, stochastic
+processes, and filtering.
+
+
+\section{Definition and existence}
+Depending on the framework we define conditional expectation differently. The different definitions are compatible and one can spend more time convincing themselves of it, but for brevity we won't do that. We define three conditional expectation: elementary conditional expectation, since it is intuitive, it helps the understanding and two additional ones that we will mainly use along the notes.
+
+\subsection*{Elementary conditional expectation}
+For an event $B\in\mathcal A$ with $\mathbb P(B)>0$, the elementary conditional expectation $\mathbb E[X\mid B]$
+is simply the average of $X$ restricted to $B$, i.e.\ the expectation under the conditional probability measure
+$\mathbb P(\,\cdot\,\mid B)$
+\begin{definition}[Elementary conditional expectation]
+Let $(\Omega,\mathcal A,\mathbb P)$ be a probability space and $B\in\mathcal A$ with $\mathbb P(B)>0$.
+The \emph{elementary conditional probability} is
+\[
+\mathbb P(A\mid B):=\frac{\mathbb P(A\cap B)}{\mathbb P(B)},\qquad A\in\mathcal A,
+\]
+and the \emph{elementary conditional expectation} of an integrable random variable $X$ is
+\[
+\mathbb E_B(X):=\mathbb E(X\mid B)=\frac{1}{\mathbb P(B)}\int_B X\,d\mathbb P.
+\]
+This is well-defined only when $\mathbb P(B)>0$.     
+\end{definition}
+
+
+\subsection*{Conditional expectation w.r.t. a $\sigma$-algebra}
+A sub-$\sigma$-algebra $\mathcal F\subseteq\mathcal A$ represents the \emph{available information}.
+We seek an $\mathcal F$-measurable ``smoothed'' version of $X$ that preserves integrals over $\mathcal F$-events.   
+
+Let $(\Omega,\mathcal A,\mathbb P)$ be a probability space, let $X\in L^1(\Omega,\mathcal A,\mathbb P)$, and let
+$\mathcal F\subseteq \mathcal A$ be a sub-$\sigma$-algebra.
+
+\begin{definition}[Conditional expectation given a $\sigma$-algebra]
+A random variable $Z$ is called a \emph{(version of the) conditional expectation of $X$ given $\mathcal F$} if:
+\begin{enumerate}
+\item[(i)] $Z$ is $\mathcal F$-measurable,
+\item[(ii)] for every $F\in\mathcal F$,
+\[
+\int_F Z\,d\mathbb P \;=\; \int_F X\,d\mathbb P.
+\]
+\end{enumerate}
+In this case we write
+\[
+Z=\mathbb E(X\mid \mathcal F),
+\]
+keeping in mind that $Z$ is unique only up to $\mathbb P$-almost sure equality.
+\end{definition}
+
+\begin{remark}
+Property (ii) says that, when we restrict attention to events $F$ whose occurrence can be decided using only the
+information in $\mathcal F$, replacing $X$ by $\E(X\mid\mathcal F)$ does not change its average value.
+\end{remark}
+
+
+\subsection*{Conditional expectation with respect to a random variable}
+
+Let $(\Omega,\mathcal A,\mathbb P)$ be a probability space, let $X\in L^1(\Omega,\mathcal A,\mathbb P)$, and let
+$Y:\Omega\to(E,\mathcal E)$ be a random element (in particular, a real random variable corresponds to $E=\mathbb R$
+with $\mathcal E=\mathcal B(\mathbb R)$). Define the $\sigma$-algebra generated by $Y$ as
+\[
+\sigma(Y):=\{Y^{-1}(B):\, B\in\mathcal E\}\subseteq \mathcal A.
+\]
+\begin{definition}[Conditional expectation given a random variable]
+A \emph{conditional expectation of $X$ given $Y$} is any version of the conditional expectation of $X$ with respect
+to $\sigma(Y)$, i.e.
+\[
+\mathbb E(X\mid Y)\;:=\;\mathbb E\bigl(X\mid\sigma(Y)\bigr).
+\]
+Equivalently, a random variable $Z$ is a version of $\mathbb E(X\mid Y)$ if
+\begin{enumerate}
+\item[(i)] $Z$ is $\sigma(Y)$-measurable (so $Z$ depends on $\omega$ only through $Y(\omega)$), and
+\item[(ii)] for every $B\in\mathcal E$,
+\[
+\int_{\{Y\in B\}} Z\,d\mathbb P \;=\; \int_{\{Y\in B\}} X\,d\mathbb P.
+\]
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[``Function of the observation'']
+Since $Z$ is $\sigma(Y)$-measurable, there exists an $\mathcal E$-measurable function $h:E\to\mathbb R$ such that
+\[
+\mathbb E(X\mid Y)=h(Y)\qquad \text{$\mathbb P$-a.s.}
+\]
+The function $h$ is uniquely determined $P_Y$-almost everywhere. This motivates the notation
+\[
+\mathbb E(X\mid Y=y):=h(y)\qquad (P_Y\text{-a.e. }y),
+\]
+even though the event $\{Y=y\}$ may have probability $0$ for every fixed $y$.
+\end{remark}
+
+\subsection*{Existence}
+One can show that under reasonable conditions, we can always find a unique conditional expectation given some information, i.e., a sub-$\sigma$-algebra. The key element to show that is Radon-Nikodym theorem.
+
+\begin{theorem}[Conditional expectation existence]
+\label{thm:ce_existence}
+Let $(\Omega,\mathcal A,\mathbb P)$ be a probability space, $X$ a real random variable with
+$\mathbb E(|X|)<\infty$, and $\mathcal F\subseteq\mathcal A$ a sub-$\sigma$-algebra.
+Then there exists an integrable random variable $Z$ such that:
+\begin{enumerate}
+\item[(i)] $Z$ is $\mathcal F$-measurable,
+\item[(ii)] $\displaystyle \int_F Z\,d\mathbb P=\int_F X\,d\mathbb P$ for all $F\in\mathcal F$.
+\end{enumerate}
+If $Z'$ is another random variable with (i)--(ii), then $Z=Z'$ $\mathbb P$-a.s.
+Any such $Z$ is called a \emph{version} of $\mathbb E(X\mid\mathcal F)$.
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1: the case $X\ge 0$.}
+Define a set function $Q$ on $(\Omega,\mathcal F)$ by
+\[
+Q(F):=\int_F X\,d\mathbb P,\qquad F\in\mathcal F.
+\]
+Then $Q$ is a measure on $\mathcal F$ and $Q\ll \mathbb P|_{\mathcal F}$ (if $\mathbb P(F)=0$, then $Q(F)=0$).
+By the Radon--Nikodym theorem, there exists an $\mathcal F$-measurable $Z\ge 0$ such that
+\[
+Q(F)=\int_F Z\,d\mathbb P,\qquad \forall F\in\mathcal F,
+\]
+which is exactly (ii), while (i) holds by construction.
+
+\textbf{Step 2: general integrable $X$.}
+Write $X=X^+-X^-$ with $X^\pm\ge 0$ and $\mathbb E(X^\pm)<\infty$.
+Apply Step 1 to $X^+$ and $X^-$ to obtain $\mathcal F$-measurable $Z^\pm$ satisfying (ii) for $X^\pm$.
+Then $Z:=Z^+-Z^-$ satisfies (i)--(ii) for $X$.
+
+\textbf{Step 3: uniqueness up to a.s.\ equality.}
+If $Z'$ is another candidate, then for all $F\in\mathcal F$,
+\[
+\int_F (Z-Z')\,d\mathbb P=0.
+\]
+For $n\in\mathbb N$, set $F_n:=\{Z-Z'>1/n\}\in\mathcal F$. Then
+\[
+0=\int_{F_n}(Z-Z')\,d\mathbb P\ \ge\ \frac1n\,\mathbb P(F_n),
+\]
+so $\mathbb P(F_n)=0$ for all $n$, hence $\mathbb P(Z>Z')=0$. By symmetry $\mathbb P(Z<Z')=0$,
+thus $Z=Z'$ $\mathbb P$-a.s.
+\end{proof}
+
+\begin{remark}
+$\mathbb E(X\mid\mathcal F)$ is only defined up to $\mathbb P$-null sets; therefore most equalities involving
+conditional expectations are intended $\mathbb P$-a.s. 
+\end{remark}
+
+\section{Basic properties of conditional expectation}
+
+Throughout, let $X,Y\in L^{1}(\Omega,\mathcal A,\mathbb P)$ and let $\mathcal F\subseteq \mathcal A$ be a sub-$\sigma$-algebra.
+
+\begin{theorem}[Properties of conditional expectation]
+\label{thm:ce_props}
+Let $a,b\in\mathbb R$ and let $\mathcal G\subseteq \mathcal F$ be another sub-$\sigma$-algebra. Then:
+\begin{enumerate}
+\item[(1)] \textbf{Linearity:}
+\[
+\mathbb E(aX+bY\mid \mathcal F)=a\,\mathbb E(X\mid\mathcal F)+b\,\mathbb E(Y\mid\mathcal F)\quad\text{a.s.}
+\]
+
+\item[(2)] \textbf{Monotonicity:} if $X\le Y$ a.s., then
+\[
+\mathbb E(X\mid\mathcal F)\le \mathbb E(Y\mid\mathcal F)\quad\text{a.s.}
+\]
+
+\item[(3)] \textbf{Taking out constants / normalization:}
+if $c$ is constant then $\mathbb E(c\mid\mathcal F)=c$ a.s., and in particular
+\[
+\mathbb E(1\mid\mathcal F)=1\quad\text{a.s.}
+\]
+
+\item[(4)] \textbf{Tower property (iterated conditioning):}
+\[
+\mathbb E(\mathbb E(X\mid\mathcal F)\mid\mathcal G)=\mathbb E(X\mid\mathcal G)\quad\text{a.s.}
+\]
+and also $\mathbb E(\mathbb E(X\mid\mathcal G)\mid\mathcal F)=\mathbb E(X\mid\mathcal G)$ a.s.
+
+\item[(5)] \textbf{Triangle inequality / positivity:}
+\[
+\bigl|\mathbb E(X\mid\mathcal F)\bigr|\le \mathbb E(|X|\mid\mathcal F)\quad\text{a.s.}
+\]
+In particular, if $X\ge 0$ a.s.\ then $\mathbb E(X\mid\mathcal F)\ge 0$ a.s.
+
+\item[(6)] \textbf{Pulling out what we know (measurable factor):}
+if $Z$ is $\mathcal F$-measurable and $\mathbb E(|ZX|)<\infty$, then
+\[
+\mathbb E(ZX\mid\mathcal F)=Z\,\mathbb E(X\mid\mathcal F)\quad\text{a.s.}
+\]
+
+\item[(7)] \textbf{Independence:}
+if $X$ is independent of $\mathcal F$, then
+\[
+\mathbb E(X\mid\mathcal F)=\mathbb E(X)\quad\text{a.s.}
+\]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Let $X_0:=\mathbb E(X\mid\mathcal F)$ and $Y_0:=\mathbb E(Y\mid\mathcal F)$ denote fixed versions.
+
+\textbf{(1) Linearity.}
+Set $Z:=aX+bY$ and $Z_0:=aX_0+bY_0$. Then $Z_0$ is $\mathcal F$-measurable.
+For any $F\in\mathcal F$,
+\[
+\int_F Z_0\,d\mathbb P
+=a\int_F X_0\,d\mathbb P+b\int_F Y_0\,d\mathbb P
+=a\int_F X\,d\mathbb P+b\int_F Y\,d\mathbb P
+=\int_F Z\,d\mathbb P.
+\]
+Hence $Z_0$ satisfies the defining properties of $\mathbb E(Z\mid\mathcal F)$, so by uniqueness a.s.\ we obtain (1).
+
+\textbf{(2) Monotonicity.}
+Assume $X\le Y$ a.s.\ and let $A:=\{X_0>Y_0\}\in\mathcal F$.
+Then, using the defining property on $A$,
+\[
+\int_A (Y_0-X_0)\,d\mathbb P=\int_A (Y-X)\,d\mathbb P\ge 0,
+\]
+but on $A$ we have $Y_0-X_0<0$. This forces $\mathbb P(A)=0$, hence $X_0\le Y_0$ a.s.
+
+\textbf{(3) Constants.}
+Let $c\in\mathbb R$ and define $Z(\omega):=c$. Then $Z$ is $\mathcal F$-measurable and for all $F\in\mathcal F$,
+\[
+\int_F Z\,d\mathbb P=c\,\mathbb P(F)=\int_F c\,d\mathbb P.
+\]
+Thus $Z$ is a version of $\mathbb E(c\mid\mathcal F)$, i.e.\ $\mathbb E(c\mid\mathcal F)=c$ a.s.
+
+\textbf{(4) Tower property.}
+Let $\mathcal G\subseteq\mathcal F$. For any $G\in\mathcal G$,
+\[
+\int_G \mathbb E(\mathbb E(X\mid\mathcal F)\mid\mathcal G)\,d\mathbb P
+=\int_G \mathbb E(X\mid\mathcal F)\,d\mathbb P
+=\int_G X\,d\mathbb P
+=\int_G \mathbb E(X\mid\mathcal G)\,d\mathbb P.
+\]
+Both random variables are $\mathcal G$-measurable, hence they coincide a.s.
+The identity $\mathbb E(\mathbb E(X\mid\mathcal G)\mid\mathcal F)=\mathbb E(X\mid\mathcal G)$ follows since
+$\mathbb E(X\mid\mathcal G)$ is already $\mathcal F$-measurable (because $\mathcal G\subseteq\mathcal F$).
+
+\textbf{(5) Triangle inequality / positivity.}
+Since $-\,|X|\le X\le |X|$ a.s., apply monotonicity (2) to obtain
+\[
+\mathbb E(-|X|\mid\mathcal F)\le \mathbb E(X\mid\mathcal F)\le \mathbb E(|X|\mid\mathcal F)\quad\text{a.s.}
+\]
+Using linearity and constants, $\mathbb E(-|X|\mid\mathcal F)=-\mathbb E(|X|\mid\mathcal F)$, hence
+$|\mathbb E(X\mid\mathcal F)|\le \mathbb E(|X|\mid\mathcal F)$ a.s.
+If $X\ge 0$ a.s., then $0\le X$ implies $0=\mathbb E(0\mid\mathcal F)\le \mathbb E(X\mid\mathcal F)$ a.s.
+
+\textbf{(6) Pulling out what we know.}
+We prove first for indicators. Let $Z=\mathbf 1_{F_0}$ with $F_0\in\mathcal F$.
+For any $F\in\mathcal F$,
+\[
+\int_F \mathbf 1_{F_0}X\,d\mathbb P=\int_{F\cap F_0} X\,d\mathbb P
+=\int_{F\cap F_0} \mathbb E(X\mid\mathcal F)\,d\mathbb P
+=\int_F \mathbf 1_{F_0}\,\mathbb E(X\mid\mathcal F)\,d\mathbb P.
+\]
+Thus $\mathbf 1_{F_0}\mathbb E(X\mid\mathcal F)$ satisfies the defining property of
+$\mathbb E(\mathbf 1_{F_0}X\mid\mathcal F)$, proving
+\[
+\mathbb E(\mathbf 1_{F_0}X\mid\mathcal F)=\mathbf 1_{F_0}\mathbb E(X\mid\mathcal F)\quad\text{a.s.}
+\]
+
+Next let $Z\ge 0$ be $\mathcal F$-measurable. Choose simple functions $Z_n=\sum_{k=1}^{m_n} c_{k,n}\mathbf 1_{F_{k,n}}$
+with $c_{k,n}\ge 0$, $F_{k,n}\in\mathcal F$, and $Z_n\uparrow Z$ pointwise.
+By linearity and the indicator case,
+\[
+\mathbb E(Z_n X\mid\mathcal F)=Z_n\,\mathbb E(X\mid\mathcal F)\quad\text{a.s.}
+\]
+Moreover, $|Z_n X|\le |Z X|$ and $\mathbb E(|Z X|)<\infty$, so by dominated convergence,
+$Z_n X\to Z X$ in $L^1$, hence $\mathbb E(Z_n X\mid\mathcal F)\to \mathbb E(ZX\mid\mathcal F)$ in $L^1$.
+Also $Z_n\mathbb E(X\mid\mathcal F)\to Z\mathbb E(X\mid\mathcal F)$ in $L^1$ by dominated convergence
+(using $|Z_n\mathbb E(X\mid\mathcal F)|\le |Z|\mathbb E(|X|\mid\mathcal F)$ and integrability).
+Passing to the limit gives $\mathbb E(ZX\mid\mathcal F)=Z\,\mathbb E(X\mid\mathcal F)$ a.s.\ for $Z\ge 0$.
+
+Finally, for general $Z$ write $Z=Z^+-Z^-$ and apply the $Z\ge 0$ case plus linearity.
+
+\textbf{(7) Independence.}
+Assume $X$ is independent of $\mathcal F$. Let $F\in\mathcal F$. Then
+\[
+\int_F X\,d\mathbb P=\mathbb E(X\mathbf 1_F)=\mathbb E(X)\,\mathbb E(\mathbf 1_F)=\mathbb E(X)\,\mathbb P(F)
+=\int_F \mathbb E(X)\,d\mathbb P.
+\]
+Hence the constant random variable $\mathbb E(X)$ satisfies the defining property of $\mathbb E(X\mid\mathcal F)$,
+so $\mathbb E(X\mid\mathcal F)=\mathbb E(X)$ a.s.
+\end{proof}
+
+
+\section{Interpretation as best approximation in \texorpdfstring{$L^2$}{L2}}
+
+When $X\in L^2(\Omega,\mathcal A,\mathbb P)$, the conditional expectation $\E(X\mid\mathcal F)$ admits a particularly
+transparent geometric meaning: it is the optimal predictor of $X$ among all random variables that can be computed from
+the information in $\mathcal F$. More precisely, the space $L^2(\Omega,\mathcal F,\mathbb P)$ of $\mathcal F$-measurable,
+square-integrable random variables is a closed linear subspace of the Hilbert space $L^2(\Omega,\mathcal A,\mathbb P)$, and
+$\E(X\mid\mathcal F)$ is exactly the orthogonal projection of $X$ onto this subspace. Equivalently, it is the unique (up to
+a.s.\ equality) $\mathcal F$-measurable random variable $Y$ that minimizes the mean squared error
+$\E[(X-Y)^2]$ over all $Y\in L^2(\Omega,\mathcal F,\mathbb P)$. Intuitively, conditioning ``throws away'' the components of
+$X$ that are invisible under $\mathcal F$ and keeps only the part that is explainable using the available information; the
+remaining error $X-\E(X\mid\mathcal F)$ is orthogonal (uncorrelated in $L^2$) to every $\mathcal F$-measurable square-integrable
+random variable, which is the hallmark of an orthogonal projection.
+
+\begin{theorem}[Best approximation / orthogonal projection]
+\label{thm:best_approx}
+If $X\in L^2(\Omega,\mathcal A,\mathbb P)$, then $\mathbb E(X\mid\mathcal F)$ is the orthogonal projection of $X$
+onto the closed linear subspace $L^2(\Omega,\mathcal F,\mathbb P)$ of $\mathcal F$-measurable square integrable random variables:
+\[
+\mathbb E\!\left[(X-\mathbb E(X\mid\mathcal F))^2\right]\le \mathbb E[(X-Y)^2]
+\quad \forall\,Y\in L^2(\Omega,\mathcal F,\mathbb P),
+\]
+with equality iff $Y=\mathbb E(X\mid\mathcal F)$ a.s.
+\end{theorem}
+
+\begin{proof}
+Let $X_0=\mathbb E(X\mid\mathcal F)$ (a version) and $Y\in L^2(\Omega,\mathcal F,\mathbb P)$.
+First, $X_0\in L^2$ (e.g.\ by Jensen: $\mathbb E(X_0^2)\le \mathbb E(\mathbb E(X^2\mid\mathcal F))=\mathbb E(X^2)$).
+Using the tower property and the measurable factor property,
+\[
+\mathbb E\bigl[(X-X_0)(X_0-Y)\bigr]
+=\mathbb E\Bigl[\mathbb E(X-X_0\mid\mathcal F)\,(X_0-Y)\Bigr]=0,
+\]
+so $X-X_0$ is orthogonal to $X_0-Y$. Hence, by Pythagoras,
+\[
+\mathbb E[(X-Y)^2]=\mathbb E[(X-X_0)^2]+\mathbb E[(X_0-Y)^2]\ge \mathbb E[(X-X_0)^2],
+\]
+and equality holds iff $\mathbb E[(X_0-Y)^2]=0$, i.e.\ $X_0=Y$ a.s.
+\end{proof}
+
+\section{Conditional Jensen inequality}
+A central reason conditional expectation is so useful is that it behaves well under convex transformations, captured by the
+conditional Jensen inequality
+\[
+g\!\bigl(\E(X\mid\mathcal F)\bigr)\le \E(g(X)\mid\mathcal F)\qquad\text{a.s.}
+\]
+for convex $g$. Intuitively, conditioning replaces $X$ by an average given the information $\mathcal F$, and convex functions
+penalize variability: evaluating $g$ after averaging can only decrease the result compared to averaging $g(X)$. This inequality
+is important because it provides a systematic way to compare risks and uncertainties under information reduction and is the
+key tool behind many fundamental bounds. For instance, taking $g(x)=x^2$ shows that conditioning cannot increase $L^2$-energy
+(and yields $\E[(\E(X\mid\mathcal F))^2]\le \E[X^2]$), while choices like $g(x)=e^{tx}$ lead to conditional moment generating
+function bounds that underpin concentration inequalities. In stochastic processes, conditional Jensen is repeatedly used to
+prove submartingale/supermartingale properties (e.g.\ $g(M_n)$ for a martingale $M_n$ and convex $g$ is a submartingale), and
+in statistical estimation it formalizes the idea that ``averaging reduces convex loss'', which is exactly why conditional
+expectation becomes the optimal predictor under squared loss and more generally interacts well with convex risk functionals.
+
+
+\begin{theorem}[Jensen inequality]
+\label{thm:jensen}
+Let $X\in L^1$ take values in an interval $I\subset\mathbb R$, and let $g:I\to\mathbb R$ be convex with
+$\mathbb E(|g(X)|)<\infty$. Then for any $\mathcal F\subseteq\mathcal A$,
+\[
+g\bigl(\mathbb E(X\mid\mathcal F)\bigr)\ \le\ \mathbb E(g(X)\mid\mathcal F)\qquad \text{a.s.}
+\]
+\end{theorem}
+
+\begin{proof}
+(Outline following the supporting-line proof.) Assume for simplicity that $I$ is open.
+For any $x_0\in I$, convexity implies the existence of a supporting line with slope given by the right-derivative $\partial_+g(x_0)$:
+\[
+g(x)\ge g(x_0)+\partial_+g(x_0)(x-x_0),\qquad x\in I.
+\]
+Moreover one may represent $g$ as the supremum of countably many such supporting lines (e.g.\ $x_0\in I\cap\mathbb Q$):
+\[
+g(x)=\sup_{x_0\in I\cap\mathbb Q}\Bigl[g(x_0)+\partial_+g(x_0)(x-x_0)\Bigr].
+\]
+Insert $X$ and take conditional expectation:
+for each fixed rational $x_0$,
+\[
+\mathbb E(g(X)\mid\mathcal F)\ \ge\ g(x_0)+\partial_+g(x_0)\bigl(\mathbb E(X\mid\mathcal F)-x_0\bigr)\qquad \text{a.s.}
+\]
+Because this is countably many inequalities, they hold simultaneously outside one $\mathbb P$-null set.
+Taking the supremum over $x_0\in I\cap\mathbb Q$ yields
+\[
+\mathbb E(g(X)\mid\mathcal F)\ \ge\ g\bigl(\mathbb E(X\mid\mathcal F)\bigr)\qquad \text{a.s.}
+\]
+\end{proof}
+
+\section{Conditional expectation as a measurable function}
+
+In contrast to simple expectations, conditional ones are in general measurable functions. We can see that as following: if $\mathcal F=\sigma(Y)$ for a random element $Y:(\Omega,\mathcal A)\to (E,\mathcal E)$ and $\mathbb E(|X|)<\infty$,
+then $\mathbb E(X\mid Y):=\mathbb E(X\mid\sigma(Y))$ is $\sigma(Y)$-measurable.
+By the factorization lemma, any $\sigma(Y)$-measurable random variable $Z$ can be written as $Z=h(Y)$ for some
+$\mathcal E$-measurable $h:E\to\mathbb R$. Hence there exists an $\mathcal E$-measurable $h$ such that
+\[
+\mathbb E(X\mid Y)=h(Y)\quad\text{a.s.}
+\]
+The function $h$ is uniquely determined $P_Y$-a.s.\ (if $h(Y)=h'(Y)$ a.s.\ then $P_Y(\{h\ne h'\})=0$).
+This motivates the (a.s.\ meaningful) notation
+\[
+\mathbb E(X\mid Y=y):=h(y),\qquad y\in E,
+\]
+even when $\mathbb P(Y=y)=0$ for all $y$. 
+
+\section{Joint density formula (conditional density) and the key equation}
+
+In the continuous case one often computes conditional expectations by introducing a conditional density. 
+
+\begin{lemma}[Conditional density and conditional expectation formula]
+\label{lem:cond_density}
+Let $(X,Y)$ be a continuous random vector with joint density $f_{X,Y}$ and let $h$ be measurable with
+$\mathbb E(|h(X,Y)|)<\infty$. Define the marginal density
+\[
+f_Y(y)=\int f_{X,Y}(x,y)\,dx,
+\]
+and define a conditional density by
+\[
+f_{X\mid Y}(x\mid y):=
+\begin{cases}
+\dfrac{f_{X,Y}(x,y)}{f_Y(y)}, & 0<f_Y(y)<\infty,\\[1.2ex]
+f_0(x), & \text{otherwise,}
+\end{cases}
+\]
+where $f_0$ is any fixed probability density.
+Then (for $P_Y$-a.e.\ $y$),
+\begin{equation}
+\label{eq:condexp_density}
+\mathbb E\bigl(h(X,Y)\mid Y=y\bigr)=\int h(x,y)\,f_{X\mid Y}(x\mid y)\,dx,
+\end{equation}
+and consequently
+\[
+\mathbb E\bigl(h(X,Y)\mid Y\bigr)=\int h(x,Y)\,f_{X\mid Y}(x\mid Y)\,dx\qquad \text{a.s.}
+\]
+\end{lemma}
+
+%===========================================================
+% End of summary
+%===========================================================

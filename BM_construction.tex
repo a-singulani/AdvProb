@@ -1,0 +1,179 @@
+\chapter{Construction of Brownian Motion}
+
+Brownian motion can be characterized as a centered Gaussian process whose covariance
+structure is given by
+\[
+\E[B(s)B(t)] = \min(s,t), \qquad s,t \in [0,1].
+\]
+The guiding principle behind the construction below is to \emph{build such a Gaussian
+process explicitly} by expanding the indicator functions
+$1_{[0,t]}$ in an orthonormal basis of $L^2([0,1])$.
+
+Indeed, if $\{g_{k,n}\}$ is an orthonormal basis of $L^2([0,1])$, then any function
+$h \in L^2([0,1])$ admits the expansion
+\[
+h = \sum_{k,n} \langle h, g_{k,n} \rangle g_{k,n},
+\]
+and Parseval's identity ensures that inner products are preserved by summation over the
+basis. Applying this idea formally to the family $\{1_{[0,t]}\}_{t\in[0,1]}$, one is led
+to consider random series of the form
+\[
+B(t) = \sum_{k,n} Z_{k,n} \int_0^t g_{k,n}(u)\,du,
+\]
+where $\{Z_{k,n}\}$ are independent standard normal random variables.
+
+The choice of the Haar basis is particularly natural: its elements are localized on
+dyadic intervals, and their integrals are continuous, piecewise linear ``tent''
+functions. This localization allows for precise control of the uniform convergence of
+the series and ultimately guarantees the continuity of the sample paths.
+
+The proof below follows this strategy rigorously. First, we show that the random series
+converges uniformly almost surely, producing a continuous process. Then we identify the
+finite-dimensional distributions and compute the covariance via Parseval's identity.
+The Gaussian structure then automatically yields independent, stationary increments,
+revealing the constructed process to be Brownian motion.
+
+\begin{theorem}[Existence (L\'evy--Ciesielski / Haar--Schauder Construction)]
+There exists a probability space $(\Omega,\mathcal F,\Prob)$ and a stochastic process
+$B=(B_t)_{t\in[0,1]}$ such that
+
+\begin{enumerate}
+\item $B_0=0$ almost surely,
+\item $t\mapsto B_t(\omega)$ is continuous on $[0,1]$ for $\Prob$-almost every $\omega$,
+\item for all $0\le s<t\le 1$, $B_t-B_s\sim\mathcal N(0,t-s)$,
+\item increments over disjoint intervals are independent.
+\end{enumerate}
+
+Hence $B$ is a standard Brownian motion on $[0,1]$.
+
+Moreover, $B$ admits the series representation
+\[
+B(t)=\sum_{n=0}^\infty\sum_{k=1}^{2^n} Z_{k,n}\, f_{k,n}(t),
+\]
+where $\{Z_{k,n}\}$ are independent standard normal random variables and
+$f_{k,n}(t)=\int_0^t g_{k,n}(u)\,du$, with $\{g_{k,n}\}$ the Haar orthonormal basis of
+$L^2([0,1])$.
+\end{theorem}
+
+\bigskip
+
+\section*{Proof}
+
+The proof proceeds in four steps:
+(i) definition of the deterministic basis,
+(ii) almost sure uniform convergence of the random series,
+(iii) identification of the Gaussian covariance,
+(iv) verification of the Brownian motion properties.
+
+\subsection*{Step 1: Haar functions and Schauder primitives}
+
+Let $\{g_{k,n}\}_{n\ge0,\,1\le k\le2^n}$ be the Haar orthonormal basis of $L^2([0,1])$,
+defined by
+\[
+g_{k,n}(t)
+=
+2^{n/2}\big(1_{I_{k,n}^\ell}(t)-1_{I_{k,n}^r}(t)\big),
+\]
+where $I_{k,n}=[(k-1)2^{-n},k2^{-n})$ and $I_{k,n}^\ell$, $I_{k,n}^r$ are its left and right
+halves.
+
+Define the integrated (Schauder) functions
+\[
+f_{k,n}(t)=\int_0^t g_{k,n}(u)\,du.
+\]
+Each $f_{k,n}$ is continuous, piecewise linear, and supported on $I_{k,n}$.
+A direct computation shows
+\[
+\|f_{k,n}\|_\infty \le 2^{-(n/2+1)}.
+\]
+
+\subsection*{Step 2: Definition of the random series}
+
+Let $\{Z_{k,n}\}$ be independent $\mathcal N(0,1)$ random variables.
+For $N\in\mathbb{N}$ define the partial sums
+\[
+B_N(t)=\sum_{n=0}^N\sum_{k=1}^{2^n} Z_{k,n} f_{k,n}(t).
+\]
+Each $B_N$ is a continuous stochastic process on $[0,1]$.
+
+\subsection*{Step 3: Almost sure uniform convergence}
+
+Define the level-$n$ contribution
+\[
+\Delta_n(t)=\sum_{k=1}^{2^n} Z_{k,n} f_{k,n}(t).
+\]
+Since the supports of $f_{k,n}$ are disjoint for fixed $n$,
+\[
+\sup_{t\in[0,1]}|\Delta_n(t)|
+\le \max_{1\le k\le2^n}|Z_{k,n}|\cdot \|f_{k,n}\|_\infty
+\le 2^{-(n/2+1)} \max_{k}|Z_{k,n}|.
+\]
+
+Using Gaussian tail estimates and the union bound, one shows that
+\[
+\sum_{n=0}^\infty \Prob\!\left(\max_{k}|Z_{k,n}| > a_n\right)<\infty
+\]
+for a suitable sequence $a_n\to\infty$.
+By the Borel--Cantelli lemma,
+\[
+\sum_{n=0}^\infty \sup_{t\in[0,1]}|\Delta_n(t)| < \infty
+\quad\text{almost surely}.
+\]
+Hence $\sum_n \Delta_n(t)$ converges uniformly in $t$ almost surely.
+Define
+\[
+B(t)=\sum_{n=0}^\infty \Delta_n(t).
+\]
+Then $B$ has almost surely continuous sample paths.
+
+\subsection*{Step 4: Gaussianity and covariance structure}
+
+For each fixed $t$, $B_N(t)$ is a finite linear combination of independent Gaussian
+random variables, hence Gaussian. Moreover, $B_N(t)\to B(t)$ in $L^2$, so $B(t)$ is
+Gaussian.
+
+For $s,t\in[0,1]$,
+\[
+\E[B(s)B(t)]
+=
+\sum_{n,k} f_{k,n}(s)f_{k,n}(t).
+\]
+Since
+\[
+f_{k,n}(t)=\int_0^t g_{k,n}(u)\,du
+= \langle 1_{[0,t]}, g_{k,n}\rangle_{L^2},
+\]
+the bilinear Parseval identity yields
+\[
+\E[B(s)B(t)]
+=
+\langle 1_{[0,s]},1_{[0,t]}\rangle_{L^2}
+=
+\int_0^{\min(s,t)}1\,du
+=
+\min(s,t).
+\]
+
+\subsection*{Step 5: Identification as Brownian motion}
+
+Since $(B(s),B(t))$ is jointly Gaussian,
+\[
+B(t)-B(s)\sim\mathcal N(0,t-s).
+\]
+Moreover, for disjoint intervals $[s,t]$ and $[u,v]$,
+\[
+\mathrm{Cov}(B(t)-B(s),\,B(v)-B(u))=0,
+\]
+which implies independence of increments.
+Finally, $B_0=0$ holds trivially from the definition.
+
+Therefore $B$ is a standard Brownian motion on $[0,1]$.
+\hfill $\square$
+
+\bigskip
+
+\begin{remark}
+This construction provides both a theoretical realization of Brownian motion
+and a practical approximation scheme: truncating the series yields continuous
+random paths converging uniformly almost surely.
+\end{remark}

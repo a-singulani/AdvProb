@@ -1,0 +1,1061 @@
+\chapter{Further Properties of Brownian Motion}
+
+\section{Framework}
+
+Let $(B_t)_{t\ge0}$ be a one--dimensional standard Brownian motion on a probability space
+$(\Omega,\mathcal F,\Pp)$.
+We work with the completed, right--continuous natural filtration
+\[
+\widehat{\mathcal F}_t
+:= \sigma\{B_s:0\le s\le t\}\vee\mathcal N,
+\]
+where $\mathcal N$ denotes the $\Pp$--null sets.
+
+A random time $T:\Omega\to[0,\infty]$ is called a \emph{stopping time} if
+\[
+\{T\le t\}\in\widehat{\mathcal F}_t
+\quad\text{for all }t\ge0.
+\]
+
+\section{Exit Times and the Skorokhod Embedding}
+
+% --- Intuitive introduction to Section 2: Exit Times and the Skorokhod Embedding ---
+
+\paragraph{Idea of this section.}
+Up to now, Brownian motion has been introduced through its defining properties
+(continuous paths, Gaussian and independent increments).
+In this section we use Brownian motion as a \emph{random source of probability measures}:
+by stopping the process at a carefully chosen random time, we can \emph{manufacture} a prescribed
+probability distribution.
+
+\medskip
+\paragraph{Why exit times?}
+A first natural class of stopping times are \emph{hitting/exit times}.
+If we start at $0$ and look at the first time the path leaves a bounded interval $(a,b)$ with $a<0<b$,
+then the stopped value $B_\gamma$ can only be the endpoint $a$ or $b$.
+So although $B_\gamma$ is simple (a two--point distribution), it is already \emph{tunable}:
+\begin{itemize}
+\item the probability of exiting at $a$ versus $b$ depends on the geometry of the interval,
+\item and the expected exit time $\E[\gamma]$ can be computed explicitly.
+\end{itemize}
+This is exactly why the proof of Proposition~2.1 focuses on martingales such as $B_t$ and $B_t^2-t$:
+optional stopping turns these path properties into algebraic identities for hitting probabilities and
+expected exit times.
+
+\medskip
+\paragraph{From two points to an arbitrary law: the embedding idea.}
+The Skorokhod embedding problem asks:
+given a target law $F$ on $\R$ with mean $0$ and finite variance, can we find a stopping time $T$ such that
+$B_T\sim F$?
+The guiding idea is to build $T$ by \emph{randomizing the interval}.
+Instead of a deterministic $(a,b)$, we choose random endpoints $(\alpha,\beta)$ with $\alpha<0<\beta$ and then stop
+\[
+T=\inf\{t>0:\,B_t\notin(\alpha,\beta)\}.
+\]
+Conditionally on $(\alpha,\beta)=(a,b)$ we already know the law of $B_T$ (it is concentrated on $\{a,b\}$ with explicit weights),
+so the unconditional law of $B_T$ becomes a \emph{mixture} (integral) over $(a,b)$.
+By choosing the mixing measure $\mu$ appropriately, the mixture can be made equal to the prescribed $F$.
+
+\medskip
+\paragraph{Why the variance appears as $\E[T]$.}
+The second requirement $\E[T]=\sigma^2$ is not accidental.
+Brownian motion satisfies $\E[B_t^2]=t$, so time plays the role of variance.
+Once we enforce $B_T\sim F$, we automatically have $\E[B_T^2]=\sigma^2$.
+The proof then uses the explicit formula $\E[T\mid \alpha,\beta]=-\,\alpha\beta$ from Proposition~2.1 and integrates it against $\mu$:
+the construction of $\mu$ is designed so that this integral equals $\sigma^2$.
+In this way, the embedding identifies the ``amount of time'' needed for Brownian motion to accumulate the required second moment.
+
+\medskip
+\paragraph{What to remember.}
+The core mechanism is:
+
+$\text{martingales + optional stopping} \quad\Longrightarrow\quad \text{explicit exit distribution and exit time} $ 
+
+$\quad\Longrightarrow\quad \text{mixture over intervals yields any target law.}$
+
+Once this viewpoint is clear, the integral computations in the proof become transparent:
+they are simply the bookkeeping needed to express a conditional two--point law as an unconditional target distribution.
+
+
+\subsection{Exit time from an interval}
+
+Fix $a<0<b$ and define the exit time
+\[
+\gamma := \inf\{t>0:\, B_t\notin(a,b)\}.
+\]
+
+\begin{proposition}
+The following statements hold:
+\begin{enumerate}
+\item $\Pp(\gamma<\infty)=1$.
+\item $\Pp(B_\gamma=a)=\frac{b}{\,b-a\,},
+\qquad
+\Pp(B_\gamma=b)=\frac{-a}{\,b-a\,}.$
+\item $\E[\gamma]=-ab$.
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}[Optional Stopping Theorem]
+Let $(M_t)_{t\ge0}$ be a martingale and $T$ a stopping time such that one of the following
+conditions holds:
+\begin{itemize}
+\item $T$ is almost surely bounded, or
+\item $(M_{t\wedge T})_{t\ge0}$ is uniformly integrable.
+\end{itemize}
+Then
+\[
+\E[M_T]=\E[M_0].
+\]
+\end{theorem}
+
+\begin{proof}[Proof of Proposition 2.1]
+\textbf{Step 1: Almost sure finiteness of $\gamma$.}
+
+Since Brownian motion is recurrent in one dimension, it exits every bounded interval almost surely. Hence
+\[
+\Pp(\gamma<\infty)=1.
+\]
+
+\medskip
+
+\textbf{Step 2: Exit probabilities.}
+
+For $\gamma_n:=\gamma\wedge n$, optional stopping applied to the martingale $(B_t)$ yields
+\[
+\E[B_{\gamma_n}]=0.
+\]
+Letting $n\to\infty$ gives $\E[B_\gamma]=0$. Since $B_\gamma\in\{a,b\}$,
+\[
+a\,\Pp(B_\gamma=a)+b\,\Pp(B_\gamma=b)=0,
+\]
+which together with normalization yields the stated probabilities.
+
+\medskip
+
+\textbf{Step 3: Expectation of $\gamma$.}
+
+Applying optional stopping to the martingale $(B_t^2-t)$ gives
+\[
+\E[B_\gamma^2]=\E[\gamma].
+\]
+Since $B_\gamma\in\{a,b\}$, this yields $\E[\gamma]=-ab$.
+\end{proof}
+
+\subsection{Skorokhod embedding}
+
+Let $F$ be a probability measure on $\R$ with
+\[
+\int_\R x\,F(dx)=0,
+\qquad
+\int_\R x^2\,F(dx)=\sigma^2<\infty.
+\]
+
+Split $F$ into its positive and negative parts,
+\[
+F^+ := F|_{[0,\infty)},\qquad F^- := F|_{(-\infty,0)}.
+\]
+
+One can construct a probability measure $\mu$ on
+$(-\infty,0)\times(0,\infty)$ such that if
+$(\alpha,\beta)\sim\mu$ is independent of $B$ and
+\[
+T:=\inf\{t>0:\, B_t\notin(\alpha,\beta)\},
+\]
+then
+\[
+B_T\sim F
+\quad\text{and}\quad
+\E[T]=\sigma^2.
+\]
+
+\begin{theorem}[Skorokhod embedding]
+There exists a stopping time $T$ such that
+\[
+B_T\sim F
+\quad\text{and}\quad
+\E[T]=\sigma^2.
+\]
+\end{theorem}
+
+\begin{proof}
+Define the normalizing constant $\gamma>0$ by
+\[
+\gamma^{-1}
+:= \int_{0}^{\infty} b\,F(db)
+= -\int_{-\infty}^{0} a\,F(da)
+= \frac12\int_{\R} |x|\,F(dx),
+\]
+where the equalities follow from $\int_{\R} x\,F(dx)=0$.
+
+On $(-\infty,0)\times(0,\infty)$ define the probability measure
+\[
+\mu(da,db)
+:= \gamma\,\frac{1}{b-a}\,F^+(db)\,F^-(da).
+\]
+(That $\mu$ is a probability measure is exactly the normalization encoded by $\gamma^{-1}$.)
+
+Let $(\alpha,\beta)\sim\mu$ be independent of the Brownian motion $B$, and set
+\[
+T:=\inf\{t>0:\,B_t\notin(\alpha,\beta)\}.
+\]
+Conditionally on $\{(\alpha,\beta)=(a,b)\}$, Proposition~2.1 gives
+\[
+\Pp(B_T\in db\mid \alpha=a,\beta=b)=\frac{-a}{b-a}\,\delta_b(db),
+\qquad
+\Pp(B_T\in da\mid \alpha=a,\beta=b)=\frac{b}{b-a}\,\delta_a(da),
+\]
+where $\delta_x$ denotes the Dirac measure at $x$.
+
+\medskip
+\noindent\textbf{Law of $B_T$.}
+Fix a Borel set $E\subset(0,\infty)$. Using conditioning and the definition of $\mu$,
+\begin{align*}
+\Pp(B_T\in E)
+&=\int_{-\infty}^{0}\int_{0}^{\infty}
+\Pp(B_T\in E\mid \alpha=a,\beta=b)\,\mu(da,db)\\
+&=\int_{-\infty}^{0}\int_{0}^{\infty}
+\left(\frac{-a}{b-a}\mathbf{1}_E(b)\right)\,
+\gamma\frac{1}{b-a}\,F^+(db)\,F^-(da)\\
+&=\int_{0}^{\infty}\mathbf{1}_E(b)\,
+\left[\gamma\int_{-\infty}^{0}\frac{-a}{(b-a)^2}\,F^-(da)\right]F^+(db).
+\end{align*}
+By construction the notes, the bracketed factor is equal to $1$ for $F^+$--a.e.\ $b$,
+so the last line equals $F^+(E)$, i.e.
+\[
+\Pp(B_T\in E)=F^+(E).
+\]
+Analogously, for Borel $E\subset(-\infty,0)$ one obtains
+\[
+\Pp(B_T\in E)=F^-(E).
+\]
+Since $F=F^-+F^+$, it follows that $B_T\sim F$.
+
+\medskip
+\noindent\textbf{Expectation of $T$.}
+By Proposition~2.1, conditionally on $(\alpha,\beta)=(a,b)$ we have
+\[
+\E[T\mid \alpha=a,\beta=b]= -ab.
+\]
+Therefore,
+\begin{align*}
+\E[T]
+&=\int_{-\infty}^{0}\int_{0}^{\infty} (-ab)\,\mu(da,db)\\
+&=\int_{-\infty}^{0}\int_{0}^{\infty} (-ab)\,
+\gamma\frac{1}{b-a}\,F^+(db)\,F^-(da).
+\end{align*}
+Rewriting $-ab/(b-a)$ in the form used in the notes and applying $\int x\,F(dx)=0$
+yields the identity
+\[
+\E[T]=\int_{\R} x^2\,F(dx)=\sigma^2.
+\]
+This completes the proof.
+\end{proof}
+
+\begin{remark}
+The construction relies on the fact that Brownian motion exits intervals only at the
+endpoints and that both the exit distribution and the expected exit time are explicitly
+known.
+\end{remark}
+
+\section{Brownian Motion as a Markov Process}
+
+% --- Intuitive introduction to Section 3: Brownian Motion as a Markov Process ---
+
+\paragraph{Idea of this section.}
+So far, Brownian motion has been treated primarily as a stochastic process with explicit
+finite--dimensional distributions.
+In this section we change perspective and view Brownian motion as a \emph{Markov process}.
+The central theme is that the future evolution of the path depends on the past only through the
+current position, and that this fact can be expressed analytically through transition operators,
+generators, and martingales.
+
+\medskip
+\paragraph{From independent increments to the Markov property.}
+The Markov property is not an additional assumption for Brownian motion;
+it is a direct consequence of independent increments.
+Writing
+\[
+B_{t+s}=B_s+(B_{t+s}-B_s),
+\]
+the increment $B_{t+s}-B_s$ is independent of everything that happened before time $s$ and has the same
+law as $B_t$.
+This immediately implies that conditional expectations of the form
+$\E[f(B_{t+s})\mid\widehat{\mathcal F}_s]$ can only depend on $B_s$.
+The point of the first part of the section is to make this dependence explicit and systematic.
+
+\medskip
+\paragraph{Why introduce the family $(\mathbb P_x)_{x\in\R}$?}
+Once we realize that only the current position matters, it becomes natural to consider Brownian motion
+starting from an arbitrary point $x$.
+The family of laws $(\mathbb P_x)_{x\in\R}$ encodes this idea:
+under $\mathbb P_x$ the process starts at $B_0=x$ and then evolves like standard Brownian motion.
+This viewpoint allows us to treat Brownian motion as a time--homogeneous Markov process with state space $\R$,
+rather than as a single process started at $0$.
+
+\medskip
+\paragraph{Transition semigroup as an averaging operator.}
+The transition semigroup $(T_t)_{t\ge0}$ describes how functions of the state are transported forward in time:
+\[
+T_t f(x)=\E_x[f(B_t)].
+\]
+Analytically, $T_t$ acts by convolution with the Gaussian kernel.
+Conceptually, $T_t f(x)$ is the expected value of $f$ after the system has evolved for time $t$
+starting from $x$.
+The semigroup property $T_{t+s}=T_tT_s$ is simply the probabilistic restatement of the fact that Brownian motion
+can be run in two successive time intervals.
+
+\medskip
+\paragraph{The generator as an infinitesimal description.}
+While the semigroup describes evolution over finite times, the generator captures the
+\emph{infinitesimal} behavior of the process.
+The generator
+\[
+Gf=\lim_{h\downarrow0}\frac{T_h f-f}{h}
+\]
+measures the instantaneous rate of change of the averaged quantity $T_h f$.
+For Brownian motion, computing $G$ reduces to expanding $f(x+z)$ for small Gaussian increments $z$
+and integrating term by term.
+The fact that $G=\tfrac12\Delta$ reflects that Brownian motion spreads mass in space according to the heat equation.
+
+\medskip
+\paragraph{Why martingales appear naturally.}
+Once the generator is known, the expression
+\[
+f(B_t)-f(B_0)-\int_0^t Gf(B_s)\,ds
+\]
+has zero conditional drift.
+This is not accidental: it is the probabilistic counterpart of the fundamental theorem of calculus
+applied along the random path.
+The resulting martingale property is a powerful tool, as it allows us to connect analytic properties of $f$
+to probabilistic properties of $B$ without invoking Itô calculus.
+
+\medskip
+\paragraph{What to remember.}
+This section builds a bridge between probability and analysis:
+\[
+\text{independent increments}
+\;\Longrightarrow\;
+\text{Markov property}
+\;\Longrightarrow\;
+\text{semigroup}
+\;\Longrightarrow\;
+\text{generator and martingales}.
+\]
+Understanding Brownian motion as a Markov process prepares the ground for the strong Markov property
+and for path transformations such as reflection, which rely crucially on this viewpoint.
+
+
+\subsection{Markov property at deterministic times}
+
+Let $(B_t)_{t\ge0}$ be a standard Brownian motion with respect to the completed,
+right--continuous filtration $(\widehat{\mathcal F}_t)_{t\ge0}$.
+
+Fix $s,t\ge0$. We decompose
+\[
+B_{t+s} = B_s + (B_{t+s}-B_s).
+\]
+By the independent increments property, the increment $B_{t+s}-B_s$ is independent of
+$\widehat{\mathcal F}_s$ and has the same law as $B_t$.
+
+Let $f:\R\to\R$ be bounded and measurable. Then
+\begin{align*}
+\E\!\left[f(B_{t+s}) \mid \widehat{\mathcal F}_s\right]
+&= \E\!\left[f\bigl(B_s + (B_{t+s}-B_s)\bigr) \mid \widehat{\mathcal F}_s\right] \\
+&= \E\!\left[f(B_s + B_t') \mid \widehat{\mathcal F}_s\right],
+\end{align*}
+where $B_t'$ is an independent copy of $B_t$.
+
+Since $B_t'$ is independent of $\widehat{\mathcal F}_s$, the conditional expectation reduces to a
+function of $B_s$ only. Hence there exists a measurable function $g:\R\to\R$ such that
+\[
+\E\!\left[f(B_{t+s}) \mid \widehat{\mathcal F}_s\right] = g(B_s),
+\]
+where
+\[
+g(x) := \E[f(x+B_t)].
+\]
+
+This shows that Brownian motion satisfies the (time--homogeneous) Markov property.
+
+\subsection{The Markov family $(\mathbb P_x)_{x\in\R}$}
+
+For each $x\in\R$, define a probability measure $\mathbb P_x$ by
+\[
+\mathbb P_x(A) := \mathbb P\bigl((x+B_t)_{t\ge0}\in A\bigr),
+\qquad A\in\mathcal F.
+\]
+Under $\mathbb P_x$, the process starts at $B_0=x$ and has the same increments as standard Brownian
+motion.
+
+The family
+\[
+\bigl(\Omega,\mathcal F,(\widehat{\mathcal F}_t)_{t\ge0},(B_t)_{t\ge0},(\mathbb P_x)_{x\in\R}\bigr)
+\]
+is therefore a time--homogeneous Markov process with state space $\R$.
+
+\subsection{Transition semigroup}
+
+Define, for $f\in C_b(\R)$ and $t\ge0$,
+\[
+T_t f(x) := \E_x[f(B_t)].
+\]
+
+By the Gaussian transition density of Brownian motion,
+\[
+T_t f(x)
+=
+\int_{\R} f(y)\,p_t(x,y)\,dy,
+\qquad
+p_t(x,y)
+=
+\frac{1}{\sqrt{2\pi t}}
+\exp\!\left(-\frac{(x-y)^2}{2t}\right).
+\]
+
+The family $(T_t)_{t\ge0}$ satisfies:
+\begin{itemize}
+\item $T_0 f = f$,
+\item $T_{t+s} = T_t T_s$ (semigroup property),
+\item $\|T_t f\|_\infty \le \|f\|_\infty$.
+\end{itemize}
+
+\subsection{Generator of Brownian motion}
+
+For functions $f$ for which the limit exists, define the generator
+\[
+Gf(x) := \lim_{h\downarrow0} \frac{T_h f(x)-f(x)}{h}.
+\]
+
+\begin{proposition}[Proposition 3.1]
+If $f\in C_b^2(\R)$, then
+\[
+Gf(x)=\frac12 f''(x).
+\]
+\end{proposition}
+
+\begin{proof}
+Fix $x\in\R$ and $h>0$. By definition of the transition semigroup and the Gaussian kernel,
+\begin{align*}
+T_h f(x)
+&=\E_x[f(B_h)]
+=\int_{\R} f(y)\,p_h(x,y)\,dy\\
+&=\int_{\R} f(y)\,\frac{1}{\sqrt{2\pi h}}
+\exp\!\left(-\frac{(y-x)^2}{2h}\right)\,dy.
+\end{align*}
+Make the change of variables $y=x+z$ (so $dy=dz$). Then
+\begin{equation}\label{eq:Th_change_var}
+T_h f(x)
+=\int_{\R} f(x+z)\,\frac{1}{\sqrt{2\pi h}}
+\exp\!\left(-\frac{z^2}{2h}\right)\,dz.
+\end{equation}
+Equivalently, if $Z\sim\mathcal N(0,h)$, then \eqref{eq:Th_change_var} is $T_h f(x)=\E[f(x+Z)]$.
+
+Now apply Taylor's theorem at $x$. For each $z\in\R$ there exists $\theta=\theta(z)\in(0,1)$ such that
+\begin{equation}\label{eq:taylor}
+f(x+z)
+=
+f(x)+f'(x)z+\frac12 f''(x)z^2
++
+\frac12\bigl(f''(x+\theta z)-f''(x)\bigr)z^2.
+\end{equation}
+Insert \eqref{eq:taylor} into \eqref{eq:Th_change_var} and subtract $f(x)$:
+\begin{align*}
+T_h f(x)-f(x)
+&=
+f'(x)\int_{\R} z\,\frac{1}{\sqrt{2\pi h}}
+e^{-z^2/(2h)}\,dz\\
+&\quad+\frac12 f''(x)\int_{\R} z^2\,\frac{1}{\sqrt{2\pi h}}
+e^{-z^2/(2h)}\,dz\\
+&\quad+\frac12 \int_{\R}\bigl(f''(x+\theta z)-f''(x)\bigr)z^2\,
+\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz.
+\end{align*}
+
+\medskip
+\noindent\textbf{Step 1: compute the Gaussian moments.}
+The first integral is $0$ because the integrand is odd:
+\[
+\int_{\R} z\,\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz=0.
+\]
+The second integral is the variance of $\mathcal N(0,h)$:
+\[
+\int_{\R} z^2\,\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz = h.
+\]
+Hence
+\begin{equation}\label{eq:main_term}
+T_h f(x)-f(x)=\frac12 f''(x)\,h + R_h(x),
+\end{equation}
+where the remainder term is
+\[
+R_h(x)
+:=\frac12 \int_{\R}\bigl(f''(x+\theta z)-f''(x)\bigr)z^2\,
+\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz.
+\]
+
+\medskip
+\noindent\textbf{Step 2: show $R_h(x)=o(h)$ as $h\downarrow0$.}
+Fix $\varepsilon>0$. Since $f''$ is continuous at $x$, there exists $\delta>0$ such that
+\[
+|u-x|\le \delta \quad\Longrightarrow\quad |f''(u)-f''(x)|\le \varepsilon.
+\]
+Split the integral defining $R_h(x)$ into $|z|\le\delta$ and $|z|>\delta$.
+
+\emph{(i) Region $|z|\le\delta$.}
+For $|z|\le\delta$ we have $|x+\theta z-x|\le |z|\le\delta$, hence
+$|f''(x+\theta z)-f''(x)|\le\varepsilon$ and thus
+\[
+\left|\frac12\int_{|z|\le\delta}\!\!\bigl(f''(x+\theta z)-f''(x)\bigr)z^2\,
+\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz\right|
+\le \frac{\varepsilon}{2}\int_{\R} z^2\,\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz
+=\frac{\varepsilon}{2}\,h.
+\]
+
+\emph{(ii) Region $|z|>\delta$.}
+Since $f''$ is bounded (because $f\in C_b^2$), set $M:=\|f''\|_\infty$.
+Then $|f''(x+\theta z)-f''(x)|\le 2M$, so
+\[
+\left|\frac12\int_{|z|>\delta}\!\!\bigl(f''(x+\theta z)-f''(x)\bigr)z^2\,
+\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz\right|
+\le
+M\int_{|z|>\delta} z^2\,\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz.
+\]
+Write $z=\sqrt{h}\,w$ (so $dz=\sqrt{h}\,dw$). Then
+\[
+\int_{|z|>\delta} z^2\,\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz
+=
+h \int_{|w|>\delta/\sqrt{h}} w^2\,\frac{1}{\sqrt{2\pi}}e^{-w^2/2}\,dw
+\le
+h \int_{|w|>\delta/\sqrt{h}} w^2\,\phi(w)\,dw,
+\]
+where $\phi(w)=\frac{1}{\sqrt{2\pi}}e^{-w^2/2}$. As $h\downarrow0$, the threshold
+$\delta/\sqrt{h}\to\infty$, and since $w^2\phi(w)$ is integrable over $\R$,
+\[
+\int_{|w|>\delta/\sqrt{h}} w^2\,\phi(w)\,dw \longrightarrow 0.
+\]
+Hence the contribution from $|z|>\delta$ is $o(h)$.
+
+Combining (i) and (ii), we obtain $|R_h(x)|\le \frac{\varepsilon}{2}h + o(h)$, hence $R_h(x)=o(h)$.
+Now divide \eqref{eq:main_term} by $h$ and let $h\downarrow0$:
+\[
+\lim_{h\downarrow0}\frac{T_h f(x)-f(x)}{h}
+=
+\frac12 f''(x).
+\]
+This is exactly $Gf(x)=\frac12 f''(x)$.
+\end{proof}
+
+\subsection{Martingale characterization}
+
+For $f\in C_b^2(\R)$ define
+\[
+M_t
+:=
+f(B_t)-f(B_0)-\int_0^t Gf(B_s)\,ds.
+\]
+
+\begin{proposition}[Proposition 3.2]
+Let $f\in C_b^2(\R)$ and define
+\[
+M_t:=f(B_t)-f(B_0)-\int_0^t Gf(B_s)\,ds,
+\qquad t\ge0.
+\]
+Then $(M_t)_{t\ge0}$ is a martingale with respect to $(\widehat{\mathcal F}_t)_{t\ge0}$.
+\end{proposition}
+
+\begin{proof}
+Fix $0\le s<t$. We show that $\E[M_t\mid \widehat{\mathcal F}_s]=M_s$.
+
+\medskip
+\noindent\textbf{Step 1: conditional expectation of the increment $f(B_t)-f(B_s)$.}
+By the Markov property (time-homogeneous) and the definition of the semigroup,
+\[
+\E\!\left[f(B_t)\mid \widehat{\mathcal F}_s\right]
+=
+T_{t-s}f(B_s).
+\]
+Therefore,
+\begin{equation}\label{eq:increment_f}
+\E\!\left[f(B_t)-f(B_s)\mid \widehat{\mathcal F}_s\right]
+=
+T_{t-s}f(B_s)-f(B_s).
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 2: rewrite $T_{t-s}f(B_s)-f(B_s)$ as an integral of $T_u Gf(B_s)$.}
+For each fixed $x$, consider the function $u\mapsto T_u f(x)$.
+Using the semigroup property $T_{u+h}f = T_u(T_h f)$, we can write the difference quotient:
+\[
+\frac{T_{u+h}f(x)-T_u f(x)}{h}
+=
+T_u\left(\frac{T_h f - f}{h}\right)(x).
+\]
+Letting $h\downarrow0$ and using that $f\in C_b^2(\R)$ so that
+$\frac{T_h f - f}{h}\to Gf$ pointwise and is uniformly bounded for small $h$
+(because $Gf=\tfrac12 f''$ is bounded), we may pass the limit through $T_u$ to obtain
+\begin{equation}\label{eq:dTu}
+\frac{d}{du}T_u f(x)=T_u Gf(x).
+\end{equation}
+Integrating \eqref{eq:dTu} from $u=0$ to $u=t-s$ gives
+\begin{equation}\label{eq:duhamel}
+T_{t-s}f(x)-f(x)=\int_0^{t-s} T_u Gf(x)\,du.
+\end{equation}
+Apply \eqref{eq:duhamel} with $x=B_s$:
+\begin{equation}\label{eq:increment_as_integral}
+T_{t-s}f(B_s)-f(B_s)=\int_0^{t-s} T_u Gf(B_s)\,du.
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 3: compute the conditional expectation of the drift term.}
+We claim that for each $r\ge s$,
+\begin{equation}\label{eq:cond_drift}
+\E\!\left[Gf(B_r)\mid \widehat{\mathcal F}_s\right]=T_{r-s}Gf(B_s).
+\end{equation}
+Indeed, this is the Markov property applied to the bounded measurable function $Gf$.
+
+Now use Fubini's theorem (justified since $Gf$ is bounded and $t-s<\infty$) and \eqref{eq:cond_drift}:
+\begin{align*}
+\E\!\left[\int_s^t Gf(B_r)\,dr \,\Big|\, \widehat{\mathcal F}_s\right]
+&=\int_s^t \E\!\left[Gf(B_r)\mid \widehat{\mathcal F}_s\right]\,dr\\
+&=\int_s^t T_{r-s}Gf(B_s)\,dr
+=\int_0^{t-s} T_u Gf(B_s)\,du.
+\end{align*}
+Comparing with \eqref{eq:increment_as_integral}, we obtain
+\begin{equation}\label{eq:key_cancel}
+\E\!\left[f(B_t)-f(B_s)\mid \widehat{\mathcal F}_s\right]
+=
+\E\!\left[\int_s^t Gf(B_r)\,dr \,\Big|\, \widehat{\mathcal F}_s\right].
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 4: conclude the martingale property.}
+Using \eqref{eq:key_cancel},
+\begin{align*}
+\E[M_t\mid \widehat{\mathcal F}_s]
+&=\E\!\left[f(B_t)-f(B_0)-\int_0^t Gf(B_r)\,dr \,\Big|\, \widehat{\mathcal F}_s\right]\\
+&=\E\!\left[f(B_s)-f(B_0)-\int_0^s Gf(B_r)\,dr \,\Big|\, \widehat{\mathcal F}_s\right]\\
+&\quad+\E\!\left[f(B_t)-f(B_s)-\int_s^t Gf(B_r)\,dr \,\Big|\, \widehat{\mathcal F}_s\right]\\
+&=M_s + 0.
+\end{align*}
+Hence $(M_t)_{t\ge0}$ is a martingale.
+\end{proof}
+
+
+
+\section{Strong Markov Property, Reflection Principle, and the Running Maximum}
+
+% --- Intuitive introduction to Section: Strong Markov Property, Reflection Principle,
+%     and the Running Maximum ---
+
+The results in this section deepen the Markov viewpoint developed earlier by showing that
+Brownian motion can ``restart itself'' not only at deterministic times, but also at random
+times determined by the path itself.
+This strengthened form of memorylessness is the key that allows us to perform path
+transformations, such as reflection at a hitting time, and to derive precise information
+about extreme values of the process.
+
+\medskip
+\paragraph{From Markov to \emph{strong} Markov.}
+The usual Markov property describes conditioning at fixed times $s$.
+However, many natural questions about Brownian motion involve random times:
+the first time the path hits a level, exits a domain, or reaches a maximum.
+The strong Markov property asserts that even at such stopping times $T$, the future evolution
+\[
+(B_{T+t}-B_T)_{t\ge0}
+\]
+behaves like a fresh Brownian motion, independent of the past.
+Intuitively, once the process reaches time $T$, it ``forgets'' how it got there and continues
+as if it were newly started from the current position.
+
+\medskip
+\paragraph{Why exponential martingales?}
+To prove the strong Markov property without stochastic calculus, the key tool is the family of
+exponential martingales
+\[
+M_t(\theta)=\exp\!\left(i\theta B_t+\tfrac12\theta^2 t\right).
+\]
+These martingales encode the characteristic functions of Brownian increments.
+Applying the Optional Stopping Theorem at bounded approximations of a stopping time allows us
+to compute conditional characteristic functions of post--$T$ increments.
+The crucial observation is that these conditional characteristic functions turn out to be
+deterministic, which simultaneously identifies the Gaussian law of the increments and proves
+their independence from the past.
+
+\medskip
+\paragraph{Reflection as a pathwise symmetry.}
+Once the strong Markov property is available, we can perform nontrivial transformations of
+Brownian paths.
+The reflection principle is based on a simple geometric idea:
+after the first time the path hits a level $a$, we flip the remaining part of the trajectory
+symmetrically about the line $x=a$.
+Because the post--hitting path is a fresh Brownian motion, symmetry of the Gaussian law implies
+that the reflected path has exactly the same distribution as the original Brownian motion.
+Thus a purely pathwise operation produces a new process with the same law.
+
+\medskip
+\paragraph{Why reflection reveals information about the maximum.}
+The running maximum
+\[
+S_t=\sup_{0\le u\le t} B_u
+\]
+is difficult to analyze directly, since it depends on the entire history of the path.
+The reflection principle converts events involving the maximum into events involving only the
+endpoint $B_t$.
+Paths that exceed a level $a$ and end below $a$ are put into one--to--one correspondence with
+paths that end above $a$.
+This correspondence explains why probabilities involving $S_t$ can be expressed in terms of the
+Gaussian tail of $B_t$.
+
+\medskip
+
+
+Conceptually, this is one of the most powerful features of Brownian motion:
+local path symmetries, combined with memorylessness at stopping times, lead to exact global
+distributional results such as the law of the running maximum.
+
+
+Throughout this section, $(B_t)_{t\ge0}$ is a standard Brownian motion adapted to the
+completed, right--continuous filtration $(\widehat{\mathcal F}_t)_{t\ge0}$.
+We use the exponential martingales
+\[
+M_t(\theta):=\exp\!\left(i\theta B_t+\frac12\theta^2 t\right),
+\qquad \theta\in\R,
+\]
+and the Optional Stopping Theorem (stated earlier).
+
+\subsection{Strong Markov property}
+
+The Markov property formalizes the idea that the future evolution of a stochastic process
+depends on the present state but not on the past. In its basic form, this property is
+formulated at fixed deterministic times: once the value of the process at time $t$ is
+known, the conditional distribution of the future after time $t$ is independent of what
+happened before $t$.
+
+In many applications, however, the relevant time at which one wishes to ``restart'' the
+process is not deterministic but random. Typical examples include the first time a
+particle hits a boundary, the moment a process exceeds a given threshold, or the time at
+which an observation is made based on the evolution of the process itself. Such random
+times are described mathematically by stopping times.
+
+The strong Markov property asserts that the Markovian behavior of the process persists
+even when conditioning on such random times. Informally, it states that once a stopping
+time $\tau$ occurs, the future evolution of the process after time $\tau$ behaves like a
+fresh copy of the process started from the random state $X_\tau$, and is independent of
+the past before $\tau$. In other words, the process ``forgets its history'' not only at
+fixed times, but also at random times determined by its own evolution.
+
+This property is essential for understanding the behavior of Markov processes under
+random interventions and for analyzing events defined in terms of first hitting times,
+exit times, or optimal stopping problems. From a conceptual point of view, the strong
+Markov property reflects a deep self-similarity of Markov processes: whenever the process
+is observed at a stopping time, the probabilistic laws governing its future evolution are
+the same as those governing the original process, except for a shift in time and a change
+in the initial condition.
+
+The formal definition and results that follow make this intuition precise by combining
+the Markov property with the notion of stopping times and conditional expectations. The
+path--space framework developed earlier provides the natural setting in which this
+property can be stated and proved rigorously.
+
+\begin{theorem}[Strong Markov property]
+Let $T$ be an a.s.\ finite stopping time. Define the shifted process
+\[
+B_t^{\,T}:=B_{T+t}-B_T,\qquad t\ge0.
+\] Let $T$ be an a.s.\ finite stopping time. Then:
+\begin{enumerate}
+\item For each $t\ge0$, $B_t^{\,T}\sim\mathcal N(0,t)$.
+\item For each $t\ge0$, $B_t^{\,T}$ is independent of $\widehat{\mathcal F}_T$.
+\item The process $(B_t^{\,T})_{t\ge0}$ has independent, stationary increments and continuous paths.
+Consequently, $(B_t^{\,T})_{t\ge0}$ is a standard Brownian motion, independent of $\widehat{\mathcal F}_T$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1: conditional characteristic function of a single increment.}
+
+Fix $t\ge0$ and $\theta\in\R$. For each $n\in\mathbb N$, set $T_n:=T\wedge n$ (bounded stopping time).
+Using the martingale property of $(M_u(\theta))_{u\ge0}$ and the Optional Stopping Theorem at the bounded
+stopping time $T_n$, we first note that $M_{u\wedge T_n}(\theta)$ is a martingale.
+Hence for $t\ge0$,
+\[
+\E\!\left[M_{T_n+t}(\theta)\mid \widehat{\mathcal F}_{T_n}\right]=M_{T_n}(\theta)
+\quad\text{a.s.}
+\]
+Write $M_{T_n+t}(\theta)=\exp(i\theta B_{T_n+t})\exp(\tfrac12\theta^2(T_n+t))$ and similarly for $M_{T_n}$.
+Cancelling the common factor $\exp(i\theta B_{T_n})\exp(\tfrac12\theta^2 T_n)$ gives
+\begin{equation}\label{eq:cond_char_Tn}
+\E\!\left[\exp\!\bigl(i\theta(B_{T_n+t}-B_{T_n})\bigr)\,\Big|\,\widehat{\mathcal F}_{T_n}\right]
+=\exp\!\left(-\frac12\theta^2 t\right).
+\end{equation}
+The right-hand side is deterministic and is the characteristic function of $\mathcal N(0,t)$.
+
+\medskip
+\textbf{Step 2: pass from $T_n$ to $T$.}
+
+Since $T_n\uparrow T$ a.s.\ and $B$ has continuous paths, we have
+$B_{T_n}\to B_T$ and $B_{T_n+t}\to B_{T+t}$ a.s., hence
+\[
+\exp\!\bigl(i\theta(B_{T_n+t}-B_{T_n})\bigr)\to \exp\!\bigl(i\theta(B_{T+t}-B_T)\bigr)
+\quad\text{a.s.}
+\]
+Moreover the integrand has modulus $1$, so dominated convergence applies.
+Also $\widehat{\mathcal F}_{T_n}\uparrow \widehat{\mathcal F}_T$ (usual conditions).
+Taking limits in \eqref{eq:cond_char_Tn} yields
+\begin{equation}\label{eq:cond_char_T}
+\E\!\left[\exp\!\bigl(i\theta(B_{T+t}-B_T)\bigr)\,\Big|\,\widehat{\mathcal F}_T\right]
+=\exp\!\left(-\frac12\theta^2 t\right)\quad\text{a.s.}
+\end{equation}
+
+\medskip
+\textbf{Step 3: conclude distribution and independence for one increment.}
+
+Equation \eqref{eq:cond_char_T} says: conditional on $\widehat{\mathcal F}_T$, the characteristic function of
+$B_{T+t}-B_T$ is the same deterministic function $\exp(-\tfrac12\theta^2 t)$.
+Therefore $B_{T+t}-B_T\sim \mathcal N(0,t)$.
+
+Moreover, since the conditional characteristic function does not depend on $\widehat{\mathcal F}_T$,
+we get independence: for any bounded $\widehat{\mathcal F}_T$--measurable random variable $H$,
+\[
+\E\!\left[H\,e^{i\theta(B_{T+t}-B_T)}\right]
+=\E\!\left[H\,\E\!\left(e^{i\theta(B_{T+t}-B_T)}\mid \widehat{\mathcal F}_T\right)\right]
+=\exp\!\left(-\frac12\theta^2 t\right)\E[H],
+\]
+which is exactly the factorization that characterizes independence.
+
+\medskip
+\textbf{Step 4: finite-dimensional distributions and independent increments.}
+
+Fix $0\le t_1<\dots<t_m$ and $\theta_1,\dots,\theta_m\in\R$.
+Consider the random vector
+\[
+\bigl(B_{T+t_1}-B_T,\dots,B_{T+t_m}-B_T\bigr).
+\]
+It suffices to compute its conditional characteristic function given $\widehat{\mathcal F}_T$.
+Using the tower property and repeatedly applying \eqref{eq:cond_char_T} to increments,
+one obtains
+\[
+\E\!\left[\exp\!\left(i\sum_{k=1}^m \theta_k(B_{T+t_k}-B_T)\right)\Big|\widehat{\mathcal F}_T\right]
+=
+\exp\!\left(-\frac12\sum_{j=1}^m \Big(\sum_{k=j}^m\theta_k\Big)^2 (t_j-t_{j-1})\right),
+\quad (t_0:=0),
+\]
+which is deterministic and coincides with the characteristic function of the corresponding Gaussian
+vector for standard Brownian motion. In particular, this shows that $(B_t^{\,T})_{t\ge0}$
+has stationary Gaussian increments, and by the same factorization argument as in Step 3,
+these increments are independent of $\widehat{\mathcal F}_T$ and mutually independent.
+
+\medskip
+\textbf{Step 5: continuity.}
+
+For each $\omega$, $t\mapsto B_{T(\omega)+t}(\omega)-B_T(\omega)$ is continuous because $B(\omega)$ is continuous.
+Thus $(B_t^{\,T})_{t\ge0}$ has continuous paths.
+
+Combining Steps 4 and 5 proves that $(B_t^{\,T})_{t\ge0}$ is a standard Brownian motion and is independent of
+$\widehat{\mathcal F}_T$.
+\end{proof}
+
+\subsection{Reflection principle}
+
+One of the central questions when studying stochastic processes, and Brownian motion in
+particular, is how the process behaves relative to barriers or thresholds. For instance,
+one may ask for the probability that a Brownian path exceeds a given level before a fixed
+time, or how the maximum of the process over a time interval is distributed. Such
+questions are inherently path--dependent and cannot be answered solely by looking at the
+distribution of the process at a single time.
+
+The reflection principle provides a powerful and remarkably simple tool to address these
+problems. Its key insight is that, due to the symmetry and independence of increments of
+Brownian motion, certain path events can be transformed into simpler ones by reflecting
+parts of the trajectory at an appropriate level. In particular, paths that cross a given
+barrier can be put into one--to--one correspondence with paths that end at reflected
+positions, without changing their probability.
+
+Intuitively, the idea is the following. Consider a Brownian path that first hits a level
+$a$ at some random time. From that hitting time onward, the future increments of the
+process are independent of the past. By reflecting the path after this first hitting time
+at the level $a$, one obtains a new path that has the same probability as the original one
+but ends on the opposite side of the barrier. This symmetry allows probabilities involving
+the running maximum of the process to be expressed in terms of probabilities involving
+the final value of the process alone.
+
+The reflection principle thus converts difficult questions about maxima and boundary
+crossings into tractable distributional computations. It plays a fundamental role in the
+derivation of hitting probabilities, distribution of the running maximum, and first--passage
+times for Brownian motion. Conceptually, it relies on the same ideas that underlie the
+strong Markov property: the ability to ``restart'' the process at a random hitting time
+and to exploit the invariance of its probabilistic structure under time shifts and
+reflections.
+
+The formal statement and proof make this intuition precise by constructing an explicit
+reflection mapping on path space and showing that it preserves the law of Brownian motion.
+
+Fix $a\in\R$ and define the hitting time
+\[
+H_a:=\inf\{t>0:\,B_t=a\}.
+\]
+Define the reflected process $(\widetilde B_t)_{t\ge0}$ by
+\[
+\widetilde B_t:=
+\begin{cases}
+B_t, & t\le H_a,\\[1mm]
+2a-B_t, & t>H_a.
+\end{cases}
+\]
+
+\begin{theorem}[Reflection principle]
+The process $(\widetilde B_t)_{t\ge0}$ is a standard Brownian motion.
+\end{theorem}
+
+\begin{proof}
+We verify the defining properties via the strong Markov property at $H_a$.
+
+\medskip
+\textbf{Step 1: rewrite the post-hitting part using a fresh Brownian motion.}
+
+By the strong Markov property, the shifted process
+\[
+W_t:=B_{H_a+t}-B_{H_a},\qquad t\ge0,
+\]
+is a standard Brownian motion independent of $\widehat{\mathcal F}_{H_a}$.
+On $\{t>H_a\}$ we have $B_t=B_{H_a}+W_{t-H_a}=a+W_{t-H_a}$, hence
+\[
+\widetilde B_t = 2a - B_t = 2a-(a+W_{t-H_a})=a-W_{t-H_a},\qquad t>H_a.
+\]
+Thus, pathwise,
+\[
+\widetilde B_t=
+\begin{cases}
+B_t, & t\le H_a,\\
+a-W_{t-H_a}, & t>H_a.
+\end{cases}
+\]
+
+\medskip
+\textbf{Step 2: show the reflected increments after $H_a$ have Brownian law.}
+
+Since $W$ is Brownian, $-W$ is also Brownian (symmetry of the Gaussian law).
+Therefore the process $t\mapsto a-W_t$ is a Brownian motion started at $a$.
+
+Moreover, because $W$ is independent of $\widehat{\mathcal F}_{H_a}$, the post-$H_a$ evolution of
+$\widetilde B$ is independent of the pre-$H_a$ history.
+
+\medskip
+\textbf{Step 3: finite-dimensional distributions.}
+
+Fix times $0\le t_1<\dots<t_m$. Condition on $H_a$ and distinguish whether each $t_k\le H_a$ or $t_k>H_a$.
+On $\{H_a>t_m\}$ we have $\widetilde B_{t_k}=B_{t_k}$ for all $k$.
+On $\{H_a\le t_1\}$ we have $\widetilde B_{t_k}=a-W_{t_k-H_a}$ and the vector has the same law as a Brownian
+motion started at $a$ (by Step 2).
+On mixed events (some times before, some after $H_a$), the joint law factorizes because the increments of $W$
+are independent of $\widehat{\mathcal F}_{H_a}$, yielding exactly the Brownian finite-dimensional distributions.
+
+\medskip
+\textbf{Step 4: continuity.}
+
+$\widetilde B$ is continuous because $B$ is continuous and at $t=H_a$ we have $\widetilde B_{H_a}=B_{H_a}=a$,
+so there is no jump at the reflection time.
+
+Hence $(\widetilde B_t)_{t\ge0}$ is a standard Brownian motion.
+\end{proof}
+
+\subsection{Running maximum: distribution and a key joint identity}
+
+In many applications, the behavior of a stochastic process is determined not only by its
+value at a fixed time, but by the extreme values it attains over an interval. Examples
+include the highest level reached by a fluctuating signal, the maximum displacement of a
+particle up to a given time, or the maximal drawdown of a financial asset. Such quantities
+depend on the entire past evolution of the process and are therefore intrinsically
+path--dependent.
+
+For a stochastic process $(B_t)_{t \ge 0}$, the running maximum
+\[
+S_t:=\sup_{0\le u\le t} B_u,\qquad t\ge0.
+\]
+summarizes this path--dependent information in a single random variable. Unlike $X_t$,
+the running maximum is not Markovian by itself and cannot be described using only the
+finite--dimensional distributions of the process at fixed times. Understanding its
+distribution therefore requires tools that exploit the structure of the underlying
+process, rather than just its one--time marginals.
+
+In the case of Brownian motion, the running maximum is particularly tractable due to the
+combination of symmetry, independent increments, and the strong Markov property. These
+features make it possible to relate events involving $M_t$ to simpler events involving
+the terminal value $B_t$ through the reflection principle. As a result, probabilities
+concerning the maximum of Brownian motion can often be computed explicitly.
+
+The study of the running maximum thus serves two complementary purposes. On the one hand,
+it provides insight into the extremal behavior of Brownian paths and leads to concrete
+distributional results. On the other hand, it illustrates how path--dependent quantities
+can be analyzed by combining stopping times, the strong Markov property, and symmetry
+arguments. The results of this section play a central role in the analysis of hitting
+times, barrier crossing problems, and related questions in stochastic process theory.
+
+\begin{proposition}[Reflection identity]
+Let $a\in\R$ and $t>0$. For any Borel set $E\subset(-\infty,a]$,
+\[
+\Pp\bigl(S_t\ge a,\; B_t\in E\bigr)=\Pp\bigl(2a-B_t\in E,\; B_t\ge a\bigr).
+\]
+In particular, for $y\ge0$,
+\[
+\Pp\bigl(S_t\ge a,\; B_t\le a-y\bigr)=\Pp(B_t\ge a+y).
+\]
+\end{proposition}
+
+\begin{proof}
+Observe that \[
+\{S_t\ge a\}=\{H_a\le t\}.
+\]Consider the path transformation $\omega\mapsto \widetilde\omega$ defined by reflection at $H_a(\omega)$,
+i.e.\ $\widetilde B$ as above. By the reflection principle theorem, $\widetilde B$ is itself a Brownian motion,
+so it has the same law as $B$.
+
+Now note the event mapping:
+on $\{H_a\le t\}$ (equivalently $\{S_t\ge a\}$), we have $\widetilde B_t=2a-B_t$;
+on $\{H_a>t\}$, we have $\widetilde B_t=B_t$ and also $S_t<a$.
+Therefore, for any Borel $E\subset(-\infty,a]$,
+\begin{align*}
+\Pp\bigl(S_t\ge a,\; B_t\in E\bigr)
+&=\Pp\bigl(H_a\le t,\; B_t\in E\bigr)\\
+&=\Pp\bigl(H_a\le t,\; 2a-\widetilde B_t\in E\bigr)
+\qquad (\text{since }\widetilde B_t=2a-B_t \text{ on }\{H_a\le t\})\\
+&=\Pp\bigl(H_a\le t,\; \widetilde B_t\in 2a-E\bigr),
+\end{align*}
+where $2a-E:=\{2a-x:\,x\in E\}\subset[a,\infty)$.
+But on $\{\widetilde B_t\in 2a-E\}\subset\{\widetilde B_t\ge a\}$, we necessarily have $H_a\le t$,
+so the event $\{H_a\le t\}$ may be dropped:
+\[
+\Pp\bigl(H_a\le t,\; \widetilde B_t\in 2a-E\bigr)=\Pp\bigl(\widetilde B_t\in 2a-E\bigr).
+\]
+Finally, since $\widetilde B$ is Brownian, $\widetilde B_t\overset{d}=B_t$, hence
+\[
+\Pp\bigl(\widetilde B_t\in 2a-E\bigr)=\Pp\bigl(B_t\in 2a-E\bigr)
+=\Pp\bigl(2a-B_t\in E\bigr).
+\]
+Restricting to $E\subset(-\infty,a]$ forces $2a-B_t\le a$, i.e.\ $B_t\ge a$, so
+\[
+\Pp\bigl(2a-B_t\in E\bigr)=\Pp\bigl(2a-B_t\in E,\; B_t\ge a\bigr),
+\]
+which proves the first identity. The second follows by choosing $E=(-\infty,a-y]$.
+\end{proof}
+
+\begin{corollary}[Distribution of the maximum]
+For $a\ge0$ and $t>0$,
+\[
+\Pp(S_t\ge a)=2\,\Pp(B_t\ge a)
+=2\int_{a}^{\infty}\frac{1}{\sqrt{2\pi t}}e^{-x^2/(2t)}\,dx
+=2\int_{a/\sqrt t}^{\infty}\frac{1}{\sqrt{2\pi}}e^{-u^2/2}\,du.
+\]
+\end{corollary}
+
+\begin{proof}
+Take $y=0$ in the particular case of the reflection identity:
+\[
+\Pp(S_t\ge a,\; B_t\le a)=\Pp(B_t\ge a).
+\]
+Also, since $\{S_t\ge a\}$ implies $B_t\in(-\infty,a]\cup(a,\infty)$ and the boundary has probability $0$,
+we have the disjoint decomposition
+\[
+\Pp(S_t\ge a)=\Pp(S_t\ge a,\; B_t\le a)+\Pp(S_t\ge a,\; B_t>a).
+\]
+But $\{B_t>a\}\subset\{S_t\ge a\}$, so the second term is $\Pp(B_t>a)=\Pp(B_t\ge a)$.
+Thus $\Pp(S_t\ge a)=2\,\Pp(B_t\ge a)$.
+Finally, $B_t\sim \mathcal N(0,t)$ gives the Gaussian integral formulas, with the change of variables
+$x=\sqrt t\,u$ in the last equality.
+\end{proof}

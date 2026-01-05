@@ -1,0 +1,328 @@
+% =================================================
+\chapter{The Bellman Equation}
+% =================================================
+In the finite-horizon optimization problem we defined, for each starting time $n$ and state $x$, the value function
+\[
+V_n(x)=\sup_{\pi}\mathbb{E}_x^{\pi}\Big[\sum_{k=n}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big],
+\]
+i.e.\ the best expected total reward achievable from $(n,x)$. The difficulty is that the supremum is taken over \emph{entire policies}, so $V_n$ is not obviously computable by a direct pointwise maximization. The Bellman equation provides the missing bridge: it turns this global optimization into a local recursion by exploiting the Markov property. Intuitively, once we are at time $n$ in state $x$ and choose an action $a\in D_n(x)$, the problem splits into two pieces: the \emph{immediate} reward $r_n(x,a)$, and the \emph{future} optimal performance starting from the random next state $X_{n+1}$, whose law is $Q_n(\cdot\mid x,a)$. Thus the continuation value is summarized by a single function, namely $V_{n+1}$, and ``optimizing from now on'' reduces to choosing the best current action in view of this continuation value. This leads to the backward recursion
+\[
+V_n(x)=\sup_{a\in D_n(x)}\Big\{r_n(x,a)+\int_E V_{n+1}(x')\,Q_n(dx'\mid x,a)\Big\},
+\qquad V_N=g_N,
+\]
+which is the Bellman equation. The rest of this chapter formalizes this idea via Bellman operators and shows how the value of any \emph{fixed} policy can be computed by reward iteration, setting the stage for verification and optimality results in later chapters.
+
+\section{Operators}
+It is convenient to introduce some operators to ease the introduction of the Bellman equations and its analysis. We set
+\[
+\mathcal{\mathbb{M}}(E) := \{v:E\to[-\infty,\infty)\;:\; v\text{ is measurable}\}.
+\]
+
+\begin{definition}[Bellman operators]
+For $n=0,1,\dots,N-1$ and $v\in\mathcal{\mathbb{M}}(E)$ define:
+\begin{align*}
+(L_n v)(x,a) &:= r_n(x,a) + \int_E v(x')\,Q_n(dx'\mid x,a), \qquad (x,a)\in D_n, \\
+(T_n^f v)(x) &:= (L_n v)(x,f(x)), \qquad x\in E,\ f\in F_n,\\
+(T_n v)(x) &:= \sup_{a\in D_n(x)} (L_n v)(x,a), \qquad x\in E.
+\end{align*}
+\end{definition}
+
+\break
+
+\begin{remark}
+\leavevmode
+\begin{enumerate}[label=(\alph*)]
+  \item For each $v\in\mathcal{\mathbb{M}}(E)$,
+  \[
+  T_n v = \sup_{f\in F_n} T_n^f v.
+  \]
+  \item If $v$ is measurable, then $T_n^f v$ is measurable for each measurable $f$.
+  However, $T_n v$ need \emph{not} be measurable in general (taking a supremum over an uncountable set can destroy measurability).
+  This motivates the later structure assumption.
+\end{enumerate}
+\end{remark}
+
+\begin{lemma}[Monotonicity of the operators]
+Let $v,w\in\mathcal{\mathbb{M}}(E)$ satisfy $v(x)\le w(x)$ for all $x\in E$. Then for each $n$:
+\begin{enumerate}[label=(\alph*)]
+  \item $L_n v(x,a)\le L_n w(x,a)$ for all $(x,a)\in D_n$;
+  \item $T_n^f v(x)\le T_n^f w(x)$ for all $x\in E$ and all $f\in F_n$;
+  \item $T_n v(x)\le T_n w(x)$ for all $x\in E$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\textbf{Step 1 (Monotonicity of $L_n$).}
+Fix $(x,a)\in D_n$. Since $v\le w$ pointwise and $Q_n(\cdot\mid x,a)$ is a probability measure,
+\[
+\int_E v(x')\,Q_n(dx'\mid x,a)\le \int_E w(x')\,Q_n(dx'\mid x,a).
+\]
+Adding $r_n(x,a)$ yields $L_n v(x,a)\le L_n w(x,a)$.
+
+\textbf{Step 2 (Monotonicity of $T_n^f$).}
+For any $f\in F_n$ and any $x\in E$,
+\[
+T_n^f v(x)=(L_n v)(x,f(x))\le (L_n w)(x,f(x))=T_n^f w(x).
+\]
+
+\textbf{Step 3 (Monotonicity of $T_n$).}
+Taking the supremum over $a\in D_n(x)$ preserves the inequality:
+\[
+T_n v(x)=\sup_{a\in D_n(x)} L_n v(x,a)\le \sup_{a\in D_n(x)} L_n w(x,a)=T_n w(x).
+\]
+\end{proof}
+
+\section{Reward iteration for a fixed policy}
+
+\paragraph{Intuition behind reward iteration.} The reward iteration (theorem) describes how we can compute the total reward (back-)recursively for any policy. The key ingredient for recursion is the Markov property, which reduces the dependency of each time step to its immediate future step. In summary, the procedure goes like this: Fix a policy $\pi=(f_0,\dots,f_{N-1})$. Starting at time $n$ in state $x$, the total reward splits into the immediate reward $r_n(x,f_n(x))$ plus a \emph{future tail reward}. Conditioning on the next state $X_{n+1}$ turns the tail into a continuation value $V_{n+1}^{\pi}(X_{n+1})$, yielding a clean recursion.
+
+\begin{theorem}[Reward Iteration]
+Let $\pi=(f_0,\dots,f_{N-1})$ be a Markov policy. Then
+\begin{align*}
+V_N^{\pi} &= g_N,\\
+V_n^{\pi} &= T_n^{f_n} V_{n+1}^{\pi},\qquad n=0,1,\dots,N-1.
+\end{align*}
+Consequently,
+\[
+V_n^{\pi} = T_n^{f_n}\,T_{n+1}^{f_{n+1}}\cdots T_{N-1}^{f_{N-1}}\, g_N,
+\qquad n=0,\dots,N.
+\]
+\end{theorem}
+
+\begin{proof}
+Fix $n\in\{0,\dots,N-1\}$ and $x\in E$.
+
+\textbf{Step 1 (Split immediate and future rewards).}
+By definition,
+\[
+V_n^{\pi}(x)=\mathbb{E}_{n,x}^{\pi}\Big[r_n(X_n,f_n(X_n)) + \sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big].
+\]
+Since $X_n=x$ $\mathbb{P}_{n,x}^\pi$-a.s., we have $r_n(X_n,f_n(X_n))=r_n(x,f_n(x))$, hence
+\[
+V_n^{\pi}(x)= r_n(x,f_n(x)) + \mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big].
+\]
+
+\textbf{Step 2 (Condition on the next state).}
+Apply the tower property conditioning on $X_{n+1}$:
+\begin{align*}
+&\mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big]\\
+&\qquad=\mathbb{E}_{n,x}^{\pi}\Big[\mathbb{E}_{n,x}^{\pi}\big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\mid X_{n+1}\big]\Big].
+\end{align*}
+
+\textbf{Step 3 (Markov property / time shift).}
+Given $X_{n+1}=x'$, the future from time $n+1$ onward under the tail policy has law $\mathbb{P}_{n+1,x'}^{\pi}$, so the inner conditional expectation equals $V_{n+1}^{\pi}(x')$.
+Therefore,
+\[
+\mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big]
+=\mathbb{E}_{n,x}^{\pi}\big[V_{n+1}^{\pi}(X_{n+1})\big].
+\]
+
+\textbf{Step 4 (Kernel representation).}
+Under $\mathbb{P}_{n,x}^{\pi}$, $X_{n+1}$ has law $Q_n(\cdot\mid x,f_n(x))$, hence
+\[
+\mathbb{E}_{n,x}^{\pi}\big[V_{n+1}^{\pi}(X_{n+1})\big]=\int_E V_{n+1}^{\pi}(x')\,Q_n(dx'\mid x,f_n(x)).
+\]
+
+\textbf{Step 5 (Identify the operator).}
+Combining,
+\[
+V_n^{\pi}(x)=r_n(x,f_n(x))+\int_E V_{n+1}^{\pi}(x')\,Q_n(dx'\mid x,f_n(x))=(T_n^{f_n}V_{n+1}^{\pi})(x).
+\]
+Iterating backward yields the concatenated formula.
+\end{proof}
+
+\section{Maximizers}
+
+\paragraph{Intuition.}
+$T_n$ represents the best achievable one-step lookahead value when the continuation value is $v$. A maximizer is a decision rule that attains this supremum (pointwise in the state).
+
+\begin{definition}[Maximizer]
+Let $v\in\mathcal{\mathbb{M}}(E)$ and $n\in\{0,\dots,N-1\}$. A decision rule $f\in F_n$ is called a \emph{maximizer of $v$ at time $n$} if
+\[
+T_n^f v = T_n v,
+\]
+i.e.\ for every $x\in E$, the action $f(x)$ maximizes $a\mapsto (L_n v)(x,a)$ over $a\in D_n(x)$.
+\end{definition}
+
+\section{Verification Theorem}
+
+\paragraph{Intuition behind the verification theorem.}
+If $(v_n)$ solves the Bellman recursion, then $v_n$ is an \emph{upper bound} on what any policy can achieve, because $T_n$ optimizes stage $n$ by taking a supremum over actions. If we can also choose actions that \emph{attain} those suprema at every stage, then we can build a policy whose performance reaches this upper bound, forcing equality with the true value function.
+
+\begin{theorem}[Verification Theorem]
+Let $(v_n)_{n=0}^N\subset\mathcal{\mathbb{M}}(E)$ satisfy
+\[
+v_N=g_N,\qquad v_n = T_n v_{n+1},\quad n=0,1,\dots,N-1.
+\]
+Then:
+\begin{enumerate}[label=(\alph*)]
+  \item $v_n\ge V_n$ for all $n=0,1,\dots,N$.
+  \item If for each $n=0,\dots,N-1$ there exists a maximizer $f_n^*\in F_n$ of $v_{n+1}$, then $v_n=V_n$ for all $n$, and the policy $\pi^*=(f_0^*,\dots,f_{N-1}^*)$ is optimal.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 0 (Terminal time).}
+Since $v_N=g_N$ and $V_N=g_N$, we have $v_N=V_N$.
+
+\medskip
+\noindent\textbf{(a) Show $v_n\ge V_n$ by backward induction.}
+
+\textbf{Step 1 (Induction hypothesis).}
+Fix $n\in\{0,\dots,N-1\}$ and assume $v_{n+1}\ge V_{n+1}$ pointwise.
+
+\textbf{Step 2 (Apply monotonicity of $T_n$).}
+By monotonicity,
+\[
+v_n=T_n v_{n+1}\ge T_n V_{n+1}.
+\]
+
+\textbf{Step 3 (Bound any fixed policy).}
+For any policy $\pi=(f_0,\dots,f_{N-1})$, reward iteration and monotonicity give
+\[
+V_n^{\pi}=T_n^{f_n}V_{n+1}^{\pi}\le T_n^{f_n}V_{n+1}\le T_n V_{n+1}.
+\]
+
+\textbf{Step 4 (Take supremum over policies).}
+Taking $\sup_{\pi}$ yields
+\[
+V_n\le T_n V_{n+1}\le v_n.
+\]
+This closes the induction.
+
+\medskip
+\noindent\textbf{(b) Construct an optimal policy from maximizers.}
+
+\textbf{Step 5 (Define the policy).}
+Assume maximizers $f_n^*$ exist and set $\pi^*:=(f_0^*,\dots,f_{N-1}^*)$.
+
+\textbf{Step 6 (Show $V_n^{\pi^*}=v_n$ by backward induction).}
+At $n=N$, $V_N^{\pi^*}=g_N=v_N$.
+Suppose $V_{n+1}^{\pi^*}=v_{n+1}$.
+Then
+\[
+V_n^{\pi^*}=T_n^{f_n^*}V_{n+1}^{\pi^*}
+= T_n^{f_n^*}v_{n+1}
+= T_n v_{n+1}
+= v_n.
+\]
+
+\textbf{Step 7 (Conclude equality and optimality).}
+Part (a) gives $v_n\ge V_n\ge V_n^{\pi^*}$.
+Together with Step~6 we get $V_n^{\pi^*}=v_n=V_n$ for all $n$, hence $\pi^*$ is optimal.
+\end{proof}
+
+\section{Structure Assumption and Structure Theorem}
+
+\paragraph{Why a structure assumption is needed.}
+For general state/action spaces, $T_n v$ may fail to be measurable even when $v$ is measurable, and the supremum in $T_n v$ may fail to be attained. The structure assumption provides a setting in which (i) the Bellman recursion remains within a measurable class and (ii) maximizers exist.
+
+\begin{definition}[Structure Assumption $(SA_N)$]
+There exist sets $\mathcal{\mathbb{M}}_n\subset\mathcal{\mathbb{M}}(E)$ and $\Delta_n\subset F_n$ such that for each $n=0,\dots,N-1$:
+\begin{enumerate}[label=(\roman*)]
+  \item $g_N\in \mathcal{\mathbb{M}}_N$.
+  \item If $v\in\mathcal{\mathbb{M}}_{n+1}$ then $T_n v$ is well-defined and $T_n v\in\mathcal{\mathbb{M}}_n$.
+  \item For every $v\in\mathcal{\mathbb{M}}_{n+1}$ there exists a maximizer $f_n\in\Delta_n$.
+\end{enumerate}
+\end{definition}
+
+\paragraph{Intuition behind the structure theorem.}
+Starting from $V_N=g_N$, the recursion $V_n=T_nV_{n+1}$ can be carried out backwards. The closure property in (ii) ensures measurability at each step, and (iii) guarantees we can pick decision rules attaining the suprema, thereby producing an optimal policy.
+
+\begin{theorem}[Structure Theorem]
+Assume $(SA_N)$ holds. Then:
+\begin{enumerate}[label=(\alph*)]
+  \item $V_n\in\mathcal{\mathbb{M}}_n$ for all $n$ and the Bellman equation holds:
+  \[
+  V_N=g_N,\qquad V_n=T_nV_{n+1},\quad n=0,1,\dots,N-1.
+  \]
+  \item Consequently,
+  \[
+  V_n = T_n T_{n+1}\cdots T_{N-1} g_N,\qquad n=0,\dots,N.
+  \]
+  \item There exist maximizers $f_n^*\in\Delta_n$ of $V_{n+1}$ for $n=0,\dots,N-1$, and any such sequence yields an optimal policy $\pi^*=(f_0^*,\dots,f_{N-1}^*)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We prove (a) and (c) by backward induction; (b) then follows by iterating the Bellman equation.
+
+\textbf{Step 1 (Base case).}
+By definition $V_N=g_N$.
+By $(SA_N)$-(i), $V_N\in\mathcal{\mathbb{M}}_N$.
+
+\textbf{Step 2 (Induction hypothesis).}
+Fix $n\in\{0,\dots,N-1\}$ and assume $V_{n+1}\in\mathcal{\mathbb{M}}_{n+1}$.
+
+\textbf{Step 3 (Upper bound).}
+For any policy $\pi$, reward iteration gives
+\[
+V_n^{\pi} = T_n^{f_n} V_{n+1}^{\pi}
+\le T_n^{f_n}V_{n+1}
+\le T_n V_{n+1}.
+\]
+Taking $\sup_{\pi}$ yields $V_n\le T_n V_{n+1}$.
+
+\textbf{Step 4 (Lower bound via $\varepsilon$-optimal continuation).}
+By $(SA_N)$-(iii), there exists a maximizer $f_n^*\in\Delta_n$ of $V_{n+1}$, so $T_n^{f_n^*}V_{n+1}=T_nV_{n+1}$.
+For $\varepsilon>0$ and each $x'\in E$, choose a policy $\pi^{\varepsilon}$ from time $n+1$ onward such that
+\[
+V_{n+1}^{\pi^{\varepsilon}}(x')\ge V_{n+1}(x')-\varepsilon.
+\]
+Consider the policy that uses $f_n^*$ at time $n$ and then follows $\pi^{\varepsilon}$ from time $n+1$ onward.
+Reward iteration yields
+\[
+V_n\ge T_n^{f_n^*}V_{n+1}^{\pi^{\varepsilon}}
+\ge T_n^{f_n^*}(V_{n+1}-\varepsilon)
+= T_n^{f_n^*}V_{n+1}-\varepsilon
+= T_nV_{n+1}-\varepsilon,
+\]
+where we used monotonicity of $T_n^{f_n^*}$.
+Letting $\varepsilon\downarrow 0$ gives $V_n\ge T_nV_{n+1}$.
+
+\textbf{Step 5 (Bellman equation and measurability).}
+Steps 3 and 4 yield $V_n=T_nV_{n+1}$.
+By $(SA_N)$-(ii), $V_n\in\mathcal{\mathbb{M}}_n$.
+
+\textbf{Step 6 (Optimal policy from maximizers).}
+Repeating for $n=N-1,\dots,0$ yields maximizers $f_n^*\in\Delta_n$ of $V_{n+1}$.
+Applying the verification theorem with $v_n:=V_n$ shows the policy $\pi^*$ is optimal.
+\end{proof}
+
+\begin{corollary}[Dynamic programming principle with an intermediate time]
+Assume $(SA_N)$ holds. If $n\le m\le N$, then for all $x\in E$,
+\[
+V_n(x)=\sup_{\pi}\mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n}^{m-1} r_k(X_k,f_k(X_k)) + V_m(X_m)\Big].
+\]
+\end{corollary}
+
+\begin{remark}[Backward induction algorithm]
+The structure theorem yields the standard backward induction algorithm:
+\begin{enumerate}[leftmargin=*]
+  \item Set $V_N:=g_N$.
+  \item For $n=N-1,N-2,\dots,0$ compute
+  \[
+  V_n(x)=\sup_{a\in D_n(x)}\Big\{r_n(x,a)+\int_E V_{n+1}(x')\,Q_n(dx'\mid x,a)\Big\}
+  \]
+  and pick a maximizer $f_n^*(x)$ attaining the supremum.
+\end{enumerate}
+Then $\pi^*=(f_0^*,\dots,f_{N-1}^*)$ is optimal.
+\end{remark}
+
+\section{A subtle point: optimal policies need not be stage-wise maximizers everywhere}
+
+\begin{example}[An optimal policy may fail to be a maximizer off the optimal path]
+Let $N=2$, $E=\{0,1\}$, and $A=\{0,1\}$ with $D_n(x)=A$ for all $x$ and $n$.
+Define transitions by
+\[
+Q_n(\{x'\}\mid x,a)=\Ind_{\{a=x'\}},
+\]
+so choosing action $a$ forces the next state to be $a$.
+Let rewards be $r_n(x,a)=a$ and $g_2(x)=x$.
+
+The policy $\pi^*=(f_0^*,f_1^*)$ with $f_0^*(x)=1$ and $f_1^*(x)=1$ is optimal.
+However, the policy $\pi=(f_0,f_1)$ with $f_0(x)=1$ for all $x$, but $f_1(0)=0$ and $f_1(1)=1$, is also optimal.
+Indeed, under either policy the state at time $1$ equals $1$ almost surely (because $f_0\equiv 1$), so the value of $f_1(0)$ is irrelevant.
+
+This illustrates: a policy can be optimal even if some components fail to be maximizers at states that are never visited under that policy.
+\end{example}

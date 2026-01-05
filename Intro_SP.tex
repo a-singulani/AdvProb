@@ -1,0 +1,500 @@
+\chapter{Stochastic Processes}
+
+Many phenomena in nature, engineering, and economics evolve in time and are subject to
+random influences. Typical examples include thermal motion of particles, fluctuating
+signals, population dynamics, and financial time series. In such situations, randomness
+cannot be captured by a single random variable; instead, one needs to describe an
+entire \emph{family} of random quantities indexed by time or space.
+
+A stochastic process provides a mathematical framework to model such systems. Informally,
+it assigns to each time $t$ a random variable $X_t$ describing the state of the system
+at that time. However, when dealing with infinitely many times, this informal description
+raises fundamental questions: on which probability space do all these random variables
+live, how are they related to each other, and what does it mean to specify their joint
+distribution?
+
+The approach taken in this section is to answer these questions in a systematic and
+measure--theoretic way. Rather than postulating the existence of a stochastic process
+from the outset, we start by describing its behavior at finitely many times. This leads
+naturally to the notion of \emph{finite--dimensional distributions}, which encode all
+probabilistic information about the process when observed at a finite number of time
+indices.
+
+The central issue is then \emph{consistency}: the distributions prescribed at different
+levels of resolution must be compatible with one another. For example, the distribution
+of $(X_{t_1},X_{t_2})$ must agree with the marginal distribution of
+$(X_{t_1},X_{t_2},X_{t_3})$ when the third coordinate is ignored. Without such compatibility,
+no single stochastic process can realize all prescribed distributions simultaneously.
+
+The Daniell--Kolmogorov theorem shows that this intuitive requirement is not only necessary
+but also sufficient. It provides a rigorous construction of a probability measure on the
+space of all trajectories $E^T$ from a consistent family of finite--dimensional
+distributions. In this way, the theorem forms the mathematical foundation for the
+existence of stochastic processes and justifies the path--space viewpoint adopted in
+this section.
+
+The definitions and results that follow should therefore be understood as preparatory
+steps toward this fundamental construction. Cylinder sets, consistency conditions, and
+regularity assumptions on the state space are introduced precisely to make the
+Daniell--Kolmogorov theorem applicable and to ensure that stochastic processes can be
+treated as genuine random elements in an infinite--dimensional setting.
+
+\begin{definition}[Stochastic process]
+Let $(\Omega,\mathcal{F},\Pp)$ be a probability space, let $(E,\B(E))$ be a measurable space,
+and let $T$ be an index set.
+
+A \emph{stochastic process} with state space $E$ and index set $T$ is a family
+\[
+(X_t)_{t\in T}
+\]
+of $E$--valued random variables on $(\Omega,\mathcal{F},\Pp)$, that is, measurable maps
+\[
+X_t : (\Omega,\mathcal{F}) \to (E,\B(E)) \qquad \text{for each } t\in T.
+\]
+\end{definition}
+
+\begin{remark}[Path--space formulation of a stochastic process]
+Let $(E,\mathcal{B}(E))$ be a measurable space and let $T$ be an index set.
+
+We denote by
+\[
+E^T := \{ \omega : T \to E \}
+\]
+the set of all functions from $T$ into $E,$
+called the \emph{path space}. An element $\omega \in E^T$ represents a single realization
+(or trajectory) of the stochastic process.
+
+The $\sigma$--algebra $\mathcal{B}(E^T)$ is defined as the smallest
+$\sigma$--algebra such that for every $t \in T$ the coordinate projection
+\[
+\pi_t : E^T \to E, \qquad \pi_t(\omega) := \omega(t),
+\]
+is measurable.
+
+With this notation, a stochastic process $(X_t)_{t \in T}$ can equivalently be described
+as a single measurable mapping
+\[
+X : \Omega \to E^T,
+\qquad
+X(\omega) := (X_t(\omega))_{t \in T}.
+\]
+
+The equivalence follows from the fact that $X$ is measurable if and only if each
+coordinate mapping $X_t = \pi_t \circ X$ is measurable.
+\end{remark}
+
+
+\section{Finite--Dimensional Distributions}
+
+When studying a stochastic process indexed by a possibly infinite set $T$, it is in
+general neither feasible nor necessary to describe the joint distribution of the entire
+collection $(X_t)_{t\in T}$ at once. Instead, one starts by analyzing the behavior of the
+process when observed at finitely many time points. The resulting joint laws encode all
+probabilistic information that can be accessed through finite observations and are therefore
+the most natural and fundamental building blocks of a stochastic process. Finite--dimensional
+distributions allow us to describe local statistical behavior without committing to a
+specific underlying probability space, and they provide a concrete and tractable way to
+formulate existence questions. The central problem addressed later is whether a family of
+such finite descriptions can be assembled into a single global object, a question that
+leads naturally to the notions of marginal distributions, consistency, and ultimately to
+the Daniell--Kolmogorov theorem.
+
+But before approaching all these questions, we define Finite-dimensional distributions and consistency formally.
+
+\begin{definition}[Finite--dimensional distributions]
+Let $I = \{t_1,\dots,t_n\} \subset T$ be a finite subset.
+The \emph{finite--dimensional distribution} of $(X_t)_{t\in T}$ at times $I$
+is the probability measure
+\[
+\mu_I := \Pp \circ (X_{t_1},\dots,X_{t_n})^{-1}
+\]
+on $(E^I,\B(E^I))$ where $E^I$ is the product space defined by the index $I$.
+\end{definition}
+
+\begin{definition}[Consistency]
+A family $(\mu_I)_{I\subset T,\ |I|<\infty}$ of probability measures on
+$(E^I,\B(E^I))$ is called \emph{consistent} if for all finite $I \subset J \subset T$,
+\[
+\mu_I = \mu_J \circ \pi_{J\to I}^{-1},
+\]
+where $\pi_{J\to I} : E^J \to E^I$ denotes the canonical projection.
+\end{definition}
+
+\begin{remark}
+Consistency expresses the requirement that lower--dimensional marginals are obtained
+from higher--dimensional ones by projection.
+\end{remark}
+
+\subsection*{Consistency and Marginal Distributions}
+
+The consistency condition expresses the fact that all finite--dimensional distributions
+describe different ``views'' of the \emph{same} stochastic process and therefore must be
+compatible with each other.
+
+To make this precise, let $I = \{t_1,\dots,t_n\} \subset J = \{t_1,\dots,t_n,t_{n+1},\dots,t_m\}$.
+The probability measure $\mu_J$ describes the joint distribution of the random vector
+\[
+(X_{t_1},\dots,X_{t_n},X_{t_{n+1}},\dots,X_{t_m}).
+\]
+
+The corresponding distribution of $(X_{t_1},\dots,X_{t_n})$ alone is obtained by
+\emph{marginalization}, that is, by integrating out the remaining variables:
+\[
+\mu_J \circ \pi_{J\to I}^{-1}(A)
+=
+\mu_J(A \times E^{J\setminus I}),
+\qquad
+A \in \mathcal{B}(E^I).
+\]
+
+\begin{remark}[Marginal distributions]
+The measure $\mu_I$ is therefore interpreted as the \emph{marginal distribution} of $\mu_J$
+with respect to the coordinates indexed by $I$.
+\end{remark}
+
+The family $(\mu_I)_{I \subset T}$ is called consistent precisely when the distribution
+$\mu_I$ coincides with this marginal for every $I \subset J$, i.e.,
+\[
+\mu_I(A)
+=
+\mu_J(A \times E^{J\setminus I}),
+\qquad
+A \in \mathcal{B}(E^I).
+\]
+
+\subsection*{Why consistency is necessary}
+
+If a stochastic process $(X_t)_{t\in T}$ exists on some probability space, then its
+finite--dimensional distributions must satisfy the consistency condition automatically.
+Indeed,
+\[
+\Pp\big((X_t)_{t\in I} \in A\big)
+=
+\Pp\big((X_t)_{t\in J} \in A \times E^{J\setminus I}\big),
+\]
+which shows that $\mu_I$ is the marginal of $\mu_J$. In other words, observing more coordinates but imposing no restriction on them does not change the probability of an event that depends only on fewer coordinates. Consistency guarantees this almost obvious concept, i.e., if one adds more observations on time, then the probability of previous observations must remain unchanged.  
+
+Consistency is therefore a \emph{necessary} condition for the existence of a stochastic
+process with prescribed finite--dimensional distributions.
+
+\subsection*{Why consistency is sufficient}
+
+The Daniell--Kolmogorov theorem shows that consistency is also \emph{sufficient}:
+if the family $(\mu_I)$ is consistent, then there exists a probability measure on the
+path space $E^T$ whose finite--dimensional distributions coincide with $(\mu_I)$.
+
+In this sense, the consistency condition encodes exactly the information needed to
+``glue together'' the finite--dimensional distributions into a single global object.
+
+\subsection*{Intuitive interpretation}
+
+One may think of the measures $\mu_I$ as describing the behavior of a process when
+observed at finitely many times. The consistency condition ensures that these observations
+do not contradict each other when taken at different levels of resolution.
+
+Without consistency, one could prescribe a distribution for $(X_1,X_2)$ and a different,
+incompatible distribution for $X_1$ alone, making it impossible to construct a single
+stochastic process realizing both.
+
+
+\section{Cylinder Sets}
+
+When constructing a stochastic process on the path space $E^T$, one faces an immediate
+difficulty: the space $E^T$ is infinite--dimensional, and its Borel $\sigma$--algebra
+cannot be described in a simple or concrete way. In particular, it is not feasible to
+assign probabilities directly to arbitrary subsets of $E^T$.
+
+The key observation is that all probabilistic information about a stochastic process is
+obtained through finite observations. Events such as
+\[
+\{X_{t_1} \in B_1,\dots,X_{t_n} \in B_n\}
+\]
+depend only on the values of the process at finitely many time indices. Cylinder sets
+are introduced precisely to formalize such events on the path space. They allow us to
+encode finite--dimensional events as subsets of $E^T$ in a canonical way.
+
+From a measure--theoretic point of view, cylinder sets play a dual role. On the one hand,
+they form a concrete class of sets on which probabilities can be defined using the given
+finite--dimensional distributions. On the other hand, they generate the product
+$\sigma$--algebra on $E^T$, ensuring that a probability measure defined on cylinder sets
+extends uniquely to all measurable events.
+
+The Daniell--Kolmogorov theorem exploits this structure: a pre--measure is first defined
+on an algebra of (special) cylinder sets using consistency of the finite--dimensional
+distributions, and regularity properties of the state space then guarantee that this
+pre--measure extends to a probability measure on the full path space. Cylinder sets thus
+provide the essential link between finite--dimensional probabilistic descriptions and
+the existence of a stochastic process as a random element of $E^T$.
+
+\begin{definition}[Cylinder sets on the path space]
+Let $(E,\mathcal{B}(E))$ be a measurable space and let $T$ be an index set.
+Set
+\[
+\Omega := E^T.
+\]
+
+For a finite subset $I \subset T$ and a measurable set $A_I \in \mathcal{B}(E^I)$, we define
+the \emph{cylinder set} associated with $A_I$ as
+\[
+C_{A_I}
+:=
+\bigl\{
+\omega \in E^T \;:\; (\omega(t))_{t \in I} \in A
+\bigr\}
+= A_I \times E^{T \backslash I} = \pi_I^{-1}(A_I).
+\]
+\end{definition}
+
+
+Cylinder sets describe events that have fixed finitely many coordinates of a path.
+
+\subsection*{Special cylinder sets}
+
+In order to work with a smaller and more manageable class of sets, we introduce
+a special subclass of cylinder sets.
+
+\begin{definition}[Special cylinder sets]
+A \emph{special cylinder set} is a set of the form
+\[
+C
+=
+\bigcap_{k=1}^n \{ \omega \in E^T : \omega(t_k) \in B_k \} = \bigcap_{k=1}^n \pi_k^{-1}(B_k),
+\]
+where
+\[
+t_1,\dots,t_n \in T,
+\qquad
+B_1,\dots,B_n \in \mathcal{B}(E).
+\]
+\end{definition}
+
+Equivalently, special cylinder sets are cylinder sets of the form
+\[
+C = \pi_I^{-1}(B_1 \times \cdots \times B_n) \times E^{T \backslash I},
+\qquad
+I = \{t_1,\dots,t_n\}.
+\]
+
+\begin{remark}
+Special cylinder sets correspond to \emph{rectangular} sets in finite dimensions.
+They are particularly convenient for constructing measures and checking additivity.
+\end{remark}
+
+\subsection*{Algebraic properties}
+
+\begin{lemma}
+The collection $\mathcal{A}$ of all special cylinder sets is an algebra of sets, i.e.,
+\begin{enumerate}[label=(\roman*)]
+\item $\Omega \in \mathcal{A}$,
+\item $A \in \mathcal{A} \Rightarrow A^c \in \mathcal{A}$,
+\item $A,B \in \mathcal{A} \Rightarrow A \cup B \in \mathcal{A}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The whole space $\Omega$ corresponds to choosing $B_k = E$.
+Complements and finite unions of special cylinder sets can be rewritten as finite unions
+of special cylinder sets by enlarging the underlying finite index set and using
+elementary set operations in $E$.
+\end{proof}
+
+\subsection*{Generation of the product $\sigma$--algebra}
+
+\begin{lemma}
+The $\sigma$--algebra generated by the collection of special cylinder sets coincides with
+the product $\sigma$--algebra:
+\[
+\sigma(\mathcal{A}) = \mathcal{B}(E^T).
+\]
+\end{lemma}
+
+\begin{proof}
+Every special cylinder set is a cylinder set, hence
+\[
+\sigma(\mathcal{A}) \subset \mathcal{B}(E^T).
+\]
+
+Conversely, the product $\sigma$--algebra $\mathcal{B}(E^T)$ is generated by sets of the
+form $\pi_I^{-1}(A)$ with $A \in \mathcal{B}(E^I)$.
+Since rectangles generate $\mathcal{B}(E^I)$ and rectangles correspond to special
+cylinder sets, it follows that
+\[
+\mathcal{B}(E^T) \subset \sigma(\mathcal{A}).
+\]
+\end{proof}
+
+\begin{remark}
+The Daniell--Kolmogorov extension theorem is proved by first defining a pre--measure
+on the algebra of special cylinder sets and then extending it uniquely to
+$\mathcal{B}(E^T)$.
+\end{remark}
+
+\section{Inner Regularity and Tightness}
+
+\begin{lemma}[Inner regularity]
+Let $E$ be a Polish space and let $\mu$ be a probability measure on $\B(E)$.
+Then for every $A \in \B(E)$,
+\[
+\mu(A)
+=
+\sup\{\mu(K) : K \subset A,\; K \text{ compact}\}.
+\]
+\end{lemma}
+
+\begin{remark}
+In particular, every probability measure on a Polish space is tight.
+This property is crucial to ensure $\sigma$--additivity when extending
+pre--measures defined on algebras of sets.
+\end{remark}
+
+\section{Daniell--Kolmogorov Extension Theorem}
+
+Up to this point, we have described a stochastic process only through its behavior at
+finitely many time indices, encoded by its finite--dimensional distributions. This reflects
+the way stochastic systems are observed in practice: one can measure or specify joint
+distributions at finitely many times, but never at infinitely many times simultaneously.
+The central question is whether such finite descriptions actually correspond to a genuine
+stochastic process evolving over the entire index set $T$.
+
+The difficulty lies in the infinite--dimensional nature of the path space $E^T$. While
+finite--dimensional distributions live on well--understood product spaces, the space of
+all trajectories is far more complex, and it is not a priori clear that one can define a
+probability measure on it that is compatible with all finite observations. In particular,
+different finite--dimensional distributions might contradict each other when viewed as
+marginals of a single global distribution.
+
+The Daniell--Kolmogorov theorem resolves this problem. It shows that the intuitive
+compatibility requirement expressed by consistency of finite--dimensional distributions
+is not only necessary but also sufficient for the existence of a stochastic process. If
+the distributions prescribed at all finite sets of time indices agree with each other
+under marginalization, then there exists a probability measure on the path space $E^T$
+whose projections reproduce exactly these distributions.
+
+In this sense, the Daniell--Kolmogorov theorem provides the mathematical justification for
+the path--space approach to stochastic processes. It allows one to construct stochastic
+processes starting solely from finite--dimensional probabilistic information, without
+having to specify an underlying probability space in advance. All subsequent notions,
+such as canonical processes, filtrations, and regularity properties of paths, rely on this
+fundamental existence result.
+
+\begin{theorem}[Daniell--Kolmogorov]
+Let $E$ be a Polish space and let
+\[
+(\mu_I)_{I \subset T,\ |I|<\infty}
+\]
+be a consistent family of probability measures on $(E^I,\B(E^I))$.
+
+Then there exists a unique probability measure
+\[
+\Pp \in \mathcal{P}(E^T,\B(E^T))
+\]
+such that for every finite $I \subset T$,
+\[
+\Pp \circ \pi_I^{-1} = \mu_I.
+\]
+\end{theorem}
+
+\subsection*{Proof}
+
+\emph{Step 1: Definition of a pre--measure.}
+For a cylinder set $C = \pi_I^{-1}(A)$ with $A \in \B(E^I)$, define
+\[
+\Pp_0(C) := \mu_I(A).
+\]
+
+\emph{Step 2: Well--definedness.}
+If $\pi_I^{-1}(A) = \pi_J^{-1}(B)$, then both sets depend only on coordinates in $I\cup J$.
+By consistency,
+\[
+\mu_I(A)
+=
+\mu_{I\cup J}(A \times E^{J\setminus I})
+=
+\mu_J(B),
+\]
+so $\Pp_0$ is well defined.
+
+\emph{Step 3: Finite additivity.}
+Let $(C_k)_{k=1}^n$ be disjoint cylinder sets.
+By representing all $C_k$ on a common finite index set and using finite additivity of
+$\mu_I$, we obtain
+\[
+\Pp_0\Big(\bigcup_{k=1}^n C_k\Big)
+=
+\sum_{k=1}^n \Pp_0(C_k).
+\]
+
+\emph{Step 4: $\sigma$--additivity.}
+Since $E$ is Polish, the measures $\mu_I$ are inner regular and hence tight.
+This prevents loss of mass at infinity and implies that $\Pp_0$ is
+$\sigma$--additive on the algebra of cylinder sets.
+
+\emph{Step 5: Extension.}
+By the Carath\'eodory extension theorem, $\Pp_0$ extends uniquely to a probability
+measure $\Pp$ on $\B(E^T)$.
+
+\hfill $\square$
+
+\subsection*{Existence of stochastic processes in Lusin spaces}
+
+The Daniell--Kolmogorov theorem was stated under the assumption that the state space $E$
+is Polish. This assumption can be relaxed to the broader class of Lusin spaces.
+
+\begin{definition}[Lusin space]
+A measurable space $(E,\mathcal{E})$ is called a \emph{Lusin space} if there exists
+a Polish space $(\tilde E,\mathcal{B}(\tilde E))$ and a measurable bijection
+\[
+\varphi : E \to \tilde E
+\]
+such that both $\varphi$ and $\varphi^{-1}$ are measurable.
+\end{definition}
+
+\begin{remark}
+Every Polish space is a Lusin space, but the converse is not true.
+In a Lusin space, the measurable structure behaves essentially as well as in the Polish case,
+even though the topology may be less regular.
+\end{remark}
+
+\begin{theorem}[Existence of stochastic processes in Lusin spaces]
+Let $(E,\mathcal{E})$ be a Lusin space and let
+\[
+(\mu_I)_{I \subset T,\ |I|<\infty}
+\]
+be a consistent family of probability measures on $(E^I,\mathcal{E}^{\otimes I})$.
+
+Then there exists a probability space $(\Omega,\mathcal{F},\Pp)$ and an $E$--valued
+stochastic process $(X_t)_{t\in T}$ such that for every finite $I \subset T$,
+\[
+\Pp \circ (X_t)_{t\in I}^{-1} = \mu_I.
+\]
+\end{theorem}
+
+\begin{proof}[Idea of the proof]
+Since $(E,\mathcal{E})$ is a Lusin space, there exists a measurable isomorphism
+$\varphi : E \to \tilde E$ onto a Polish space $\tilde E$.
+
+For each finite $I \subset T$, define a probability measure $\tilde\mu_I$ on
+$\tilde E^I$ by pushforward:
+\[
+\tilde\mu_I := \mu_I \circ \varphi_I^{-1},
+\qquad
+\varphi_I(x_1,\dots,x_n) := (\varphi(x_1),\dots,\varphi(x_n)).
+\]
+
+The family $(\tilde\mu_I)$ is consistent.
+By the Daniell--Kolmogorov theorem in the Polish space $\tilde E$, there exists a probability
+measure $\tilde\Pp$ on $\tilde E^T$ with finite--dimensional distributions $(\tilde\mu_I)$.
+
+Finally, pulling back $\tilde\Pp$ via the inverse isomorphism $\varphi^{-1}$ yields
+a probability measure $\Pp$ on $E^T$, and the canonical process
+\[
+X_t(\omega) := \omega(t)
+\]
+has finite--dimensional distributions $(\mu_I)$.
+\end{proof}
+
+\begin{remark}
+The use of Lusin spaces is essential in applications where the state space is naturally
+measurable but not Polish. The theorem shows that the existence of a stochastic process
+depends primarily on the measurable structure rather than on the topology.
+\end{remark}
