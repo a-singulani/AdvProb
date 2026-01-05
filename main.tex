@@ -8,7 +8,7 @@
 \usepackage{mathrsfs}
 \usepackage{enumitem}
 \usepackage{geometry}
-\usepackage{hyperref}
+
 
 
 % -------------------------------------------------
@@ -21,7 +21,7 @@
 \usepackage[most]{tcolorbox}
 \usepackage{etoolbox}
 
-
+\newcounter{tcbautolabel}
 \tcbuselibrary{theorems,breakable,skins}
 
 % --- Color palette (tweak RGB if you like) ---
@@ -100,39 +100,94 @@
 
 % ---------- User-facing environments with optional [title] ----------
 
+% -------------------------------------------------
+% Shared theorem counter (like amsthm), numbered within chapter
+% This makes \label inside work normally.
+% -------------------------------------------------
+\newcounter{thm}[chapter]
+\renewcommand{\thethm}{\thechapter.\arabic{thm}}
+
 \NewDocumentEnvironment{theorem}{o}
-{\begin{theorembox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{theorembox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[mybox, mycolors=ThmNavy,
+    title={Theorem~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 \NewDocumentEnvironment{lemma}{o}
-{\begin{lemmabox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{lemmabox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[mybox, mycolors=LemBlue,
+    title={Lemma~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 \NewDocumentEnvironment{proposition}{o}
-{\begin{propositionbox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{propositionbox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[mybox, mycolors=PropBlue,
+    title={Proposition~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 \NewDocumentEnvironment{corollary}{o}
-{\begin{corollarybox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{corollarybox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[mybox, mycolors=CorNavy,
+    title={Corollary~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 \NewDocumentEnvironment{definition}{o}
-{\begin{definitionbox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{definitionbox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[mybox, mycolors=DefBlue, fontupper=\normalfont,
+    title={Definition~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 \NewDocumentEnvironment{example}{o}
-{\begin{examplebox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{examplebox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[mybox, mycolors=ExBlue, fontupper=\normalfont,
+    title={Example~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 \NewDocumentEnvironment{remark}{o}
-{\begin{remarkbox}{\IfValueTF{#1}{#1}{}}{}}
-{\end{remarkbox}}
+{%
+  \refstepcounter{thm}%
+  \begin{tcolorbox}[enhanced, breakable,
+    boxrule=0pt, frame hidden,
+    colback=white,
+    left=0pt, right=0pt, top=0.5mm, bottom=0.5mm,
+    fonttitle=\itshape, coltitle=black!70,
+    fontupper=\normalfont,
+    title={Remark~\thethm\IfValueT{#1}{ (\unexpanded{#1})}}%
+  ]%
+}
+{\end{tcolorbox}}
 
 
 
 
 
 
+
+
+
+\definecolor{stepblue}{HTML}{2F80ED} % light-ish blue
+\newcommand{\Step}[1]{\par\medskip\noindent\textcolor{stepblue}{ Step #1.}\;}
+
+\definecolor{stepblue}{HTML}{2F80ED} % light-ish blue
+\newcommand{\LabelProof}[1]{\par\medskip\noindent\textcolor{stepblue}{ #1.}\;}
 
 \geometry{margin=1in}
 
@@ -159,6 +214,7 @@
 \newcommand{\Prob}{\mathbb{P}}
 \newcommand{\Pp}{\Prob}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\A}{\mathcal{A}}
 \newcommand{\B}{\mathcal{B}}
 \newcommand{\Ecal}{\mathcal{E}}
 \newcommand{\supp}{\operatorname{supp}}
@@ -176,6 +232,7 @@
 \newcommand{\esssup}{\operatorname*{ess\,sup}}
 \newcommand{\essinf}{\operatorname*{ess\,inf}}
 
+\usepackage{hyperref}
 
 
 % -------------------------------------------------
@@ -193,6 +250,7 @@
 
 \part{Conditional Expectation}
 \input{Conditional_Expectation}
+\input{RCD}
 \input{Optimal_Stop_Prob}
 \input{Kalman_Filter}
 

@@ -69,11 +69,11 @@ Conversely, given $Q_n$ one can take $Z=E$, $T_n(x,a,z)=z$, and $Q_n^Z=Q_n$.
 \end{theorem}
 
 \begin{proof}
-\textbf{Step 1 (From $Q_n$ to disturbances).}
+\Step{1 (From $Q_n$ to disturbances)}
 Given $Q_n$, set $Z:=E$, $\mathcal{Z}:=\mathcal{E}$, define $T_n(x,a,z):=z$, and set $Q_n^Z(B\mid x,a):=Q_n(B\mid x,a)$.
 Then the reconstruction formula holds trivially.
 
-\textbf{Step 2 (From disturbances to $Q_n$).}
+\Step{2 (From disturbances to $Q_n$)}
 Given $(T_n,Q_n^Z)$, define $Q_n$ by the reconstruction formula.
 For fixed $(x,a)$, the map $B\mapsto Q_n(B\mid x,a)$ is a probability measure as the pushforward of $Q_n^Z(\cdot\mid x,a)$ under the measurable map $z\mapsto T_n(x,a,z)$.
 For fixed $B\in\mathcal{E}$, measurability of $(x,a)\mapsto Q_n(B\mid x,a)$ follows from measurability of $T_n$ and of the kernel $Q_n^Z$.

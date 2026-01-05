@@ -1,0 +1,449 @@
+\chapter{Regular Conditional Distribution}
+
+\section{From conditional expectation to conditioning on \texorpdfstring{$X=x$}{X=x}}
+
+We would like to define \emph{conditional probability} using our conditional expectation, so we can can answer questions like: what is the probability of $Y$ to happen given that $X=x$? In principle, thanks to the factorization lemma we can formalize this idea (Note that throughout this section, $(\Omega,\A,\mathbb{P})$ is a probability space).
+
+\begin{definition}[Conditional expectation given $X=x$]
+\label{def:condexp_x}
+Let $Y\in L^1(\mathbb{P})$ and let $X:(\Omega,\A)\to(E,\E)$ be measurable.
+Let $Z:=\mathbb{E}[Y\mid \sigma(X)]$. By the factorization there exists $\xi:E\to\mathbb{R}$ measurable with
+$Z=\xi(X)$ a.s. We define
+\[
+\mathbb{E}[Y\mid X=x] := \xi(x).
+\]
+Equivalently, for $A\in\A$,
+\[
+\mathbb{P}(A\mid X=x) := \mathbb{E}[\Ind_A\mid X=x].
+\]
+\end{definition}
+
+However, there is a subtlety. The random variable $Z$ is not uniquely determined \emph{pointwise}: any two versions agree only $\mathbb{P}$-a.s.
+In other words, for each fixed $A$ there exists a null set $N_A$ (depending on $A$) such that
+two valid choices of $\mathbb{P}(A\mid \F)$ may differ on $N_A$, but nowhere else.
+This is harmless if we look at one single event (or finitely many), because we can always ignore a finite union of null sets.
+
+\paragraph{Why this is a problem when conditioning on $X=x$?}
+Now suppose we want to interpret conditioning on a random variable $X$.
+A natural idea is:
+\[
+\mathbb{P}(Y\in B\mid X=x)\stackrel{?}{=}\text{``a version of }\mathbb{E}[\mathbf{1}_{\{Y\in B\}}\mid \sigma(X)]\text{ evaluated at }X=x\text{''}.
+\]
+For each fixed $B\in\E$, the random variable
+\[
+Z_B(\omega):=\mathbb{P}(Y\in B\mid \sigma(X))(\omega)
+\]
+exists and is $\sigma(X)$-measurable, hence can be written as $Z_B=\xi_B(X)$ a.s.\ for some measurable $\xi_B$.
+So we might want to \emph{define} $\mathbb{P}(Y\in B\mid X=x):=\xi_B(x)$.
+
+The issue is that the null set on which $Z_B\neq \xi_B(X)$ can depend on $B$.
+Thus, for each $B$ we can find a ``good'' set $\Omega_B$ with $\mathbb{P}(\Omega_B)=1$ where the identity holds,
+but there is no reason for the intersection $\bigcap_{B\in\E}\Omega_B$ to still have probability $1$.
+And this is exactly what we would need in order to obtain a \emph{single} object
+\[
+x\mapsto \big(\text{a probability measure on }(E,\E)\big)
+\]
+that works for \emph{all} sets $B$ simultaneously.
+
+\paragraph{Why ``one null set per event'' is too weak?}
+Think of $\mathbb{P}(Y\in B\mid \sigma(X))$ as a family of random variables indexed by $B\in\E$.
+Conditional expectation guarantees:
+\begin{itemize}
+\item for each \emph{individual} $B$, there is a well-defined (a.s.) value of $\mathbb{P}(Y\in B\mid \sigma(X))$,
+\item but the exceptional set where the chosen representative is wrong may vary with $B$.
+\end{itemize}
+To build a conditional \emph{distribution}, however, we need a single $\omega$-wise probability measure
+$B\mapsto \vartheta(\omega,B)$, i.e.\ we need the measure axioms (countable additivity, etc.) to hold
+for each fixed $\omega$ (outside one global null set).
+That forces us to control \emph{countably many} relations simultaneously (at least on a countable generator),
+and then extend to all $B$ by a monotone class argument.
+Plain conditional expectation does not give this uniform control automatically. But the concept of regular conditional distributions fix these problems.
+
+\begin{definition}[Transition kernel / Markov kernel]
+\label{def:kernel}
+Let $(\Omega_1,\A_1)$ and $(\Omega_2,\A_2)$ be measurable spaces.
+A map $\vartheta:\Omega_1\times \A_2\to [0,\infty]$ is a \emph{finite transition kernel} from $\Omega_1$ to $\Omega_2$ if:
+\begin{enumerate}[label=(\roman*)]
+\item for every $A_2\in\A_2$, the function $\omega_1\mapsto \vartheta(\omega_1,A_2)$ is $\A_1$-measurable;
+\item for every $\omega_1\in\Omega_1$, the set function $A_2\mapsto \vartheta(\omega_1,A_2)$ is a finite measure on $(\Omega_2,\A_2)$.
+\end{enumerate}
+If the measures in (ii) are probability measures, $\vartheta$ is a \emph{stochastic/Markov kernel}.
+\end{definition}
+
+\begin{definition}[Regular conditional distribution (RCD)]
+\label{def:rcd}
+Let $Y:(\Omega,\A)\to(E,\E)$ be measurable and let $\F\subseteq \A$ be a sub-$\sigma$-algebra.
+A Markov kernel $\vartheta_{Y,\F}$ from $(\Omega,\F)$ to $(E,\E)$ is called a \emph{regular conditional distribution of $Y$ given $\F$} if
+\begin{equation}
+\label{eq:rcd-def}
+\int_A \vartheta_{Y,\F}(\omega,B)\,\mathbb{P}(d\omega) \;=\; \mathbb{P}\big(A\cap \{Y\in B\}\big)
+\quad\text{for all }A\in\F,\; B\in\E.
+\end{equation}
+Equivalently, $\vartheta_{Y,\F}(\cdot,B)$ is a version of $\mathbb{P}(Y\in B\mid \F)$ for every $B\in\E$.
+\end{definition}
+
+
+
+\paragraph{So what does RCD give us?}
+A regular conditional distribution upgrades the abstract identity
+\[
+\mathbb{E}[\mathbf{1}_{\{Y\in B\}}\mid \F]
+\quad\text{(defined only up to $\mathbb{P}$-null sets, separately for each $B$)}
+\]
+into a single random probability measure
+\[
+\omega \mapsto \vartheta_{Y,\F}(\omega,\cdot)
+\]
+such that for almost every $\omega$ we can do \emph{all} of the following \emph{pointwise}:
+\begin{itemize}
+\item evaluate $\mathbb{P}(Y\in B\mid \F)(\omega)$ for \emph{every} measurable $B$,
+\item integrate functions:
+\[
+\mathbb{E}[f(Y)\mid \F](\omega)=\int f(y)\,\vartheta_{Y,\F}(\omega,dy),
+\]
+\item treat conditioning as a genuine ``posterior distribution'' of $Y$ given the information $\F$.
+\end{itemize}
+This is the sense in which regular conditional distributions provide a \emph{regularized} (pointwise, measure-valued) form of conditional expectation.
+
+\subsection*{Existence}
+Evidently, a natural question is whether our new object exist in our context. We start by showing the existence in $\mathbb{R}$ and later we generalize for larger spaces. The idea is to construct a distribution in $\mathbb{R}$ that satisfies the RCD definition.
+\begin{theorem}[Existence of an RCD for real-valued random variables]
+\label{thm:rcd-R}
+Let $Y:(\Omega,\A)\to(\mathbb{R},\B(\mathbb{R}))$ be real-valued and $\F\subseteq \A$.
+Then there exists a regular conditional distribution $\vartheta_{Y,\F}$ of $Y$ given $\F$.
+\end{theorem}
+
+\begin{proof}
+\Step{1: conditional distribution function on rationals}
+For each $r\in\mathbb{Q}$, pick a version
+\[
+F(r,\cdot) := \mathbb{P}\big(Y\le r\mid \F\big)
+\]
+which is $\F$-measurable and takes values in $[0,1]$.
+
+\Step{2: enforce monotonicity outside null sets}
+If $r\le s$ then $\Ind_{\{Y\le r\}}\le \Ind_{\{Y\le s\}}$, hence by monotonicity of conditional expectation
+there exists $N_{r,s}\in\F$ with $\mathbb{P}(N_{r,s})=0$ such that
+\[
+F(r,\omega)\le F(s,\omega)\quad\text{for all }\omega\notin N_{r,s}.
+\]
+Let $N_1:=\bigcup_{r\le s,\; r,s\in\mathbb{Q}}N_{r,s}$; then $\mathbb{P}(N_1)=0$ and for $\omega\notin N_1$ the map
+$r\mapsto F(r,\omega)$ is nondecreasing on $\mathbb{Q}$.
+
+\Step{3: enforce right limits and boundary conditions}
+Using dominated convergence for conditional expectations, we can choose null sets ensuring:
+(i) right limits along $r+1/n$ exist for each rational $r$ outside a null set,
+(ii) $\inf_{n\in\mathbb{N}}F(-n,\omega)=0$ and $\sup_{n\in\mathbb{N}}F(n,\omega)=1$ outside a null set.
+Let $N_2$ be the union of these null sets, and set $N:=N_1\cup N_2$ so that $\mathbb{P}(N)=0$.
+
+\Step{4: extend to all real $z$ by right-continuous hull}
+For $\omega\notin N$ and $z\in\mathbb{R}$ define
+\[
+\widetilde F(z,\omega):=\inf\{F(r,\omega): r\in\mathbb{Q},\ r>z\}.
+\]
+Then $\widetilde F(\cdot,\omega)$ is nondecreasing and right-continuous, with limits $0$ at $-\infty$ and $1$ at $+\infty$,
+hence it is a distribution function. For $\omega\in N$, set $\widetilde F(\cdot,\omega)$ equal to an arbitrary fixed distribution function.
+
+\Step{5: define the kernel and verify measurability}
+For each $\omega$, let $\vartheta(\omega,\cdot)$ be the unique probability measure on $(\mathbb{R},\B(\mathbb{R}))$
+with distribution function $\widetilde F(\cdot,\omega)$.
+For sets of the form $(-\infty,r]$ with $r\in\mathbb{Q}$ we have
+\[
+\vartheta(\omega,(-\infty,r])=\widetilde F(r,\omega)=F(r,\omega)\quad\text{for }\omega\notin N,
+\]
+so $\omega\mapsto \vartheta(\omega,(-\infty,r])$ is $\F$-measurable.
+Since $\{(-\infty,r]:r\in\mathbb{Q}\}$ generates $\B(\mathbb{R})$ and is stable under finite intersections,
+a standard monotone class/$\pi$-$\lambda$ argument yields $\F$-measurability of $\omega\mapsto \vartheta(\omega,B)$ for all Borel $B$.
+
+\Step{6: verify the defining property \eqref{eq:rcd-def}}
+For $A\in\F$ and $B=(-\infty,r]$ with $r\in\mathbb{Q}$,
+\[
+\int_A \vartheta(\omega,B)\,\mathbb{P}(d\omega)=\int_A F(r,\omega)\,\mathbb{P}(d\omega)
+= \mathbb{P}\big(A\cap\{Y\le r\}\big)
+\]
+by the defining property of conditional expectation.
+Both sides are finite measures in $B$ and agree on the generator $\{(-\infty,r]: r\in\mathbb{Q}\}$, hence they agree on all $B\in\B(\mathbb{R})$.
+Thus $\vartheta$ is a regular conditional distribution of $Y$ given $\F$.
+\end{proof}
+
+\section{Borel spaces, Polish spaces, and Lusin spaces}
+
+Regular conditional distributions are \emph{pointwise} objects: for almost every outcome
+we want a genuine probability measure that depends on the conditioning information in a \emph{measurable} way.
+This measurability requirement is subtle. In ``well-behaved'' measurable spaces one can select such conditional laws;
+in pathological spaces this selection may fail. The classes below are precisely the standard ``well-behaved'' settings
+in which conditional probabilities behave as one expects from $\mathbb{R}^n$.
+
+\subsection*{Borel spaces}
+A Borel space is, by definition, a measurable space that can be relabeled into a Borel subset of $\mathbb{R}$ equipped with its Borel $\sigma$-algebra.
+This might look restrictive, but it covers essentially all state spaces used in probability theory:
+\[
+\begin{aligned}
+&\mathbb{R}^n,\quad \mathbb{R}^\infty \text{ (countable product),}\;\text{separable Banach/Hilbert spaces with their Borel $\sigma$-algebras,}\\
+&\text{countable sets with the power set $\sigma$-algebra, and any separable complete metric space.}
+\end{aligned}
+\]
+
+Intuitively, ``standard Borel'' means: there is a \emph{countable amount of information} that generates all measurable sets
+(a countable generator), and this makes it possible to construct conditional probabilities by first defining them on the generator
+and then extending them to all measurable sets. Essentially, these are abstract spaces that behave like Borel subsets of $\mathbb{R}$.
+
+\begin{definition}[Isomorphism of measurable spaces and measure spaces]
+\label{def:isom}
+Measurable spaces $(E,\E)$ and $(\widetilde E,\widetilde{\E})$ are \emph{isomorphic}
+if there exists a bijection $\xi:E\to \widetilde E$ such that $\xi$ is $\E$-$\widetilde{\E}$ measurable and
+$\xi^{-1}$ is $\widetilde{\E}$-$\E$ measurable.
+If moreover $\mu$ on $(E,\E)$ and $\widetilde\mu$ on $(\widetilde E,\widetilde{\E})$ satisfy
+$\widetilde\mu=\mu\circ \xi^{-1}$, then $(E,\E,\mu)$ and $(\widetilde E,\widetilde{\E},\widetilde\mu)$ are
+\emph{isomorphic as measure spaces}.
+\end{definition}
+
+\begin{definition}[Borel space / standard Borel space]
+\label{def:borelspace}
+A measurable space $(E,\E)$ is called a \emph{Borel space} (also: \emph{standard Borel})
+if it is isomorphic to $(B,\B(B))$ for some Borel set $B\in \B(\mathbb{R})$.
+\end{definition}
+
+\subsection*{Polish space}
+A Polish space is a separable complete metric space.
+This is a topological condition, not a purely measurable one, but it is the most common source of standard Borel spaces:
+if $E$ is Polish, then its Borel $\sigma$-algebra $\B(E)$ is standard Borel (see \ref{thm:polish-to-borel}).
+Concrete parallels are:
+\[
+\mathbb{R}^n,\quad \text{any separable Hilbert space }(\ell^2, L^2[0,1]),\quad C([0,1]),\quad \text{separable Banach spaces}.
+\]
+The key intuition is that separability provides a countable dense set (hence countable ``coordinates'' to approximate open sets),
+and completeness ensures limits of Cauchy sequences stay inside the space. Together, these properties yield a robust notion of
+approximation and enable powerful selection and regularity theorems in probability (existence of regular conditional distributions,
+measurable selections, tightness arguments, etc.).
+
+\begin{definition}[Polish space]
+A topological space is \emph{Polish} if it is separable and its topology is induced by a complete metric.
+\end{definition}
+
+\begin{theorem}[Polish $\Rightarrow$ Borel space]
+\label{thm:polish-to-borel}
+If $E$ is Polish and $\E=\B(E)$ is its Borel $\sigma$-algebra, then $(E,\E)$ is a Borel space.
+\end{theorem}
+
+\subsection*{Lusin spaces}
+
+Lusin spaces are often presented as spaces that are, in a precise sense, not necessarily Polish themselves,
+but can be realized as a measurable image of a Polish space without losing the ``good'' measurability properties. They are ``almost Polish'' from the measurable viewpoint.
+A typical formulation is: a Lusin measurable space is isomorphic (as a measurable space) to a Borel subset of a Polish space.
+Thus, from the standpoint of measure theory, Lusin spaces retain the same good behavior as standard Borel spaces.
+A helpful parallel is manifold theory: a manifold may not be globally Euclidean, but locally it looks like $\mathbb{R}^n$;
+similarly, a Lusin space may not come with a nice global metric structure, but it still carries the same measurable structure
+as a Borel subset of a Polish space. 
+
+\begin{definition}[Lusin measurable space]
+A measurable space $(E,\E)$ is called a \emph{Lusin measurable space} if there exists a Polish space $P$
+and a Borel set $B\in\B(P)$ such that $(E,\E)$ is isomorphic (as a measurable space) to $(B,\B(B))$.
+In other words, there exists a bijection $\varphi:E\to B$ with $\varphi$ and $\varphi^{-1}$ measurable.
+\end{definition}
+
+\subsection{Existence of RCDs on Borel spaces}
+
+\begin{theorem}[Existence of RCDs for Borel-valued random variables]
+\label{thm:rcd-borel}
+Let $\F\subseteq\A$ and let $Y:(\Omega,\A)\to(E,\E)$ take values in a Borel space $(E,\E)$.
+Then there exists a regular conditional distribution $\vartheta_{Y,\F}$ of $Y$ given $\F$.
+\end{theorem}
+
+\begin{proof}
+Since $(E,\E)$ is a Borel space, there exist a Borel set $B\subseteq\mathbb{R}$ and a measurable isomorphism
+$\xi:(E,\E)\to(B,\B(B))$.
+Define the real-valued random variable $\widetilde Y := \xi\circ Y$ (viewed as a map into $\mathbb{R}$ by extending outside $B$ arbitrarily).
+By Theorem~\ref{thm:rcd-R}, there exists a regular conditional distribution $\vartheta_{\widetilde Y,\F}$ of $\widetilde Y$ given $\F$.
+Now define, for $A\in\E$,
+\[
+\vartheta_{Y,\F}(\omega,A):=\vartheta_{\widetilde Y,\F}\big(\omega,\xi(A)\big).
+\]
+Measurability in $\omega$ and the measure property in $A$ follow from those of $\vartheta_{\widetilde Y,\F}$ and the isomorphism.
+Finally, for $C\in\F$,
+\[
+\int_C \vartheta_{Y,\F}(\omega,A)\,\mathbb{P}(d\omega)
+=\int_C \vartheta_{\widetilde Y,\F}(\omega,\xi(A))\,\mathbb{P}(d\omega)
+=\mathbb{P}\big(C\cap\{\widetilde Y\in \xi(A)\}\big)
+=\mathbb{P}\big(C\cap\{Y\in A\}\big),
+\]
+so $\vartheta_{Y,\F}$ is an RCD.
+\end{proof}
+
+\subsection{Regularized conditional expectation: kernel representation}
+
+The next statement explains why a regular conditional distribution is a \emph{regularization} of conditional expectation:
+it turns $\mathbb{E}[f(X)\mid \F]$ into an integral against a (random) probability measure.
+
+\begin{theorem}[Integral representation of conditional expectation]
+\label{thm:reg-cond-exp}
+Let $X:(\Omega,\A)\to(E,\E)$ be Borel-valued and let $\F\subseteq\A$.
+Let $\vartheta_{X,\F}$ be an RCD of $X$ given $\F$.
+If $f:E\to\mathbb{R}$ is measurable with $\mathbb{E}[|f(X)|]<\infty$, then
+\begin{equation}
+\label{eq:kernel-repr}
+\mathbb{E}[f(X)\mid \F](\omega)=\int_E f(x)\,\vartheta_{X,\F}(\omega,dx)
+\qquad\text{for }\mathbb{P}\text{-a.e. }\omega.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+It suffices to consider $f\ge 0$ (apply to $f^+$ and $f^-$ otherwise).
+Approximate $f$ increasingly by simple functions:
+there exist measurable sets $A_i\in\E$ and $\alpha_i\ge 0$ such that
+\[
+g_n:=\sum_{i=1}^n \alpha_i \Ind_{A_i}\uparrow f.
+\]
+Fix $B\in\F$. Using Definition~\ref{def:rcd} with $Y=X$,
+\begin{align*}
+\mathbb{E}[g_n(X)\Ind_B]
+&=\sum_{i=1}^n \alpha_i\,\mathbb{P}(B\cap\{X\in A_i\})
+=\sum_{i=1}^n \alpha_i \int_B \vartheta_{X,\F}(\omega,A_i)\,\mathbb{P}(d\omega) \\
+&=\int_B \left(\int_E g_n(x)\,\vartheta_{X,\F}(\omega,dx)\right)\mathbb{P}(d\omega).    
+\end{align*}
+
+By monotone convergence, for $\mathbb{P}$-a.e.\ $\omega$,
+$\int g_n(x)\,\vartheta_{X,\F}(\omega,dx)\uparrow \int f(x)\,\vartheta_{X,\F}(\omega,dx)$,
+and also $\mathbb{E}[g_n(X)\Ind_B]\uparrow \mathbb{E}[f(X)\Ind_B]$.
+Thus, for all $B\in\F$,
+\[
+\mathbb{E}[f(X)\Ind_B]
+=\int_B \left(\int_E f(x)\,\vartheta_{X,\F}(\omega,dx)\right)\mathbb{P}(d\omega).
+\]
+The right-hand side is $\F$-measurable in $\omega$, so it has the defining property of $\mathbb{E}[f(X)\mid \F]$.
+\end{proof}
+
+\section{Disintegration lemma}
+A common situation one faces is to \emph{simulate} or \emph{integrate} with respect to a joint model $(X,Y)$ whose law $\mu$ on $E\times F$ is complicated, while the marginal of $X$ and the conditional law of $Y$ given $X=x$ are tractable.  The disintegration lemma justifies rigorously the intuitive two-step procedure: \emph{first sample $x$ from the marginal law $\mu_E$ of $X$, and then sample $y$ from the conditional law $\kappa(x,\cdot)$ given this $x$.}  In this way, probabilities and expectations under the joint law can be computed by iterating: for instance, for an integrable payoff $\varphi:E\times F\to\mathbb{R}$ one can evaluate
+\[
+\int_{E\times F}\varphi(x,y)\,\mu(dx,dy)
+=\int_E\left(\int_F \varphi(x,y)\,\kappa(x,dy)\right)\mu_E(dx),
+\]
+which is exactly the mathematical statement behind many practical algorithms (e.g.\ hierarchical simulation, Monte--Carlo estimators, Bayesian posterior prediction).  The key point is that this remains valid even when there is \emph{no density} and no ``formula'' for $\kappa(x,dy)$: disintegration guarantees that such a measurable conditional kernel exists and that the two-step computation truly reproduces the original joint law.
+
+\paragraph{Idea.}
+A probability measure $\mu$ on a product space $E\times F$ is the mathematical object that encodes the
+\emph{joint law} of a pair of random variables $(X,Y)$ taking values in $E$ and $F$.
+From basic probability one expects that a joint law should decompose into
+\[
+\text{(law of }X)\times \text{(conditional law of }Y\text{ given }X=x).
+\]
+This is exactly what the disintegration lemma formalizes.
+
+More concretely, let $\mu_E$ be the first marginal of $\mu$, i.e.\ the distribution of $X$.
+Then disintegration asserts that there exists a measurable family of probability measures
+\[
+x \longmapsto \kappa(x,\cdot)\in \mathcal{P}(F),
+\]
+such that for each measurable set $B\subseteq F$, the map $x\mapsto \kappa(x,B)$ is measurable and
+\[
+\mu(A\times B)=\int_A \kappa(x,B)\,\mu_E(dx)\qquad (A\in\E,\;B\in\F).
+\]
+Heuristically, you should read $\kappa(x,\cdot)$ as the \emph{conditional distribution} of $Y$ given $X=x$.
+Then the identity above says: to compute the probability that $(X,Y)$ falls in $A\times B$,
+first choose $x$ according to the law of $X$, and then (given this $x$) choose $y$ according to the conditional law of $Y$ given $X=x$.
+
+\paragraph{Why this is not automatic from conditional expectation?}
+Conditional expectation guarantees that for each fixed set $B\in\F$ the random variable
+$\mathbb{P}(Y\in B\mid \sigma(X))$ exists (as an a.s.\ defined object).
+Disintegration goes further: it produces \emph{one single} object $\kappa(x,\cdot)$ such that, for almost every $x$,
+$B\mapsto \kappa(x,B)$ is a genuine probability measure and the dependence on $x$ is measurable.
+In other words, the lemma upgrades ``separate conditional probabilities'' into a \emph{measurable kernel}
+(which can then be used to integrate arbitrary functions of $Y$ given $X=x$).
+
+
+
+
+
+
+\begin{theorem}[Disintegration lemma for probability measures on products]
+\label{thm:disintegration}
+Let $(E,\E)$ and $(F,\F)$ be Borel spaces and let $\mu$ be a probability measure on $(E\times F,\E\otimes \F)$.
+Let $\mu_E$ be the first marginal: $\mu_E(A):=\mu(A\times F)$.
+Then there exists a Markov kernel $\kappa:E\times \F\to[0,1]$ such that:
+\begin{enumerate}[label=(\roman*)]
+\item for each $B\in\F$, the map $x\mapsto \kappa(x,B)$ is $\E$-measurable;
+\item for each $x\in E$, $B\mapsto \kappa(x,B)$ is a probability measure on $(F,\F)$;
+\item (\emph{disintegration identity}) for all $A\in\E$ and $B\in\F$,
+\begin{equation}
+\label{eq:disintegration}
+\mu(A\times B)=\int_A \kappa(x,B)\,\mu_E(dx).
+\end{equation}
+\end{enumerate}
+Moreover, $\kappa$ is unique $\mu_E$-a.e.\ in the sense that if $\kappa'$ also satisfies \eqref{eq:disintegration},
+then $\kappa(x,\cdot)=\kappa'(x,\cdot)$ for $\mu_E$-a.e.\ $x$.
+\end{theorem}
+
+\begin{proof}
+Consider the probability space $(\Omega,\A,\mathbb{P}):=(E\times F,\E\otimes\F,\mu)$.
+Let $X(\omega)=x$ and $Y(\omega)=y$ be the coordinate projections on $E$ and $F$, respectively.
+Then $X$ takes values in the Borel space $(E,\E)$ and $Y$ in $(F,\F)$.
+
+By Theorem~\ref{thm:rcd-borel}, there exists a regular conditional distribution
+$\vartheta_{Y,\sigma(X)}$ of $Y$ given $\sigma(X)$.
+Since $\sigma(X)$ consists of sets of the form $X^{-1}(A)=A\times F$ with $A\in\E$,
+the kernel $\vartheta_{Y,\sigma(X)}(\omega,\cdot)$ is $\sigma(X)$-measurable in $\omega$.
+
+\Step{1: factor the $\sigma(X)$-measurable kernel through $X$}
+Fix $B\in\F$. The map $\omega\mapsto \vartheta_{Y,\sigma(X)}(\omega,B)$ is $\sigma(X)$-measurable, hence by the factorization Lemma
+there exists a measurable map $k_B:E\to[0,1]$ such that
+\[
+\vartheta_{Y,\sigma(X)}(\omega,B)=k_B(X(\omega))\qquad \mu\text{-a.s.}
+\]
+Define $\kappa(x,B):=k_B(x)$. One checks that $x\mapsto \kappa(x,B)$ is measurable for each $B$.
+
+\Step{2: $B\mapsto \kappa(x,B)$ is a probability measure}
+For a.e.\ $\omega$, $B\mapsto \vartheta_{Y,\sigma(X)}(\omega,B)$ is a probability measure.
+Since $\vartheta_{Y,\sigma(X)}(\omega,\cdot)=\kappa(X(\omega),\cdot)$ a.s., it follows that for $\mu_E$-a.e.\ $x$,
+$B\mapsto \kappa(x,B)$ is a probability measure. Redefine $\kappa(x,\cdot)$ arbitrarily on a $\mu_E$-null set of $x$ to make it a probability measure for all $x$.
+
+\Step{3: verify the disintegration identity}
+Take $A\in\E$ and $B\in\F$. Using the RCD property \eqref{eq:rcd-def} with $\F=\sigma(X)$ and $A\times F\in\sigma(X)$,
+\[
+\mu(A\times B)
+= \int_{A\times F} \vartheta_{Y,\sigma(X)}(\omega,B)\,\mu(d\omega)
+= \int_{A\times F} \kappa(X(\omega),B)\,\mu(d\omega).
+\]
+But under $\mu$, $X(\omega)=x$ and integrating over $A\times F$ amounts to integrating $x\in A$ against the marginal $\mu_E$:
+\[
+\int_{A\times F} \kappa(X(\omega),B)\,\mu(d\omega)=\int_A \kappa(x,B)\,\mu_E(dx),
+\]
+which is \eqref{eq:disintegration}.
+
+\LabelProof{Uniqueness}
+If $\kappa'$ also satisfies \eqref{eq:disintegration}, then for each fixed $B\in\F$,
+the functions $x\mapsto \kappa(x,B)$ and $x\mapsto \kappa'(x,B)$ have the same integrals over all $A\in\E$ w.r.t.\ $\mu_E$.
+Hence they are equal $\mu_E$-a.e. for each $B$ in a countable generator of $\F$.
+A monotone class argument extends equality to all $B\in\F$, yielding $\kappa(x,\cdot)=\kappa'(x,\cdot)$ for $\mu_E$-a.e.\ $x$.
+\end{proof}
+
+\begin{remark}[Finite measures and $\sigma$-finite extensions]
+If $\mu$ is a finite measure, apply Theorem~\ref{thm:disintegration} to $\mu/\mu(E\times F)$ and rescale.
+Extensions to $\sigma$-finite measures require additional hypotheses; for standard Borel spaces one typically assumes a suitable $\sigma$-finite structure
+to ensure existence of a disintegration kernel.
+\end{remark}
+
+\begin{remark}{The geometric interpretation}
+You can think of the product space $E\times F$ as being ``foliated'' by the vertical fibers
+\[
+\{x\}\times F,\qquad x\in E.
+\]
+The joint measure $\mu$ assigns mass to sets in the product.
+Disintegration says that one can ``slice'' $\mu$ along these fibers:
+for (almost every) $x$ there is a conditional measure $\kappa(x,\cdot)$ on the fiber $\{x\}\times F$,
+and the original mass is recovered by averaging these slices with respect to the marginal $\mu_E$.
+This is the measure-theoretic analogue of Fubini's theorem:
+Fubini integrates a function by iterated integrals, while disintegration decomposes the \emph{measure itself}
+into an iterated structure (first in $x$, then in $y$ conditioned on $x$).
+\end{remark}
+
+\begin{remark}{An analogy to densities.}
+If $\mu$ admits a joint density $p_{X,Y}(x,y)$ with respect to Lebesgue measure, then one writes
+\[
+p_{X,Y}(x,y)=p_X(x)\,p_{Y\mid X}(y\mid x),
+\]
+where $p_{Y\mid X}(y\mid x)=\frac{p_{X,Y}(x,y)}{p_X(x)}$ whenever $p_X(x)>0$.
+The disintegration lemma is the \emph{measure-level} version of this factorization,
+and it remains valid even when densities do \emph{not} exist (discrete/continuous mixtures, singular laws, etc.).
+Thus, it is the correct general replacement for the ``ratio formula'' for conditional densities.
+\end{remark}

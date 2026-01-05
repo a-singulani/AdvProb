@@ -55,9 +55,7 @@ $f_{k,n}(t)=\int_0^t g_{k,n}(u)\,du$, with $\{g_{k,n}\}$ the Haar orthonormal ba
 $L^2([0,1])$.
 \end{theorem}
 
-\bigskip
-
-\section*{Proof}
+\begin{proof}
 
 The proof proceeds in four steps:
 (i) definition of the deterministic basis,
@@ -65,7 +63,7 @@ The proof proceeds in four steps:
 (iii) identification of the Gaussian covariance,
 (iv) verification of the Brownian motion properties.
 
-\subsection*{Step 1: Haar functions and Schauder primitives}
+\Step{1: Haar functions and Schauder primitives}
 
 Let $\{g_{k,n}\}_{n\ge0,\,1\le k\le2^n}$ be the Haar orthonormal basis of $L^2([0,1])$,
 defined by
@@ -87,7 +85,7 @@ A direct computation shows
 \|f_{k,n}\|_\infty \le 2^{-(n/2+1)}.
 \]
 
-\subsection*{Step 2: Definition of the random series}
+\Step{2: Definition of the random series}
 
 Let $\{Z_{k,n}\}$ be independent $\mathcal N(0,1)$ random variables.
 For $N\in\mathbb{N}$ define the partial sums
@@ -96,7 +94,7 @@ B_N(t)=\sum_{n=0}^N\sum_{k=1}^{2^n} Z_{k,n} f_{k,n}(t).
 \]
 Each $B_N$ is a continuous stochastic process on $[0,1]$.
 
-\subsection*{Step 3: Almost sure uniform convergence}
+\Step{3: Almost sure uniform convergence}
 
 Define the level-$n$ contribution
 \[
@@ -126,7 +124,7 @@ B(t)=\sum_{n=0}^\infty \Delta_n(t).
 \]
 Then $B$ has almost surely continuous sample paths.
 
-\subsection*{Step 4: Gaussianity and covariance structure}
+\Step{4: Gaussianity and covariance structure}
 
 For each fixed $t$, $B_N(t)$ is a finite linear combination of independent Gaussian
 random variables, hence Gaussian. Moreover, $B_N(t)\to B(t)$ in $L^2$, so $B(t)$ is
@@ -154,7 +152,7 @@ the bilinear Parseval identity yields
 \min(s,t).
 \]
 
-\subsection*{Step 5: Identification as Brownian motion}
+\Step{5: Identification as Brownian motion}
 
 Since $(B(s),B(t))$ is jointly Gaussian,
 \[
@@ -168,9 +166,8 @@ which implies independence of increments.
 Finally, $B_0=0$ holds trivially from the definition.
 
 Therefore $B$ is a standard Brownian motion on $[0,1]$.
-\hfill $\square$
 
-\bigskip
+\end{proof}
 
 \begin{remark}
 This construction provides both a theoretical realization of Brownian motion

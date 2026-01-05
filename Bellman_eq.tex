@@ -52,20 +52,20 @@ Let $v,w\in\mathcal{\mathbb{M}}(E)$ satisfy $v(x)\le w(x)$ for all $x\in E$. The
 \end{lemma}
 
 \begin{proof}
-\textbf{Step 1 (Monotonicity of $L_n$).}
+\Step{1 (Monotonicity of $L_n$)}
 Fix $(x,a)\in D_n$. Since $v\le w$ pointwise and $Q_n(\cdot\mid x,a)$ is a probability measure,
 \[
 \int_E v(x')\,Q_n(dx'\mid x,a)\le \int_E w(x')\,Q_n(dx'\mid x,a).
 \]
 Adding $r_n(x,a)$ yields $L_n v(x,a)\le L_n w(x,a)$.
 
-\textbf{Step 2 (Monotonicity of $T_n^f$).}
+\Step{2 (Monotonicity of $T_n^f$)}
 For any $f\in F_n$ and any $x\in E$,
 \[
 T_n^f v(x)=(L_n v)(x,f(x))\le (L_n w)(x,f(x))=T_n^f w(x).
 \]
 
-\textbf{Step 3 (Monotonicity of $T_n$).}
+\Step{3 (Monotonicity of $T_n$)}
 Taking the supremum over $a\in D_n(x)$ preserves the inequality:
 \[
 T_n v(x)=\sup_{a\in D_n(x)} L_n v(x,a)\le \sup_{a\in D_n(x)} L_n w(x,a)=T_n w(x).
@@ -92,7 +92,7 @@ V_n^{\pi} = T_n^{f_n}\,T_{n+1}^{f_{n+1}}\cdots T_{N-1}^{f_{N-1}}\, g_N,
 \begin{proof}
 Fix $n\in\{0,\dots,N-1\}$ and $x\in E$.
 
-\textbf{Step 1 (Split immediate and future rewards).}
+\Step{1 (Split immediate and future rewards)}
 By definition,
 \[
 V_n^{\pi}(x)=\mathbb{E}_{n,x}^{\pi}\Big[r_n(X_n,f_n(X_n)) + \sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big].
@@ -102,14 +102,14 @@ Since $X_n=x$ $\mathbb{P}_{n,x}^\pi$-a.s., we have $r_n(X_n,f_n(X_n))=r_n(x,f_n(
 V_n^{\pi}(x)= r_n(x,f_n(x)) + \mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big].
 \]
 
-\textbf{Step 2 (Condition on the next state).}
+\Step{2 (Condition on the next state)}
 Apply the tower property conditioning on $X_{n+1}$:
 \begin{align*}
 &\mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big]\\
 &\qquad=\mathbb{E}_{n,x}^{\pi}\Big[\mathbb{E}_{n,x}^{\pi}\big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\mid X_{n+1}\big]\Big].
 \end{align*}
 
-\textbf{Step 3 (Markov property / time shift).}
+\Step{3 (Markov property / time shift)}
 Given $X_{n+1}=x'$, the future from time $n+1$ onward under the tail policy has law $\mathbb{P}_{n+1,x'}^{\pi}$, so the inner conditional expectation equals $V_{n+1}^{\pi}(x')$.
 Therefore,
 \[
@@ -117,13 +117,13 @@ Therefore,
 =\mathbb{E}_{n,x}^{\pi}\big[V_{n+1}^{\pi}(X_{n+1})\big].
 \]
 
-\textbf{Step 4 (Kernel representation).}
+\Step{4 (Kernel representation)}
 Under $\mathbb{P}_{n,x}^{\pi}$, $X_{n+1}$ has law $Q_n(\cdot\mid x,f_n(x))$, hence
 \[
 \mathbb{E}_{n,x}^{\pi}\big[V_{n+1}^{\pi}(X_{n+1})\big]=\int_E V_{n+1}^{\pi}(x')\,Q_n(dx'\mid x,f_n(x)).
 \]
 
-\textbf{Step 5 (Identify the operator).}
+\Step{5 (Identify the operator)}
 Combining,
 \[
 V_n^{\pi}(x)=r_n(x,f_n(x))+\int_E V_{n+1}^{\pi}(x')\,Q_n(dx'\mid x,f_n(x))=(T_n^{f_n}V_{n+1}^{\pi})(x).
@@ -162,28 +162,28 @@ Then:
 \end{theorem}
 
 \begin{proof}
-\textbf{Step 0 (Terminal time).}
+\Step{0 (Terminal time)}
 Since $v_N=g_N$ and $V_N=g_N$, we have $v_N=V_N$.
 
 \medskip
 \noindent\textbf{(a) Show $v_n\ge V_n$ by backward induction.}
 
-\textbf{Step 1 (Induction hypothesis).}
+\Step{1 (Induction hypothesis)}
 Fix $n\in\{0,\dots,N-1\}$ and assume $v_{n+1}\ge V_{n+1}$ pointwise.
 
-\textbf{Step 2 (Apply monotonicity of $T_n$).}
+\Step{2 (Apply monotonicity of $T_n$)}
 By monotonicity,
 \[
 v_n=T_n v_{n+1}\ge T_n V_{n+1}.
 \]
 
-\textbf{Step 3 (Bound any fixed policy).}
+\Step{3 (Bound any fixed policy)}
 For any policy $\pi=(f_0,\dots,f_{N-1})$, reward iteration and monotonicity give
 \[
 V_n^{\pi}=T_n^{f_n}V_{n+1}^{\pi}\le T_n^{f_n}V_{n+1}\le T_n V_{n+1}.
 \]
 
-\textbf{Step 4 (Take supremum over policies).}
+\Step{4 (Take supremum over policies)}
 Taking $\sup_{\pi}$ yields
 \[
 V_n\le T_n V_{n+1}\le v_n.
@@ -193,10 +193,10 @@ This closes the induction.
 \medskip
 \noindent\textbf{(b) Construct an optimal policy from maximizers.}
 
-\textbf{Step 5 (Define the policy).}
+\Step{5 (Define the policy)}
 Assume maximizers $f_n^*$ exist and set $\pi^*:=(f_0^*,\dots,f_{N-1}^*)$.
 
-\textbf{Step 6 (Show $V_n^{\pi^*}=v_n$ by backward induction).}
+\Step{6 (Show $V_n^{\pi^*}=v_n$ by backward induction)}
 At $n=N$, $V_N^{\pi^*}=g_N=v_N$.
 Suppose $V_{n+1}^{\pi^*}=v_{n+1}$.
 Then
@@ -207,7 +207,7 @@ V_n^{\pi^*}=T_n^{f_n^*}V_{n+1}^{\pi^*}
 = v_n.
 \]
 
-\textbf{Step 7 (Conclude equality and optimality).}
+\Step{7 (Conclude equality and optimality)}
 Part (a) gives $v_n\ge V_n\ge V_n^{\pi^*}$.
 Together with Step~6 we get $V_n^{\pi^*}=v_n=V_n$ for all $n$, hence $\pi^*$ is optimal.
 \end{proof}
@@ -247,14 +247,14 @@ Assume $(SA_N)$ holds. Then:
 \begin{proof}
 We prove (a) and (c) by backward induction; (b) then follows by iterating the Bellman equation.
 
-\textbf{Step 1 (Base case).}
+\Step{1 (Base case)} 
 By definition $V_N=g_N$.
 By $(SA_N)$-(i), $V_N\in\mathcal{\mathbb{M}}_N$.
 
-\textbf{Step 2 (Induction hypothesis).}
+\Step{2 (Induction hypothesis)}
 Fix $n\in\{0,\dots,N-1\}$ and assume $V_{n+1}\in\mathcal{\mathbb{M}}_{n+1}$.
 
-\textbf{Step 3 (Upper bound).}
+\Step{3 (Upper bound)}
 For any policy $\pi$, reward iteration gives
 \[
 V_n^{\pi} = T_n^{f_n} V_{n+1}^{\pi}
@@ -263,7 +263,7 @@ V_n^{\pi} = T_n^{f_n} V_{n+1}^{\pi}
 \]
 Taking $\sup_{\pi}$ yields $V_n\le T_n V_{n+1}$.
 
-\textbf{Step 4 (Lower bound via $\varepsilon$-optimal continuation).}
+\Step{4 (Lower bound via $\varepsilon$-optimal continuation)}
 By $(SA_N)$-(iii), there exists a maximizer $f_n^*\in\Delta_n$ of $V_{n+1}$, so $T_n^{f_n^*}V_{n+1}=T_nV_{n+1}$.
 For $\varepsilon>0$ and each $x'\in E$, choose a policy $\pi^{\varepsilon}$ from time $n+1$ onward such that
 \[
@@ -280,11 +280,11 @@ V_n\ge T_n^{f_n^*}V_{n+1}^{\pi^{\varepsilon}}
 where we used monotonicity of $T_n^{f_n^*}$.
 Letting $\varepsilon\downarrow 0$ gives $V_n\ge T_nV_{n+1}$.
 
-\textbf{Step 5 (Bellman equation and measurability).}
+\Step{5 (Bellman equation and measurability)}
 Steps 3 and 4 yield $V_n=T_nV_{n+1}$.
 By $(SA_N)$-(ii), $V_n\in\mathcal{\mathbb{M}}_n$.
 
-\textbf{Step 6 (Optimal policy from maximizers).}
+\Step{6 (Optimal policy from maximizers)}
 Repeating for $n=N-1,\dots,0$ yields maximizers $f_n^*\in\Delta_n$ of $V_{n+1}$.
 Applying the verification theorem with $v_n:=V_n$ shows the policy $\pi^*$ is optimal.
 \end{proof}
@@ -309,7 +309,7 @@ The structure theorem yields the standard backward induction algorithm:
 Then $\pi^*=(f_0^*,\dots,f_{N-1}^*)$ is optimal.
 \end{remark}
 
-\section{A subtle point: optimal policies need not be stage-wise maximizers everywhere}
+\section{Optimal policies and stage-wise maximizers everywhere}
 
 \begin{example}[An optimal policy may fail to be a maximizer off the optimal path]
 Let $N=2$, $E=\{0,1\}$, and $A=\{0,1\}$ with $D_n(x)=A$ for all $x$ and $n$.

@@ -19,18 +19,12 @@ A random time $T:\Omega\to[0,\infty]$ is called a \emph{stopping time} if
 
 \section{Exit Times and the Skorokhod Embedding}
 
-% --- Intuitive introduction to Section 2: Exit Times and the Skorokhod Embedding ---
+Imagine a factory producing a sensitive electronic component. One important quantity — say voltage deviation — fluctuates randomly over time due to usual degradation. The deviation has the folloing properties: starts at $0V$, it fluctuates unpredictably over time and we cannot influence the process once it starts. We assume that the fluctuation is well modeled by Brownian motion. We want the final recorded deviation to satisfy a precise statistical requirement: with probability 50\%, the deviation should be within $+1V$,
+and with probability 50\%, within $-1V$ unit. In other words, we want to identify a situation where 50\% of our component degrades beyond our tolerance. Skorokhod embedding will give us a stopping-time rule that, when applied repeatedly to identical components, produces a prescribed distribution of final outcomes across the population. Actually we will see by stopping the process at a carefully chosen random time, we can \emph{manufacture} a prescribed probability distribution.
 
-\paragraph{Idea of this section.}
-Up to now, Brownian motion has been introduced through its defining properties
-(continuous paths, Gaussian and independent increments).
-In this section we use Brownian motion as a \emph{random source of probability measures}:
-by stopping the process at a carefully chosen random time, we can \emph{manufacture} a prescribed
-probability distribution.
 
-\medskip
-\paragraph{Why exit times?}
-A first natural class of stopping times are \emph{hitting/exit times}.
+\subsection{Exit time from an interval}
+We will need a class of stopping times, namely, \emph{hitting/exit times}.
 If we start at $0$ and look at the first time the path leaves a bounded interval $(a,b)$ with $a<0<b$,
 then the stopped value $B_\gamma$ can only be the endpoint $a$ or $b$.
 So although $B_\gamma$ is simple (a two--point distribution), it is already \emph{tunable}:
@@ -38,48 +32,8 @@ So although $B_\gamma$ is simple (a two--point distribution), it is already \emp
 \item the probability of exiting at $a$ versus $b$ depends on the geometry of the interval,
 \item and the expected exit time $\E[\gamma]$ can be computed explicitly.
 \end{itemize}
-This is exactly why the proof of Proposition~2.1 focuses on martingales such as $B_t$ and $B_t^2-t$:
-optional stopping turns these path properties into algebraic identities for hitting probabilities and
-expected exit times.
 
-\medskip
-\paragraph{From two points to an arbitrary law: the embedding idea.}
-The Skorokhod embedding problem asks:
-given a target law $F$ on $\R$ with mean $0$ and finite variance, can we find a stopping time $T$ such that
-$B_T\sim F$?
-The guiding idea is to build $T$ by \emph{randomizing the interval}.
-Instead of a deterministic $(a,b)$, we choose random endpoints $(\alpha,\beta)$ with $\alpha<0<\beta$ and then stop
-\[
-T=\inf\{t>0:\,B_t\notin(\alpha,\beta)\}.
-\]
-Conditionally on $(\alpha,\beta)=(a,b)$ we already know the law of $B_T$ (it is concentrated on $\{a,b\}$ with explicit weights),
-so the unconditional law of $B_T$ becomes a \emph{mixture} (integral) over $(a,b)$.
-By choosing the mixing measure $\mu$ appropriately, the mixture can be made equal to the prescribed $F$.
-
-\medskip
-\paragraph{Why the variance appears as $\E[T]$.}
-The second requirement $\E[T]=\sigma^2$ is not accidental.
-Brownian motion satisfies $\E[B_t^2]=t$, so time plays the role of variance.
-Once we enforce $B_T\sim F$, we automatically have $\E[B_T^2]=\sigma^2$.
-The proof then uses the explicit formula $\E[T\mid \alpha,\beta]=-\,\alpha\beta$ from Proposition~2.1 and integrates it against $\mu$:
-the construction of $\mu$ is designed so that this integral equals $\sigma^2$.
-In this way, the embedding identifies the ``amount of time'' needed for Brownian motion to accumulate the required second moment.
-
-\medskip
-\paragraph{What to remember.}
-The core mechanism is:
-
-$\text{martingales + optional stopping} \quad\Longrightarrow\quad \text{explicit exit distribution and exit time} $ 
-
-$\quad\Longrightarrow\quad \text{mixture over intervals yields any target law.}$
-
-Once this viewpoint is clear, the integral computations in the proof become transparent:
-they are simply the bookkeeping needed to express a conditional two--point law as an unconditional target distribution.
-
-
-\subsection{Exit time from an interval}
-
-Fix $a<0<b$ and define the exit time
+Fix $a<0<b$ and define the exit time 
 \[
 \gamma := \inf\{t>0:\, B_t\notin(a,b)\}.
 \]
@@ -87,13 +41,17 @@ Fix $a<0<b$ and define the exit time
 \begin{proposition}
 The following statements hold:
 \begin{enumerate}
+\label{prop:exit_time_prop}
 \item $\Pp(\gamma<\infty)=1$.
 \item $\Pp(B_\gamma=a)=\frac{b}{\,b-a\,},
 \qquad
 \Pp(B_\gamma=b)=\frac{-a}{\,b-a\,}.$
 \item $\E[\gamma]=-ab$.
 \end{enumerate}
+
 \end{proposition}
+
+We will need the following thoerem to proof propostion \ref{prop:exit_time_prop}.
 
 \begin{theorem}[Optional Stopping Theorem]
 Let $(M_t)_{t\ge0}$ be a martingale and $T$ a stopping time such that one of the following
@@ -108,8 +66,10 @@ Then
 \]
 \end{theorem}
 
-\begin{proof}[Proof of Proposition 2.1]
-\textbf{Step 1: Almost sure finiteness of $\gamma$.}
+\begin{proof}[Proof of Proposition \ref{prop:exit_time_prop}]
+We prove each statement separately. The optional stopping theorem (without proof) is the main tool for statement 2 and 3. 
+
+\Step{1: Almost sure finiteness of $\gamma$}
 
 Since Brownian motion is recurrent in one dimension, it exits every bounded interval almost surely. Hence
 \[
@@ -118,7 +78,7 @@ Since Brownian motion is recurrent in one dimension, it exits every bounded inte
 
 \medskip
 
-\textbf{Step 2: Exit probabilities.}
+\Step{2: Exit probabilities}
 
 For $\gamma_n:=\gamma\wedge n$, optional stopping applied to the martingale $(B_t)$ yields
 \[
@@ -130,9 +90,7 @@ a\,\Pp(B_\gamma=a)+b\,\Pp(B_\gamma=b)=0,
 \]
 which together with normalization yields the stated probabilities.
 
-\medskip
-
-\textbf{Step 3: Expectation of $\gamma$.}
+\Step{3: Expectation of $\gamma$}
 
 Applying optional stopping to the martingale $(B_t^2-t)$ gives
 \[
@@ -142,6 +100,21 @@ Since $B_\gamma\in\{a,b\}$, this yields $\E[\gamma]=-ab$.
 \end{proof}
 
 \subsection{Skorokhod embedding}
+
+\paragraph{The embedding idea.}
+The Skorokhod embedding problem asks:
+given a target law $F$ on $\R$ with mean $0$ and finite variance, can we find a stopping time $T$ such that
+$B_T\sim F$?
+The guiding idea is to build $T$ by \emph{randomizing the interval}.
+Instead of a deterministic $(a,b)$, we choose random endpoints $(\alpha,\beta)$ with $\alpha<0<\beta$ and then stop
+\[
+T=\inf\{t>0:\,B_t\notin(\alpha,\beta)\}.
+\]
+Conditionally on $(\alpha,\beta)=(a,b)$ we already know the law of $B_T$ (it is concentrated on $\{a,b\}$ with explicit weights),
+so the unconditional law of $B_T$ becomes a \emph{mixture} (integral) over $(a,b)$.
+By choosing the mixing measure $\mu$ appropriately, the mixture can be made equal to the prescribed $F$.
+
+\medskip
 
 Let $F$ be a probability measure on $\R$ with
 \[
@@ -198,7 +171,7 @@ Let $(\alpha,\beta)\sim\mu$ be independent of the Brownian motion $B$, and set
 \[
 T:=\inf\{t>0:\,B_t\notin(\alpha,\beta)\}.
 \]
-Conditionally on $\{(\alpha,\beta)=(a,b)\}$, Proposition~2.1 gives
+Conditionally on $\{(\alpha,\beta)=(a,b)\}$, Proposition \ref{prop:exit_time_prop} gives
 \[
 \Pp(B_T\in db\mid \alpha=a,\beta=b)=\frac{-a}{b-a}\,\delta_b(db),
 \qquad
@@ -207,7 +180,7 @@ Conditionally on $\{(\alpha,\beta)=(a,b)\}$, Proposition~2.1 gives
 where $\delta_x$ denotes the Dirac measure at $x$.
 
 \medskip
-\noindent\textbf{Law of $B_T$.}
+\LabelProof{Law of $B_T$}
 Fix a Borel set $E\subset(0,\infty)$. Using conditioning and the definition of $\mu$,
 \begin{align*}
 \Pp(B_T\in E)
@@ -231,7 +204,7 @@ Analogously, for Borel $E\subset(-\infty,0)$ one obtains
 Since $F=F^-+F^+$, it follows that $B_T\sim F$.
 
 \medskip
-\noindent\textbf{Expectation of $T$.}
+\LabelProof{Expectation of $T$}
 By Proposition~2.1, conditionally on $(\alpha,\beta)=(a,b)$ we have
 \[
 \E[T\mid \alpha=a,\beta=b]= -ab.
@@ -257,11 +230,21 @@ endpoints and that both the exit distribution and the expected exit time are exp
 known.
 \end{remark}
 
+\begin{remark}
+\paragraph{Why the variance appears as $\E[T]$?}
+The second requirement $\E[T]=\sigma^2$ is not accidental.
+Brownian motion satisfies $\E[B_t^2]=t$, so time plays the role of variance.
+Once we enforce $B_T\sim F$, we automatically have $\E[B_T^2]=\sigma^2$.
+The proof then uses the explicit formula $\E[T\mid \alpha,\beta]=-\,\alpha\beta$ from Proposition \ref{prop:exit_time_prop} and integrates it against $\mu$:
+the construction of $\mu$ is designed so that this integral equals $\sigma^2$.
+In this way, the embedding identifies the ``amount of time'' needed for Brownian motion to accumulate the required second moment.    
+\end{remark}
+
+
 \section{Brownian Motion as a Markov Process}
 
 % --- Intuitive introduction to Section 3: Brownian Motion as a Markov Process ---
 
-\paragraph{Idea of this section.}
 So far, Brownian motion has been treated primarily as a stochastic process with explicit
 finite--dimensional distributions.
 In this section we change perspective and view Brownian motion as a \emph{Markov process}.
@@ -269,8 +252,13 @@ The central theme is that the future evolution of the path depends on the past o
 current position, and that this fact can be expressed analytically through transition operators,
 generators, and martingales.
 
-\medskip
-\paragraph{From independent increments to the Markov property.}
+Understanding Brownian motion as a Markov process prepares the ground for the strong Markov property
+and for path transformations such as reflection, which rely crucially on this viewpoint.
+
+
+\subsection{Markov property at deterministic times}
+
+\paragraph{Idea.}
 The Markov property is not an additional assumption for Brownian motion;
 it is a direct consequence of independent increments.
 Writing
@@ -281,71 +269,8 @@ the increment $B_{t+s}-B_s$ is independent of everything that happened before ti
 law as $B_t$.
 This immediately implies that conditional expectations of the form
 $\E[f(B_{t+s})\mid\widehat{\mathcal F}_s]$ can only depend on $B_s$.
-The point of the first part of the section is to make this dependence explicit and systematic.
 
 \medskip
-\paragraph{Why introduce the family $(\mathbb P_x)_{x\in\R}$?}
-Once we realize that only the current position matters, it becomes natural to consider Brownian motion
-starting from an arbitrary point $x$.
-The family of laws $(\mathbb P_x)_{x\in\R}$ encodes this idea:
-under $\mathbb P_x$ the process starts at $B_0=x$ and then evolves like standard Brownian motion.
-This viewpoint allows us to treat Brownian motion as a time--homogeneous Markov process with state space $\R$,
-rather than as a single process started at $0$.
-
-\medskip
-\paragraph{Transition semigroup as an averaging operator.}
-The transition semigroup $(T_t)_{t\ge0}$ describes how functions of the state are transported forward in time:
-\[
-T_t f(x)=\E_x[f(B_t)].
-\]
-Analytically, $T_t$ acts by convolution with the Gaussian kernel.
-Conceptually, $T_t f(x)$ is the expected value of $f$ after the system has evolved for time $t$
-starting from $x$.
-The semigroup property $T_{t+s}=T_tT_s$ is simply the probabilistic restatement of the fact that Brownian motion
-can be run in two successive time intervals.
-
-\medskip
-\paragraph{The generator as an infinitesimal description.}
-While the semigroup describes evolution over finite times, the generator captures the
-\emph{infinitesimal} behavior of the process.
-The generator
-\[
-Gf=\lim_{h\downarrow0}\frac{T_h f-f}{h}
-\]
-measures the instantaneous rate of change of the averaged quantity $T_h f$.
-For Brownian motion, computing $G$ reduces to expanding $f(x+z)$ for small Gaussian increments $z$
-and integrating term by term.
-The fact that $G=\tfrac12\Delta$ reflects that Brownian motion spreads mass in space according to the heat equation.
-
-\medskip
-\paragraph{Why martingales appear naturally.}
-Once the generator is known, the expression
-\[
-f(B_t)-f(B_0)-\int_0^t Gf(B_s)\,ds
-\]
-has zero conditional drift.
-This is not accidental: it is the probabilistic counterpart of the fundamental theorem of calculus
-applied along the random path.
-The resulting martingale property is a powerful tool, as it allows us to connect analytic properties of $f$
-to probabilistic properties of $B$ without invoking Itô calculus.
-
-\medskip
-\paragraph{What to remember.}
-This section builds a bridge between probability and analysis:
-\[
-\text{independent increments}
-\;\Longrightarrow\;
-\text{Markov property}
-\;\Longrightarrow\;
-\text{semigroup}
-\;\Longrightarrow\;
-\text{generator and martingales}.
-\]
-Understanding Brownian motion as a Markov process prepares the ground for the strong Markov property
-and for path transformations such as reflection, which rely crucially on this viewpoint.
-
-
-\subsection{Markov property at deterministic times}
 
 Let $(B_t)_{t\ge0}$ be a standard Brownian motion with respect to the completed,
 right--continuous filtration $(\widehat{\mathcal F}_t)_{t\ge0}$.
@@ -378,6 +303,11 @@ g(x) := \E[f(x+B_t)].
 This shows that Brownian motion satisfies the (time--homogeneous) Markov property.
 
 \subsection{The Markov family $(\mathbb P_x)_{x\in\R}$}
+Before analyzing the evolution of a stochastic process in time, we introduce the concept of a Markov family, which formalizes the idea that the probabilistic behavior of the process can be restarted from its current state. Roughly speaking, once the present state of the system is known, the future evolution is governed by the same probabilistic laws, independently of how the system arrived at that state.
+
+Returning to the manufacturing example, this corresponds to the following intuition: if the degradation process of a component is temporarily suspended (for instance, by turning the component off) and later resumed, then—given the current level of degradation—we expect the subsequent evolution to follow the same statistical behavior as if the process had just started from that level. The past history of the component matters only through its present state, not through the specific path taken to reach it.
+
+\medskip 
 
 For each $x\in\R$, define a probability measure $\mathbb P_x$ by
 \[
@@ -393,8 +323,90 @@ The family
 \]
 is therefore a time--homogeneous Markov process with state space $\R$.
 
+\paragraph{Why introduce the family $(\mathbb P_x)_{x\in\R}$?}
+Once we realize that only the current position matters, it becomes natural to consider Brownian motion
+starting from an arbitrary point $x$.
+The family of laws $(\mathbb P_x)_{x\in\R}$ encodes this idea:
+under $\mathbb P_x$ the process starts at $B_0=x$ and then evolves like standard Brownian motion.
+This viewpoint allows us to treat Brownian motion as a time--homogeneous Markov process with state space $\R$,
+rather than as a single process started at $0$.
+
+
+
 \subsection{Transition semigroup}
 
+Let us now investigate what happens when we enforce the Markov property
+\begin{equation}\label{eq:Markov_conditional}
+\mathbb{E}_x\!\left[f(X_{t+s}) \,\middle|\, \mathcal{F}_s\right]
+=
+\mathbb{E}_{X_s}\!\left[f(X_t)\right]
+\qquad \mathbb{P}_x\text{-a.s.} \; \forall s,t\ge 0.
+\end{equation}
+Both sides of \eqref{eq:Markov_conditional} are \emph{random variables}:
+the left-hand side is $\mathcal{F}_s$--measurable by definition of conditional expectation,
+and the right-hand side depends on $\omega$ only through the random state $X_s(\omega)$. We can have another view on this equation if we define an operator $(P_t)_{t\ge 0}$ by
+\[
+(P_t f)(x) := \mathbb{E}_x\!\left[f(X_t)\right], \qquad x\in E.
+\]
+With this notation,
+\[
+\mathbb{E}_{X_s}\!\left[f(X_t)\right] = (P_t f)(X_s),
+\]
+i.e.\ the right-hand side of \eqref{eq:Markov_conditional} is the function $P_t f$
+evaluated at the random point $X_s$.
+
+\paragraph{Averaging both sides.}For the left-hand side we use
+the tower property, hence
+\[
+\mathbb{E}_x\!\left[\mathbb{E}_x\!\left[f(X_{t+s}) \,\middle|\, \mathcal{F}_s\right]\right]
+=
+\mathbb{E}_x\!\left[f(X_{t+s})\right].
+\]
+For the right-hand side we use our previous notation
+\[
+\mathbb{E}_x\!\left[\mathbb{E}_{X_s}\!\left[f(X_t)\right]\right]
+=
+\mathbb{E}_x\!\left[(P_t f)(X_s)\right].
+\]
+Putting these together yields
+\begin{equation}\label{eq:semigroup_intermediate}
+\mathbb{E}_x\!\left[f(X_{t+s})\right]
+=
+\mathbb{E}_x\!\left[(P_t f)(X_s)\right].
+\end{equation}
+
+But by definition of $P_{t+s}$, the left-hand side of \eqref{eq:semigroup_intermediate} equals
+\[
+\mathbb{E}_x[f(X_{t+s})] = (P_{t+s} f)(x).
+\]
+By definition of $P_s$ applied to the function $P_t f$, the right-hand side equals
+\[
+\mathbb{E}_x[(P_t f)(X_s)] = (P_s(P_t f))(x).
+\]
+Therefore,
+\[
+(P_{t+s} f)(x) = (P_s(P_t f))(x), \qquad \forall\,x\in E,\ \forall\,f.
+\]
+Equivalently, as an operator identity,
+\[
+P_{t+s} = P_s \circ P_t, \qquad s,t\ge 0,
+\]
+which is precisely the \emph{semigroup property} and $P_t$ is what we call the transition semigroup (operator).
+
+\paragraph{Interpretation.}
+The transition semigroup $(T_t)_{t\ge0}$ describes how functions of the state are transported forward in time by
+\[
+T_t f(x)=\E_x[f(B_t)].
+\]
+Analytically, $T_t$ acts by convolution with the Gaussian kernel.
+Conceptually, $T_t f(x)$ is the expected value of $f$ after the system has evolved for time $t$
+starting from $x$.
+The semigroup property $T_{t+s}=T_tT_s$ is simply the probabilistic restatement of the fact that Brownian motion
+can be run in two successive time intervals.
+
+\medskip
+
+\begin{definition}[Transition Semigroup]
 Define, for $f\in C_b(\R)$ and $t\ge0$,
 \[
 T_t f(x) := \E_x[f(B_t)].
@@ -419,12 +431,32 @@ The family $(T_t)_{t\ge0}$ satisfies:
 \item $\|T_t f\|_\infty \le \|f\|_\infty$.
 \end{itemize}
 
-\subsection{Generator of Brownian motion}
+$T_t$ is the Transistion Semigroup.
+    
+\end{definition}
 
+
+\subsection{Generator of Brownian motion}
+The transition semigroup associated with a Markov process describes how the law of the
+process evolves over finite time intervals. While this global description is sufficient
+to propagate expectations forward in time, it does not reveal the local mechanism that
+drives the evolution of the process. In many situations, one is interested in
+understanding how the process changes instantaneously, rather than after a fixed positive
+time.
+
+The generator captures this infinitesimal behavior. It measures the first--order rate of
+change of expected values at time zero and thus encodes the local dynamics that produce
+the semigroup. In this sense, the generator plays the same role as a differential operator
+in the theory of deterministic dynamical systems: it provides a concise and structural
+description of the evolution, from which the entire semigroup can be recovered.
+
+\begin{definition}
 For functions $f$ for which the limit exists, define the generator
 \[
 Gf(x) := \lim_{h\downarrow0} \frac{T_h f(x)-f(x)}{h}.
-\]
+\]    
+\end{definition}
+
 
 \begin{proposition}[Proposition 3.1]
 If $f\in C_b^2(\R)$, then
@@ -471,7 +503,7 @@ e^{-z^2/(2h)}\,dz\\
 \end{align*}
 
 \medskip
-\noindent\textbf{Step 1: compute the Gaussian moments.}
+\Step{1: compute the Gaussian moments}
 The first integral is $0$ because the integrand is odd:
 \[
 \int_{\R} z\,\frac{1}{\sqrt{2\pi h}}e^{-z^2/(2h)}\,dz=0.
@@ -492,7 +524,7 @@ R_h(x)
 \]
 
 \medskip
-\noindent\textbf{Step 2: show $R_h(x)=o(h)$ as $h\downarrow0$.}
+\Step{2: show $R_h(x)=o(h)$ as $h\downarrow0$}
 Fix $\varepsilon>0$. Since $f''$ is continuous at $x$, there exists $\delta>0$ such that
 \[
 |u-x|\le \delta \quad\Longrightarrow\quad |f''(u)-f''(x)|\le \varepsilon.
@@ -543,14 +575,27 @@ Now divide \eqref{eq:main_term} by $h$ and let $h\downarrow0$:
 This is exactly $Gf(x)=\frac12 f''(x)$.
 \end{proof}
 
-\subsection{Martingale characterization}
+\begin{remark}
+    The fact that $G=\tfrac12\Delta$ reflects that Brownian motion spreads mass in space according to the heat equation.
+\end{remark}
 
-For $f\in C_b^2(\R)$ define
-\[
-M_t
-:=
-f(B_t)-f(B_0)-\int_0^t Gf(B_s)\,ds.
-\]
+\paragraph{Why a generator?} Introducing the generator allows us to characterize Markov processes through local
+properties, establish connections with partial differential equations, and formulate
+martingale characterizations of the dynamics. The generator therefore serves as the
+fundamental object that links probabilistic evolution, analytic structure, and
+infinitesimal behavior.
+
+\subsection{Martingale characterization}
+To close this section, we want to describe how a Martingale arises naturally from a Brownian motion when we understand it as a Markov process. It captures the idea that, once
+the infinitesimal drift prescribed by the generator is removed, the remaining evolution of
+the process should exhibit no systematic trend. This property is expressed by identifying
+certain functionals of the process that are martingales.
+
+\paragraph{Why?} The Martingale characterization is fundamental because it describes the dynamics of the process
+directly in terms of its sample paths, without reference to finite-time transition
+probabilities. It forms the basis of the martingale problem approach, which is a central
+tool for proving existence and uniqueness of Markov processes and for connecting
+probabilistic dynamics with analytic structures such as partial differential equations.
 
 \begin{proposition}[Proposition 3.2]
 Let $f\in C_b^2(\R)$ and define
@@ -565,7 +610,7 @@ Then $(M_t)_{t\ge0}$ is a martingale with respect to $(\widehat{\mathcal F}_t)_{
 Fix $0\le s<t$. We show that $\E[M_t\mid \widehat{\mathcal F}_s]=M_s$.
 
 \medskip
-\noindent\textbf{Step 1: conditional expectation of the increment $f(B_t)-f(B_s)$.}
+\Step{1: conditional expectation of the increment $f(B_t)-f(B_s)$}
 By the Markov property (time-homogeneous) and the definition of the semigroup,
 \[
 \E\!\left[f(B_t)\mid \widehat{\mathcal F}_s\right]
@@ -580,7 +625,7 @@ T_{t-s}f(B_s)-f(B_s).
 \end{equation}
 
 \medskip
-\noindent\textbf{Step 2: rewrite $T_{t-s}f(B_s)-f(B_s)$ as an integral of $T_u Gf(B_s)$.}
+\Step{2: rewrite $T_{t-s}f(B_s)-f(B_s)$ as an integral of $T_u Gf(B_s)$}
 For each fixed $x$, consider the function $u\mapsto T_u f(x)$.
 Using the semigroup property $T_{u+h}f = T_u(T_h f)$, we can write the difference quotient:
 \[
@@ -604,7 +649,7 @@ T_{t-s}f(B_s)-f(B_s)=\int_0^{t-s} T_u Gf(B_s)\,du.
 \end{equation}
 
 \medskip
-\noindent\textbf{Step 3: compute the conditional expectation of the drift term.}
+\Step{3: compute the conditional expectation of the drift term}
 We claim that for each $r\ge s$,
 \begin{equation}\label{eq:cond_drift}
 \E\!\left[Gf(B_r)\mid \widehat{\mathcal F}_s\right]=T_{r-s}Gf(B_s).
@@ -626,7 +671,7 @@ Comparing with \eqref{eq:increment_as_integral}, we obtain
 \end{equation}
 
 \medskip
-\noindent\textbf{Step 4: conclude the martingale property.}
+\Step{4: conclude the martingale property}
 Using \eqref{eq:key_cancel},
 \begin{align*}
 \E[M_t\mid \widehat{\mathcal F}_s]
@@ -638,9 +683,22 @@ Using \eqref{eq:key_cancel},
 Hence $(M_t)_{t\ge0}$ is a martingale.
 \end{proof}
 
+\begin{remark}
+Once the generator is known, the expression
+\[
+f(B_t)-f(B_0)-\int_0^t Gf(B_s)\,ds
+\]
+has zero conditional drift.
+This is not accidental: it is the probabilistic counterpart of the fundamental theorem of calculus
+applied along the random path.
+The resulting martingale property is a powerful tool, as it allows us to connect analytic properties of $f$
+to probabilistic properties of $B$.    
+\end{remark}
 
 
-\section{Strong Markov Property, Reflection Principle, and the Running Maximum}
+
+
+\section{Strong Markov Property and its consequencies}
 
 % --- Intuitive introduction to Section: Strong Markov Property, Reflection Principle,
 %     and the Running Maximum ---
@@ -652,65 +710,9 @@ This strengthened form of memorylessness is the key that allows us to perform pa
 transformations, such as reflection at a hitting time, and to derive precise information
 about extreme values of the process.
 
-\medskip
-\paragraph{From Markov to \emph{strong} Markov.}
-The usual Markov property describes conditioning at fixed times $s$.
-However, many natural questions about Brownian motion involve random times:
-the first time the path hits a level, exits a domain, or reaches a maximum.
-The strong Markov property asserts that even at such stopping times $T$, the future evolution
-\[
-(B_{T+t}-B_T)_{t\ge0}
-\]
-behaves like a fresh Brownian motion, independent of the past.
-Intuitively, once the process reaches time $T$, it ``forgets'' how it got there and continues
-as if it were newly started from the current position.
-
-\medskip
-\paragraph{Why exponential martingales?}
-To prove the strong Markov property without stochastic calculus, the key tool is the family of
-exponential martingales
-\[
-M_t(\theta)=\exp\!\left(i\theta B_t+\tfrac12\theta^2 t\right).
-\]
-These martingales encode the characteristic functions of Brownian increments.
-Applying the Optional Stopping Theorem at bounded approximations of a stopping time allows us
-to compute conditional characteristic functions of post--$T$ increments.
-The crucial observation is that these conditional characteristic functions turn out to be
-deterministic, which simultaneously identifies the Gaussian law of the increments and proves
-their independence from the past.
-
-\medskip
-\paragraph{Reflection as a pathwise symmetry.}
-Once the strong Markov property is available, we can perform nontrivial transformations of
-Brownian paths.
-The reflection principle is based on a simple geometric idea:
-after the first time the path hits a level $a$, we flip the remaining part of the trajectory
-symmetrically about the line $x=a$.
-Because the post--hitting path is a fresh Brownian motion, symmetry of the Gaussian law implies
-that the reflected path has exactly the same distribution as the original Brownian motion.
-Thus a purely pathwise operation produces a new process with the same law.
-
-\medskip
-\paragraph{Why reflection reveals information about the maximum.}
-The running maximum
-\[
-S_t=\sup_{0\le u\le t} B_u
-\]
-is difficult to analyze directly, since it depends on the entire history of the path.
-The reflection principle converts events involving the maximum into events involving only the
-endpoint $B_t$.
-Paths that exceed a level $a$ and end below $a$ are put into one--to--one correspondence with
-paths that end above $a$.
-This correspondence explains why probabilities involving $S_t$ can be expressed in terms of the
-Gaussian tail of $B_t$.
-
-\medskip
-
-
 Conceptually, this is one of the most powerful features of Brownian motion:
 local path symmetries, combined with memorylessness at stopping times, lead to exact global
 distributional results such as the law of the running maximum.
-
 
 Throughout this section, $(B_t)_{t\ge0}$ is a standard Brownian motion adapted to the
 completed, right--continuous filtration $(\widehat{\mathcal F}_t)_{t\ge0}$.
@@ -769,7 +771,7 @@ Consequently, $(B_t^{\,T})_{t\ge0}$ is a standard Brownian motion, independent o
 \end{theorem}
 
 \begin{proof}
-\textbf{Step 1: conditional characteristic function of a single increment.}
+\Step{1: conditional characteristic function of a single increment}
 
 Fix $t\ge0$ and $\theta\in\R$. For each $n\in\mathbb N$, set $T_n:=T\wedge n$ (bounded stopping time).
 Using the martingale property of $(M_u(\theta))_{u\ge0}$ and the Optional Stopping Theorem at the bounded
@@ -788,7 +790,7 @@ Cancelling the common factor $\exp(i\theta B_{T_n})\exp(\tfrac12\theta^2 T_n)$ g
 The right-hand side is deterministic and is the characteristic function of $\mathcal N(0,t)$.
 
 \medskip
-\textbf{Step 2: pass from $T_n$ to $T$.}
+\Step{2: pass from $T_n$ to $T$}
 
 Since $T_n\uparrow T$ a.s.\ and $B$ has continuous paths, we have
 $B_{T_n}\to B_T$ and $B_{T_n+t}\to B_{T+t}$ a.s., hence
@@ -805,7 +807,7 @@ Taking limits in \eqref{eq:cond_char_Tn} yields
 \end{equation}
 
 \medskip
-\textbf{Step 3: conclude distribution and independence for one increment.}
+\Step{3: conclude distribution and independence for one increment}
 
 Equation \eqref{eq:cond_char_T} says: conditional on $\widehat{\mathcal F}_T$, the characteristic function of
 $B_{T+t}-B_T$ is the same deterministic function $\exp(-\tfrac12\theta^2 t)$.
@@ -821,7 +823,7 @@ we get independence: for any bounded $\widehat{\mathcal F}_T$--measurable random
 which is exactly the factorization that characterizes independence.
 
 \medskip
-\textbf{Step 4: finite-dimensional distributions and independent increments.}
+\Step{4: finite-dimensional distributions and independent increments}
 
 Fix $0\le t_1<\dots<t_m$ and $\theta_1,\dots,\theta_m\in\R$.
 Consider the random vector
@@ -843,7 +845,7 @@ has stationary Gaussian increments, and by the same factorization argument as in
 these increments are independent of $\widehat{\mathcal F}_T$ and mutually independent.
 
 \medskip
-\textbf{Step 5: continuity.}
+\Step{5: continuity}
 
 For each $\omega$, $t\mapsto B_{T(\omega)+t}(\omega)-B_T(\omega)$ is continuous because $B(\omega)$ is continuous.
 Thus $(B_t^{\,T})_{t\ge0}$ has continuous paths.
@@ -851,6 +853,47 @@ Thus $(B_t^{\,T})_{t\ge0}$ has continuous paths.
 Combining Steps 4 and 5 proves that $(B_t^{\,T})_{t\ge0}$ is a standard Brownian motion and is independent of
 $\widehat{\mathcal F}_T$.
 \end{proof}
+
+\medskip
+\paragraph{Why exponential martingales?}
+To prove the strong Markov property without stochastic calculus, the key tool is the family of
+exponential martingales
+\[
+M_t(\theta)=\exp\!\left(i\theta B_t+\tfrac12\theta^2 t\right).
+\]
+These martingales encode the characteristic functions of Brownian increments.
+Applying the Optional Stopping Theorem at bounded approximations of a stopping time allows us
+to compute conditional characteristic functions of post--$T$ increments.
+The crucial observation is that these conditional characteristic functions turn out to be
+deterministic, which simultaneously identifies the Gaussian law of the increments and proves
+their independence from the past.
+
+\begin{remark}[From Markov families to the strong Markov property]
+The notions of a Markov family, the (ordinary) Markov property, and the strong Markov
+property all formalize, at different levels, the idea that a stochastic process can be
+``restarted''. The distinction between them lies in the type of restart that is allowed.
+
+A Markov family $\{\mathbb P_x\}_{x\in E}$ specifies the law of the process when it is
+started from a given deterministic state at a fixed initial time. The (ordinary) Markov
+property extends this idea by allowing the restart to occur at a fixed deterministic time,
+but from a random state determined by the evolution of the process. Finally, the strong
+Markov property asserts that the same restart principle remains valid when the restart
+time itself is random and depends on the past of the process, provided it is a stopping
+time.
+
+\medskip
+\noindent
+These three levels of restartability can be summarized as follows:
+\[
+\begin{array}{c|c|c}
+\text{Concept} & \text{Restart time} & \text{Restart state} \\ \hline
+\text{Markov family} & \text{fixed (initial time)} & \text{deterministic} \\
+\text{Markov property} & \text{fixed} & \text{random} \\
+\text{Strong Markov property} & \text{random (stopping time)} & \text{random}
+\end{array}
+\]
+\end{remark}
+
 
 \subsection{Reflection principle}
 
@@ -908,7 +951,7 @@ The process $(\widetilde B_t)_{t\ge0}$ is a standard Brownian motion.
 We verify the defining properties via the strong Markov property at $H_a$.
 
 \medskip
-\textbf{Step 1: rewrite the post-hitting part using a fresh Brownian motion.}
+\Step{1: rewrite the post-hitting part using a fresh Brownian motion}
 
 By the strong Markov property, the shifted process
 \[
@@ -929,7 +972,7 @@ a-W_{t-H_a}, & t>H_a.
 \]
 
 \medskip
-\textbf{Step 2: show the reflected increments after $H_a$ have Brownian law.}
+\Step{2: show the reflected increments after $H_a$ have Brownian law}
 
 Since $W$ is Brownian, $-W$ is also Brownian (symmetry of the Gaussian law).
 Therefore the process $t\mapsto a-W_t$ is a Brownian motion started at $a$.
@@ -938,7 +981,7 @@ Moreover, because $W$ is independent of $\widehat{\mathcal F}_{H_a}$, the post-$
 $\widetilde B$ is independent of the pre-$H_a$ history.
 
 \medskip
-\textbf{Step 3: finite-dimensional distributions.}
+\Step{3: finite-dimensional distribution}
 
 Fix times $0\le t_1<\dots<t_m$. Condition on $H_a$ and distinguish whether each $t_k\le H_a$ or $t_k>H_a$.
 On $\{H_a>t_m\}$ we have $\widetilde B_{t_k}=B_{t_k}$ for all $k$.
@@ -948,7 +991,7 @@ On mixed events (some times before, some after $H_a$), the joint law factorizes 
 are independent of $\widehat{\mathcal F}_{H_a}$, yielding exactly the Brownian finite-dimensional distributions.
 
 \medskip
-\textbf{Step 4: continuity.}
+\Step{4: continuity}
 
 $\widetilde B$ is continuous because $B$ is continuous and at $t=H_a$ we have $\widetilde B_{H_a}=B_{H_a}=a$,
 so there is no jump at the reflection time.
@@ -977,16 +1020,23 @@ process, rather than just its one--time marginals.
 
 In the case of Brownian motion, the running maximum is particularly tractable due to the
 combination of symmetry, independent increments, and the strong Markov property. These
-features make it possible to relate events involving $M_t$ to simpler events involving
+features make it possible to relate events involving $S_t$ to simpler events involving
 the terminal value $B_t$ through the reflection principle. As a result, probabilities
 concerning the maximum of Brownian motion can often be computed explicitly.
 
-The study of the running maximum thus serves two complementary purposes. On the one hand,
-it provides insight into the extremal behavior of Brownian paths and leads to concrete
-distributional results. On the other hand, it illustrates how path--dependent quantities
-can be analyzed by combining stopping times, the strong Markov property, and symmetry
-arguments. The results of this section play a central role in the analysis of hitting
-times, barrier crossing problems, and related questions in stochastic process theory.
+The next identity expresses a pathwise symmetry of Brownian motion with respect to the level
+$a$ and will use it to obtain the distribution of the running maximum. On the event $\{S_t \ge a\}$, the process reaches the level $a$ at some (random) time
+before $t$. By the strong Markov property, the future evolution after this first hitting
+time is independent of the past and has the same law as a fresh Brownian motion started
+from $a$. Reflecting the increments of the path after this hitting time across the level
+$a$ produces a new path with the same probability, while mapping terminal values below $a$
+to terminal values above $a$. As a consequence, events of the form $\{S_t \ge a,\; B_t \in
+E\}$ with $E \subset (-\infty,a]$ -- Brownian paths that reach the
+level $a$ at some time before $t$ but end below it -- are in one--to--one correspondence with events
+$\{B_t \ge a,\; 2a-B_t \in E\}$ -- paths that end above $a$ whose reflected terminal
+positions lie in the same region below $a$. The proposition therefore allows probabilities involving
+the running maximum to be expressed in terms of the one--dimensional distribution of
+$B_t$, and serves as the key tool for computing the law of $S_t$.
 
 \begin{proposition}[Reflection identity]
 Let $a\in\R$ and $t>0$. For any Borel set $E\subset(-\infty,a]$,
@@ -1035,6 +1085,8 @@ Restricting to $E\subset(-\infty,a]$ forces $2a-B_t\le a$, i.e.\ $B_t\ge a$, so
 which proves the first identity. The second follows by choosing $E=(-\infty,a-y]$.
 \end{proof}
 
+We can now compute the running maximum from the distribution of $B_t$.
+
 \begin{corollary}[Distribution of the maximum]
 For $a\ge0$ and $t>0$,
 \[
@@ -1059,3 +1111,11 @@ Thus $\Pp(S_t\ge a)=2\,\Pp(B_t\ge a)$.
 Finally, $B_t\sim \mathcal N(0,t)$ gives the Gaussian integral formulas, with the change of variables
 $x=\sqrt t\,u$ in the last equality.
 \end{proof}
+
+
+The study of the running maximum thus serves two complementary purposes. On the one hand,
+it provides insight into the extremal behavior of Brownian paths and leads to concrete
+distributional results. On the other hand, it illustrates how path--dependent quantities
+can be analyzed by combining stopping times, the strong Markov property, and symmetry
+arguments. The results of this section play a central role in the analysis of hitting
+times, barrier crossing problems, and related questions in stochastic process theory.
