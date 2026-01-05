@@ -92,10 +92,6 @@ The various notions differ by what test objects they allow and therefore by what
 
 Let $(E,d)$ be a metric space, and let $\B(E)$ be its Borel $\sigma$-algebra. More generally, one may start with a measurable space $(E,\Ecal)$, but in these notes we mainly use $(E,\B(E))$.
 
-\begin{definition}[Polish space]
-A metric space $(E,d)$ is called \emph{Polish} if it is complete and separable.
-\end{definition}
-
 \begin{definition}[Totally bounded and relatively compact]
 Let $A\subset E$.
 \begin{enumerate}[label=(\alph*)]
@@ -180,44 +176,7 @@ although indicator functions are discontinuous and therefore excluded,
 they can be approximated from above or below by continuous bounded functions.
 \end{quote}
 As a consequence, integrals against continuous bounded functions
-encode the same information as probabilities of closed (or open) sets.
-
-\medskip
-
-\noindent
-\textbf{Why $C_b(E)$?}
-The space $C_b(E)$ is large enough to be separating, but still manageable:
-\begin{itemize}
-\item boundedness ensures integrals are always well-defined,
-\item continuity allows approximation arguments using the metric structure,
-\item the class is stable under algebraic operations and limits.
-\end{itemize}
-This balance explains why weak convergence is defined using $C_b(E)$
-rather than all measurable functions.
-
-\medskip
-
-\noindent
-\textbf{Logical structure of the proofs.}
-The separation result is established in two conceptual steps:
-\begin{enumerate}[label=(\roman*)]
-\item show that agreement of integrals against $C_b(E)$ implies agreement on all closed sets,
-\item show that agreement on all closed sets implies equality of measures.
-\end{enumerate}
-The first step uses explicit continuous approximations of indicator functions of closed sets;
-the second step uses measure-theoretic structure (Dynkin systems and the $\pi$--$\lambda$ theorem).
-Together, they bridge the analytic world of test functions and the measure-theoretic world of sets.
-
-\medskip
-
-\noindent
-\textbf{Why this matters later.}
-Separating classes are the conceptual foundation of weak convergence,
-compactness results, and Prokhorov-type theorems.
-They explain why convergence of integrals against a restricted family of functions
-is strong enough to identify limits,
-and they justify replacing complicated setwise arguments by functional ones.
-
+encode the same information as probabilities of closed (or open) sets. We will be working with the following function classes.
 
 \begin{definition}[Continuous function classes]
 Define
@@ -231,6 +190,17 @@ C_c(E):=\{f\in C(E): \supp(f) \text{ is compact}\},
 where $\|f\|_\infty:=\sup_{x\in E}|f(x)|$.
 \end{definition}
 
+\noindent
+\textbf{Why $C_b(E)$?}
+The space $C_b(E)$ is large enough to be separating, but still manageable:
+\begin{itemize}
+\item boundedness ensures integrals are always well-defined,
+\item continuity allows approximation arguments using the metric structure,
+\item the class is stable under algebraic operations and limits.
+\end{itemize}
+This balance explains why weak convergence is defined using $C_b(E)$
+rather than all measurable functions. Finally, we can define separating classes.
+
 \begin{definition}[Separating class]
 A class $\mathcal{C}$ of bounded measurable functions $E\to\R$ is called \emph{separating} for $\mathcal{M}_1(E)$ if
 \[
@@ -238,6 +208,14 @@ A class $\mathcal{C}$ of bounded measurable functions $E\to\R$ is called \emph{s
 \qquad P,Q\in\mathcal{M}_1(E).
 \]
 \end{definition}
+
+\noindent
+\textbf{Why this matters later.}
+Separating classes are the conceptual foundation of weak convergence,
+compactness results, and Prokhorov-type theorems.
+They explain why convergence of integrals against a restricted family of functions
+is strong enough to identify limits,
+and they justify replacing complicated setwise arguments by functional ones.
 
 \paragraph{Intuition behind Lemma~\ref{lem:closed_det}.}
 This lemma formalizes the idea that closed sets already contain enough information to determine a Borel probability measure on a metric space.
