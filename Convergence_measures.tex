@@ -577,5 +577,407 @@ Hence, in this case, tightness is equivalent to relative compactness in $\mathca
 which recovers the classical Prokhorov theorem.
 \end{remark}
 
+\section{Portmanteau theorem}
+
+The definition of weak convergence is formulated through test
+functions, and in applications it is often more convenient to verify convergence through sets or to
+work with an explicit metric.  The Portmanteau theorem below provides exactly this bridge: it gives a
+collection of equivalent criteria for $\mathbb{P}_n\Rightarrow\mathbb{P}$, ranging from convergence
+of integrals against (uniformly) continuous bounded functions to one-sided bounds on probabilities
+of closed/open sets and convergence on $\mathbb{P}$-continuity sets.  The additional link to the
+Prokhorov metric is particularly useful because it turns weak convergence into a quantitative,
+metric statement; this enables compactness arguments (via tightness/Prokhorov) and stability
+estimates when passing to limits in probabilistic models.
+
+\begin{theorem}[Portmanteau theorem and Prokhorov metric]\label{thm:portmanteau-prokhorov}
+Let $(E,d)$ be a metric space and let $\mathcal{E}:=\mathcal{B}(E)$ be its Borel $\sigma$-algebra.
+Let $(\mathbb{P}_n)_{n\in\mathbb{N}}\subset \mathcal{P}(E)$ and $\mathbb{P}\in\mathcal{P}(E)$ be Borel probability measures.
+Consider the following statements:
+\begin{enumerate}[label=\textnormal{(\alph*)}, leftmargin=3.2em]
+  \item $\displaystyle \lim_{n\to\infty}\rho(\mathbb{P}_n,\mathbb{P})=0$, where $\rho$ denotes the Prokhorov metric.
+  \item $\mathbb{P}_n \Rightarrow \mathbb{P}$ (weak convergence).
+  \item $\displaystyle \lim_{n\to\infty}\int_E f\,d\mathbb{P}_n=\int_E f\,d\mathbb{P}\qquad \forall\, f\in C_b(E)$,
+        where $f$ is uniformily continuous.
+  \item $\displaystyle \limsup_{n\to\infty}\mathbb{P}_n(F)\le \mathbb{P}(F)\qquad \forall\, F\in\mathcal{E}\ \text{closed}$.
+  \item $\displaystyle \liminf_{n\to\infty}\mathbb{P}_n(G)\ge \mathbb{P}(G)\qquad \forall\, G\in\mathcal{E}\ \text{open}$.
+  \item $\displaystyle \lim_{n\to\infty}\mathbb{P}_n(A)=\mathbb{P}(A)\qquad \forall\, A\in\mathcal{E}\ \text{with }\mathbb{P}(\partial A)=0$,
+        i.e.\ for all $\mathbb{P}$-continuity sets $A$.
+\end{enumerate}
+Then \textnormal{(b)}--\textnormal{(f)} are equivalent, and \textnormal{(a)} implies \textnormal{(b)}.
+Moreover, if $(E,d)$ is separable, then \textnormal{(a)}--\textnormal{(f)} are equivalent (in particular, $\rho$ metrizes weak convergence).
+\end{theorem}
+
+\begin{proof}[Equivalence of \textnormal{(b)}--\textnormal{(f)}]
+We prove the chain of implications
+\[
+\textnormal{(b)}\Rightarrow\textnormal{(c)}\Rightarrow\textnormal{(d)}\Rightarrow\textnormal{(e)}
+\Rightarrow\textnormal{(f)}\Rightarrow\textnormal{(b)},
+\]
+
+\medskip
+\LabelProof{\textnormal{(b)} $\Rightarrow$ \textnormal{(c)}}
+If $\mathbb{P}_n\Rightarrow \mathbb{P}$, then by definition (weak convergence on a metric space)
+\[
+\int_E f\,d\mathbb{P}_n \to \int_E f\,d\mathbb{P}\qquad\forall f\in C_b(E).
+\]
+In particular, this holds for every bounded \emph{uniformly} continuous $f$, hence \textnormal{(c)} follows. 
+
+\medskip
+\LabelProof{\textnormal{(c)} $\Rightarrow$ \textnormal{(d)}}
+Fix a closed set $F\subset E$ and $\delta>0$. Define the open $\delta$-neighbourhood
+\[
+G_\delta := F^\delta := \{y\in E:\ \exists x\in F\ \text{with}\ d(x,y)<\delta\},
+\]
+and define the function
+\[
+f_{F,\delta}(x):=\Bigl(1-\frac{d(x,F)}{\delta}\Bigr)_+,
+\qquad d(x,F):=\inf_{y\in F} d(x,y).
+\]
+Then $f_{F,\delta}$ is bounded and (in fact Lipschitz, hence uniformly continuous), satisfies
+$f_{F,\delta}=1$ on $F$ and $f_{F,\delta}=0$ on $G_\delta^{\,c}$, and $0\le f_{F,\delta}\le 1$.
+Therefore
+\[
+\mathbb{P}_n(F)\le \int_E f_{F,\delta}\,d\mathbb{P}_n.
+\]
+Taking $\limsup_{n\to\infty}$ and using \textnormal{(c)} gives
+\[
+\limsup_{n\to\infty}\mathbb{P}_n(F)
+\le \int_E f_{F,\delta}\,d\mathbb{P}
+\le \mathbb{P}(G_\delta).
+\]
+Since $G_\delta\downarrow F$ as $\delta\downarrow 0$, continuity from above yields
+$\mathbb{P}(G_\delta)\downarrow \mathbb{P}(F)$, hence letting $\delta\downarrow 0$ gives
+\[
+\limsup_{n\to\infty}\mathbb{P}_n(F)\le \mathbb{P}(F),
+\]
+which is \textnormal{(d)}. 
+
+\medskip
+\LabelProof{\textnormal{(d)} $\Rightarrow$ \textnormal{(e)}}
+If $G$ is open, then $G^c$ is closed, so by \textnormal{(d)},
+\[
+\limsup_{n\to\infty}\mathbb{P}_n(G^c)\le \mathbb{P}(G^c).
+\]
+Using $\mathbb{P}_n(G)=1-\mathbb{P}_n(G^c)$ and $\mathbb{P}(G)=1-\mathbb{P}(G^c)$ yields
+\[
+\liminf_{n\to\infty}\mathbb{P}_n(G)\ge \mathbb{P}(G),
+\]
+i.e.\ \textnormal{(e)}. 
+
+\medskip
+\LabelProof{\textnormal{(d)} and \textnormal{(e)} $\Rightarrow$ \textnormal{(f)}}
+Let $A\in\mathcal{E}$ satisfy $\mathbb{P}(\partial A)=0$. Then $A^\circ\subset A\subset \overline{A}$
+and $\overline{A}\setminus A^\circ\subset \partial A$, hence
+$\mathbb{P}(\overline{A})=\mathbb{P}(A^\circ)=\mathbb{P}(A)$.
+Applying \textnormal{(d)} to $\overline{A}$ and \textnormal{(e)} to $A^\circ$ gives
+\[
+\mathbb{P}(A)=\mathbb{P}(\overline{A}) \ge \limsup_{n\to\infty}\mathbb{P}_n(\overline{A})
+\ge \limsup_{n\to\infty}\mathbb{P}_n(A),
+\]
+and
+\[
+\liminf_{n\to\infty}\mathbb{P}_n(A)\ge \liminf_{n\to\infty}\mathbb{P}_n(A^\circ)
+\ge \mathbb{P}(A^\circ)=\mathbb{P}(A).
+\]
+Thus $\mathbb{P}_n(A)\to \mathbb{P}(A)$, i.e.\ \textnormal{(f)} holds. 
+
+\medskip
+\LabelProof{\textnormal{(f)} $\Rightarrow$ \textnormal{(b)}.}
+We show that \textnormal{(f)} implies convergence of integrals for all $f\in C_b(E)$, which is
+equivalent to \textnormal{(b)} by Definition~5.10 in the notes. 
+Let $f\in C_b(E)$ and write $f=f^+-f^-$, so it suffices to assume $f\ge 0$.
+Set $C:=\|f\|_\infty$. Using the standard identity for nonnegative bounded functions,
+\[
+\int_E f\,d\mathbb{P}=\int_{0}^{C}\mathbb{P}(f>t)\,dt,
+\qquad
+\int_E f\,d\mathbb{P}_n=\int_{0}^{C}\mathbb{P}_n(f>t)\,dt.
+\]
+For each $t\in(0,C)$ one has
+\[
+\partial\{f>t\}\subset \{f=t\}.
+\]
+The level sets $\{f=t\}$ are pairwise disjoint in $t$, hence there are at most countably many
+$t$ with $\mathbb{P}(f=t)>0$. Therefore, for Lebesgue-a.e.\ $t\in(0,C)$,
+\[
+\mathbb{P}(\partial\{f>t\})=0,
+\]
+so $\{f>t\}$ is a $\mathbb{P}$-continuity set. By \textnormal{(f)} we then have
+$\mathbb{P}_n(f>t)\to \mathbb{P}(f>t)$ for a.e.\ $t$.
+Since $0\le \mathbb{P}_n(f>t)\le 1$, dominated convergence yields
+\[
+\int_E f\,d\mathbb{P}_n
+=\int_{0}^{C}\mathbb{P}_n(f>t)\,dt
+\longrightarrow
+\int_{0}^{C}\mathbb{P}(f>t)\,dt
+=\int_E f\,d\mathbb{P}.
+\]
+Thus $\int f\,d\mathbb{P}_n\to \int f\,d\mathbb{P}$ for all $f\in C_b(E)$, i.e.\ $\mathbb{P}_n\Rightarrow \mathbb{P}$.
+This proves \textnormal{(f)} $\Rightarrow$ \textnormal{(b)}. 
+
+\medskip
+Combining Steps~1--5 gives the equivalence of \textnormal{(b)}--\textnormal{(f)}.
+\end{proof}
+
+
+
+
+\begin{proof}[Proof of \textnormal{(a)} $\Rightarrow$ \textnormal{(b)}]
+Assume \textnormal{(a)}, i.e.\ $\rho(\mathbb{P}_n,\mathbb{P})\to 0$ as $n\to\infty$, where $\rho$ is the Prokhorov metric.
+Fix a closed set $F\in\mathcal{E}$. By the definition of $\rho$, for each $n$ there exists $\varepsilon_n\downarrow 0$
+(with $\varepsilon_n \ge \rho(\mathbb{P}_n,\mathbb{P})$) such that
+\[
+\mathbb{P}_n(F)\le \mathbb{P}(F^{\varepsilon_n})+\varepsilon_n,
+\]
+where $F^{\varepsilon}:=\{x\in E:\ d(x,F)<\varepsilon\}$ denotes the open $\varepsilon$-neighbourhood of $F$.
+Taking $\limsup_{n\to\infty}$ yields
+\[
+\limsup_{n\to\infty}\mathbb{P}_n(F)
+\le \limsup_{n\to\infty}\mathbb{P}(F^{\varepsilon_n})+\varepsilon_n.
+\]
+Since $\varepsilon_n\downarrow 0$, we have $F^{\varepsilon_n}\downarrow F$ and hence, by continuity from above of
+the probability measure $\mathbb{P}$,
+\[
+\lim_{n\to\infty}\mathbb{P}(F^{\varepsilon_n})=\mathbb{P}(F).
+\]
+Therefore $\limsup_{n\to\infty}\mathbb{P}_n(F)\le \mathbb{P}(F)$ for every closed $F$.
+By the $(d)$, this implies $\mathbb{P}_n \Rightarrow \mathbb{P}$,
+i.e.\ \textnormal{(b)} holds.
+\end{proof}
+
+
+\begin{proof}[Proof of \textnormal{(b)} $\Rightarrow$ \textnormal{(a)}]
+Assume \textnormal{(b)}, i.e.\ $\mathbb{P}_n \Rightarrow \mathbb{P}$.
+Assume moreover that $(E,d)$ is separable.
+
+Fix $\varepsilon>0$. By separability, there exists a countable collection of open balls
+$\{A_k^\varepsilon\}_{k\in\mathbb{N}}$ with diameter $<\varepsilon$ such that $\bigcup_{k=1}^\infty A_k^\varepsilon = E$.
+Choose $N_1(\varepsilon)\in\mathbb{N}$ so that
+\[
+\mathbb{P}\Big(\bigcup_{k=1}^{N_1(\varepsilon)} A_k^\varepsilon\Big) > 1-\varepsilon,
+\qquad\text{equivalently}\qquad
+\mathbb{P}\Big(\bigcup_{k>N_1(\varepsilon)} A_k^\varepsilon\Big) < \varepsilon.
+\]
+Next, by $(e)$, for any open set $G$ there exists
+$N_2(\varepsilon,G)$ such that for all $n\ge N_2(\varepsilon,G)$,
+\[
+\mathbb{P}_n(G) \ge \mathbb{P}(G)-\varepsilon.
+\]
+Using the countable basis construction, one obtains an index $N(\varepsilon)$ such that
+for all $n\ge N(\varepsilon)$ and all Borel sets $A\in\mathcal{E}$,
+\begin{equation}\label{eq:prokhorov_one_side}
+\mathbb{P}(A)\le \mathbb{P}_n(A^{2\varepsilon}) + 2\varepsilon.
+\end{equation}
+
+\LabelProof{***Briefly: cover $A$ by unions of the finitely many balls $A_1^\varepsilon,\dots,A_{N_1(\varepsilon)}^\varepsilon$
+that intersect $A$, plus the tail $\bigcup_{k>N_1(\varepsilon)}A_k^\varepsilon$ of $\mathbb{P}$-mass $<\varepsilon$;
+call this union $G_0$. Then $G_0\subset A^\varepsilon$ and $\mathbb{P}(A)\le \mathbb{P}(G_0)+\varepsilon
+\le \mathbb{P}_n(G_0)+2\varepsilon \le \mathbb{P}_n(A^{2\varepsilon})+2\varepsilon$.***}
+\medskip
+
+From \eqref{eq:prokhorov_one_side} we derive the reverse inequality as follows: for any Borel set $B$,
+\[
+\mathbb{P}(B^{\varepsilon})
+= 1-\mathbb{P}\big((B^{\varepsilon})^c\big)
+\ge 1-\mathbb{P}_n\big(((B^{\varepsilon})^c)^{2\varepsilon}\big)-2\varepsilon
+\ge \mathbb{P}_n(B)-2\varepsilon,
+\]
+where we used \eqref{eq:prokhorov_one_side} with $A=(B^\varepsilon)^c$ and the set inclusion
+$B \subset \big(((B^{\varepsilon})^c)^{2\varepsilon}\big)^c$ (equivalently,
+$\big(((B^{\varepsilon})^c)^{2\varepsilon}\big) \subset B^c$).
+Hence, for all $n\ge N(\varepsilon)$ and all Borel $B$,
+\[
+\mathbb{P}_n(B)\le \mathbb{P}(B^{\varepsilon})+2\varepsilon.
+\]
+Together with \eqref{eq:prokhorov_one_side} (renaming $A$ as $B$) this shows that for all $n\ge N(\varepsilon)$,
+\[
+\rho(\mathbb{P}_n,\mathbb{P}) \le 2\varepsilon.
+\]
+Since $\varepsilon>0$ was arbitrary, we conclude $\rho(\mathbb{P}_n,\mathbb{P})\to 0$, i.e.\ \textnormal{(a)} holds.
+\end{proof}
+
+%------------------------------------------------
+% Arzelà--Ascoli (deterministic) + Tightness criterion (probabilistic)
+% on C([0,\infty);\R^d)
+%------------------------------------------------
+
+\begin{definition}[Modulus of continuity]\label{def:modulus_continuity}
+Let $E:=C([0,\infty);\R^d)$. For $T>0$ and $\delta>0$ define
+\[
+w_T(\omega,\delta)
+:=\sup\bigl\{|\omega(t)-\omega(s)|:\ s,t\in[0,T],\ |t-s|<\delta\bigr\},
+\qquad \omega\in E.
+\]
+\end{definition}
+
+\begin{proposition}[Arzel\`a--Ascoli]\label{prop:AA_C0infty}
+Let $E:=C([0,\infty);\R^d)$ and let $A\subset E$.
+Then $\overline{A}$ is compact in $E$ (with the topology of uniform convergence on compact
+intervals) if and only if the following two conditions hold:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=3.2em]
+\item (\emph{Uniform boundedness on compacts}) For every $T>0$,
+\[
+\sup_{\omega\in A}\|\omega\|_{[0,T]} < \infty,
+\qquad\text{where }\ \|\omega\|_{[0,T]}:=\sup_{t\in[0,T]}|\omega(t)|.
+\]
+\item (\emph{Equicontinuity on compacts}) For every $T>0$,
+\[
+\lim_{\delta\downarrow 0}\ \sup_{\omega\in A} w_T(\omega,\delta)=0,
+\]
+with $w_T$ as in Definition~\ref{def:modulus_continuity}.
+\end{enumerate}
+\end{proposition}
+
+\begin{theorem}[Tightness criterion based on Arzel\`a--Ascoli]\label{thm:tightness_C0infty}
+Let $E:=C([0,\infty);\R^d)$ and equip $E$ with the metric
+\[
+d(\omega,\tilde\omega)
+:=\sum_{m=1}^\infty 2^{-m}\Bigl(\|\omega-\tilde\omega\|_{[0,m]}\wedge 1\Bigr),
+\qquad
+\|\omega\|_{[0,T]}:=\sup_{t\in[0,T]}|\omega(t)|.
+\]
+Then $(E,d)$ is Polish and $\mathcal{B}(E)$ coincides with the canonical $\sigma$-algebra
+generated by the coordinate maps (equivalently, by cylinder sets).
+
+Let $(\Pp_n)_{n\in\N}\subset\mathcal{P}(E)$ be a sequence of Borel probability measures.
+Then $(\Pp_n)$ is tight in $\mathcal{P}(E)$ if and only if the following two conditions hold:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=3.2em]
+\item (\emph{Tightness of sup-norms on compacts}) For every $T>0$,
+\[
+\lim_{a\to\infty}\ \sup_{n\in\N}\ \Pp_n\bigl(\|\omega\|_{[0,T]}\ge a\bigr)=0.
+\]
+\item (\emph{Stochastic equicontinuity on compacts}) For every $T>0$ and every $\varepsilon>0$,
+\[
+\lim_{\delta\downarrow 0}\ \sup_{n\in\N}\ \Pp_n\bigl(w_T(\omega,\delta)\ge \varepsilon\bigr)=0,
+\]
+where $w_T$ is the modulus of continuity from Definition~\ref{def:modulus_continuity}.
+\end{enumerate}
+\end{theorem}
+
+%------------------------------------------------
+% Proof of the tightness criterion on C([0,\infty);\R^d)
+% (probabilistic translation of Arzelà--Ascoli)
+% Based on Section 23 (Theorem 55/56) in the attached notes.
+%------------------------------------------------
+
+\begin{proof}[Proof of Theorem~\ref{thm:tightness_C0infty}]
+We follow the Arzel\`a--Ascoli characterization of compact subsets of
+$(C([0,\infty);\R^d),d)$ and translate it into probabilistic language
+(the argument is exactly as in Theorem~56 of the notes). :contentReference[oaicite:0]{index=0}
+
+\medskip
+\noindent\textbf{Notation.}
+For $T>0$ write $\|\omega\|_{[0,T]}:=\sup_{t\in[0,T]}|\omega(t)|$ and
+\[
+w_T(\omega,\delta):=\sup\bigl\{|\omega(t)-\omega(s)|:\ s,t\in[0,T],\ |t-s|<\delta\bigr\}.
+\]
+Recall that a sequence $(\Pp_n)$ is \emph{(uniformly) tight} on $(E,d)$ if for every $\gamma>0$
+there exists a compact set $K\subset E$ such that
+\[
+\inf_{n\in\N}\Pp_n(K)\ge 1-\gamma.
+\]
+
+%------------------------------------------------
+\medskip
+\noindent\textbf{Step 1: ``$\Rightarrow$'' (tightness $\Rightarrow$ the two bounds).}
+Assume $(\Pp_n)$ is tight. Fix $\gamma>0$. Then there exists a compact set $K\subset E$ such that
+$\Pp_n(K)\ge 1-\gamma$ for all $n$.
+
+\smallskip
+\emph{(i) Supremum control.}
+Fix $T>0$. Since $K$ is compact, Arzel\`a--Ascoli implies that $K$ is uniformly bounded on $[0,T]$:
+there exists $\lambda=\lambda(T)>0$ such that
+\[
+\|\omega\|_{[0,T]}\le \lambda\qquad\forall\,\omega\in K.
+\]
+Hence for all $n$,
+\[
+\Pp_n\bigl(\|\omega\|_{[0,T]}>\lambda\bigr)\le \Pp_n(K^c)\le \gamma.
+\]
+Letting $\lambda\to\infty$ yields
+\[
+\lim_{\lambda\to\infty}\ \sup_{n\in\N}\ \Pp_n\bigl(\|\omega\|_{[0,T]}\ge \lambda\bigr)=0.
+\]
+
+\smallskip
+\emph{(ii) Modulus-of-continuity control.}
+Fix $T>0$ and $\varepsilon>0$. Again by Arzel\`a--Ascoli, $K$ is equicontinuous on $[0,T]$:
+there exists $\delta_0=\delta_0(T,\varepsilon)>0$ such that for all $\delta\in(0,\delta_0)$,
+\[
+w_T(\omega,\delta)<\varepsilon\qquad\forall\,\omega\in K.
+\]
+Thus for all $n$ and all $\delta\in(0,\delta_0)$,
+\[
+\Pp_n\bigl(w_T(\omega,\delta)\ge\varepsilon\bigr)\le \Pp_n(K^c)\le \gamma.
+\]
+Letting $\delta\downarrow 0$ (and then $\gamma\downarrow 0$) gives
+\[
+\lim_{\delta\downarrow 0}\ \sup_{n\in\N}\ \Pp_n\bigl(w_T(\omega,\delta)\ge\varepsilon\bigr)=0.
+\]
+This proves the two conditions.
+
+%------------------------------------------------
+\medskip
+\noindent\textbf{Step 2: ``$\Leftarrow$'' (the two bounds $\Rightarrow$ tightness).}
+Assume now that the following hold:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=3.2em]
+\item for every $T>0$, $\displaystyle \lim_{\lambda\to\infty}\sup_{n}\Pp_n(\|\omega\|_{[0,T]}\ge\lambda)=0$,
+\item for every $T>0$ and $\varepsilon>0$, $\displaystyle \lim_{\delta\downarrow 0}\sup_n\Pp_n(w_T(\omega,\delta)\ge\varepsilon)=0$.
+\end{enumerate}
+Fix $\gamma>0$. We construct a compact set $K\subset E$ such that $\inf_n\Pp_n(K)\ge 1-\gamma$.
+
+\smallskip
+\emph{(a) Compact sets on a fixed horizon $[0,T]$.}
+Fix $T\in\N$.
+From (i) choose $\lambda_T>0$ such that
+\[
+\sup_{n\in\N}\Pp_n\bigl(\|\omega\|_{[0,T]}>\lambda_T\bigr)\le \frac{\gamma}{2^{T+1}}.
+\]
+Next, for each $k\in\N$ apply (ii) with $\varepsilon=1/k$ to find $\delta_{T,k}>0$ such that
+\[
+\sup_{n\in\N}\Pp_n\bigl(w_T(\omega,\delta_{T,k})>1/k\bigr)\le \frac{\gamma}{2^{T+k+1}}.
+\]
+Define
+\[
+A_T
+:=\Bigl\{\omega\in E:\ \|\omega\|_{[0,T]}\le \lambda_T,\ 
+w_T(\omega,\delta_{T,k})\le \frac1k\ \text{for all }k\in\N\Bigr\}.
+\]
+Then by the union bound, for all $n\in\N$,
+\begin{align*}
+\Pp_n(A_T)
+&\ge 1-\Pp_n\bigl(\|\omega\|_{[0,T]}>\lambda_T\bigr)
+   -\sum_{k=1}^\infty \Pp_n\Bigl(w_T(\omega,\delta_{T,k})>\frac1k\Bigr)\\
+&\ge 1-\frac{\gamma}{2^{T+1}}-\sum_{k=1}^\infty \frac{\gamma}{2^{T+k+1}}
+= 1-\frac{\gamma}{2^T}.
+\end{align*}
+
+\smallskip
+\emph{(b) A global compact set.}
+Set
+\[
+K:=\bigcap_{T=1}^\infty A_T.
+\]
+By construction, $K$ is closed. Moreover, for each fixed $T$, the set $K$ is uniformly bounded
+on $[0,T]$ (by $\lambda_T$) and equicontinuous on $[0,T]$ (because
+$w_T(\omega,\delta_{T,k})\le 1/k$ for all $k$).
+Hence Arzel\`a--Ascoli implies that $K$ is compact in $(E,d)$. :contentReference[oaicite:1]{index=1}
+
+Finally, using again the union bound,
+\[
+\Pp_n(K)
+=1-\Pp_n\Bigl(\bigcup_{T=1}^\infty A_T^c\Bigr)
+\ge 1-\sum_{T=1}^\infty \Pp_n(A_T^c)
+\ge 1-\sum_{T=1}^\infty \frac{\gamma}{2^T}
+=1-\gamma,
+\]
+for all $n\in\N$. This is exactly tightness.
+
+\medskip
+Combining Step~1 and Step~2 proves the theorem.
+\end{proof}
+
+
+
+
 
 
