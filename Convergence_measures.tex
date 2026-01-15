@@ -976,6 +976,101 @@ for all $n\in\N$. This is exactly tightness.
 Combining Step~1 and Step~2 proves the theorem.
 \end{proof}
 
+%------------------------------------------------
+% Definitions used to apply the tightness criterion on C([0,∞);R^d)
+% and to prepare Kolmogorov--Chentsov.
+%------------------------------------------------
+
+\subsection{Modifications, indistinguishability, and H\"older continuity}\label{subsec:mods-holder}
+
+In order to apply the tightness criterion of Theorem~\ref{thm:tightness_C0infty} to a sequence of
+processes $(X^n)_{n\in\N}$, one typically considers their \emph{laws}
+\[
+\Pp_n := \mathcal{L}(X^n)\in \mathcal{P}\bigl(C([0,\infty);\R^d)\bigr),
+\]
+and verifies tightness of $(\Pp_n)_{n\in\N}$ through estimates on the sample paths of $X^n$.
+For this, we recall two standard notions identifying processes which coincide ``up to null sets''.
+
+\begin{definition}[Modification]\label{def:modification}
+Let $(\Omega,\mathcal{A},\Pp)$ be a probability space and let
+$X=(X_t)_{t\ge 0}$ and $Y=(Y_t)_{t\ge 0}$ be $\R^d$-valued stochastic processes.
+We say that $X$ and $Y$ are \emph{modifications} (or \emph{versions}) of each other if
+for every $t\ge 0$,
+\[
+\Pp(X_t = Y_t)=1 .
+\]
+Equivalently, $X_t=Y_t$ $\Pp$-a.s.\ for each fixed $t$.
+\end{definition}
+
+\begin{definition}[Indistinguishability]\label{def:indistinguishable}
+Let $X=(X_t)_{t\ge 0}$ and $Y=(Y_t)_{t\ge 0}$ be $\R^d$-valued stochastic processes on
+$(\Omega,\mathcal{A},\Pp)$.
+We say that $X$ and $Y$ are \emph{indistinguishable} if
+\[
+\Pp\bigl( X_t = Y_t\ \text{for all }t\ge 0 \bigr)=1 .
+\]
+Equivalently, there exists a null set $N\in\mathcal{A}$ such that for all $\omega\in\Omega\setminus N$,
+\[
+X_t(\omega)=Y_t(\omega)\qquad\forall\,t\ge 0 .
+\]
+\end{definition}
+
+\begin{remark}\label{rem:modif-vs-indist}
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=3.2em]
+\item Indistinguishability implies modification, but the converse is false in general.
+\item If the index set is discrete, e.g.\ $t\in\N$ or $t\in\{0,1,\dots,T\}$, then
+\emph{modification and indistinguishability are equivalent}.
+Indeed, if $\Pp(X_t=Y_t)=1$ for each $t$ in a countable set, then the intersection of the
+corresponding full-measure events is still a full-measure event.
+\item If $X$ and $Y$ admit continuous sample paths and are modifications of each other, then
+they are automatically indistinguishable.
+\end{enumerate}
+\end{remark}
+
+\medskip
+For tightness on $C([0,\infty);\R^d)$ and for the Kolmogorov--Chentsov theorem,
+a key role is played by H\"older regularity of sample paths.
+
+\begin{definition}[Local H\"older continuity]\label{def:holder_local}
+Let $\alpha\in(0,1]$ and $T>0$.
+A function $f:[0,T]\to\R^d$ is called \emph{$\alpha$-H\"older continuous on $[0,T]$} if
+there exists a constant $C_T<\infty$ such that
+\[
+|f(t)-f(s)| \le C_T\,|t-s|^\alpha
+\qquad\forall\, s,t\in[0,T].
+\]
+The smallest such constant is denoted by
+\[
+[f]_{\alpha;[0,T]} := \sup_{\substack{s,t\in[0,T]\\s\neq t}}
+\frac{|f(t)-f(s)|}{|t-s|^\alpha}
+\in [0,\infty],
+\]
+and is called the \emph{H\"older seminorm} of $f$ on $[0,T]$.
+\end{definition}
+
+\begin{definition}[H\"older continuity]\label{def:holder_global}
+A function $f:[0,\infty)\to\R^d$ is called \emph{locally $\alpha$-H\"older continuous} if
+for every $T>0$ the restriction $f|_{[0,T]}$ is $\alpha$-H\"older continuous
+(i.e.\ $[f]_{\alpha;[0,T]}<\infty$ for all $T>0$).
+\end{definition}
+
+\begin{remark}[H\"older continuity implies modulus of continuity estimates]\label{rem:holder_modulus}
+If $f$ is $\alpha$-H\"older continuous on $[0,T]$ with constant $C_T$, then for every $\delta>0$,
+\[
+w_T(f,\delta)\le C_T\,\delta^\alpha,
+\]
+where $w_T$ is the modulus of continuity from Definition~\ref{def:modulus_continuity}.
+In particular, H\"older regularity implies equicontinuity, which is the key compactness
+mechanism behind the tightness criterion of Theorem~\ref{thm:tightness_C0infty}.
+\end{remark}
+
+\medskip
+The Kolmogorov--Chentsov theorem will provide sufficient moment conditions on the increments
+of a stochastic process guaranteeing the existence of a \emph{continuous} (in fact H\"older continuous)
+modification. This is the main tool for producing probability measures on
+$C([0,\infty);\R^d)$ starting from a process given only by its finite-dimensional distributions.
+
+
 
 
 
