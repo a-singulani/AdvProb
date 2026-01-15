@@ -578,4 +578,178 @@ which recovers the classical Prokhorov theorem.
 \end{remark}
 
 
+\subsection{Weak convergence and Portmanteau}
+
+Let $(E,d)$ be a metric space and let $\mathcal{P}(E)$ denote the set of Borel probability measures on $E$.
+We write $P_n \Rightarrow P$ (weak convergence) if
+\[
+\int_E f\,dP_n \longrightarrow \int_E f\,dP
+\quad\text{for all bounded continuous } f:E\to\mathbb{R}.
+\]
+
+\begin{theorem}[Portmanteau]
+Let $(E,d)$ be a metric space and $P_n,P\in\mathcal{P}(E)$. The following are equivalent:
+\begin{enumerate}
+\item $P_n \Rightarrow P$.
+\item For every closed set $F\subset E$,
+\[
+\limsup_{n\to\infty} P_n(F)\le P(F).
+\]
+\item For every open set $G\subset E$,
+\[
+\liminf_{n\to\infty} P_n(G)\ge P(G).
+\]
+\item For every Borel set $A\subset E$ with $P(\partial A)=0$,
+\[
+P_n(A)\to P(A).
+\]
+\end{enumerate}
+\end{theorem}
+
+\subsection{Prokhorov metric and Prokhorov theorem}
+
+For $A\subset E$ and $\varepsilon>0$, define the $\varepsilon$-enlargement
+\[
+A^\varepsilon := \{x\in E:\ d(x,A)<\varepsilon\}.
+\]
+The Prokhorov metric on $\mathcal{P}(E)$ is
+\[
+\pi(P,Q) := \inf\Bigl\{\varepsilon>0:\ P(A)\le Q(A^\varepsilon)+\varepsilon
+\ \text{for all Borel }A\subset E\Bigr\}.
+\]
+
+\begin{definition}[Tightness]
+A family $\mathcal{F}\subset\mathcal{P}(E)$ is tight if for every $\varepsilon>0$ there exists a compact set
+$K\subset E$ such that
+\[
+\sup_{P\in\mathcal{F}} P(K^c)\le \varepsilon.
+\]
+\end{definition}
+
+\begin{theorem}[Prokhorov theorem (Polish spaces)]
+If $E$ is Polish (complete and separable metric), then $\mathcal{F}\subset\mathcal{P}(E)$ is tight
+if and only if it is relatively compact for weak convergence (every sequence has a weakly convergent subsequence).
+\end{theorem}
+
+\subsection{The path space $C([0,\infty))$}
+
+Let
+\[
+C([0,\infty)) := \{w:[0,\infty)\to\mathbb{R}\ \text{continuous}\}.
+\]
+A standard metric inducing uniform convergence on compact intervals is
+\[
+d(w,v) := \sum_{k=1}^\infty 2^{-k}\Bigl( \|w-v\|_{[0,k]}\wedge 1\Bigr),
+\qquad
+\|w-v\|_{[0,k]}:=\sup_{t\in[0,k]} |w(t)-v(t)|.
+\]
+Then $\bigl(C([0,\infty)),d\bigr)$ is Polish.
+
+\paragraph{Modulus of continuity.}
+For $T>0$ and $\delta>0$, define
+\[
+\omega_T(w,\delta)
+:= \sup\Bigl\{|w(t)-w(s)|:\ s,t\in[0,T],\ |t-s|\le \delta\Bigr\}.
+\]
+
+\begin{theorem}[Arzela-Ascoli on \texorpdfstring{$C([0,\infty))$}]
+Let $A\subset C([0,\infty))$. The closure $\overline{A}$ is compact in $(C([0,\infty)),d)$ if and only if:
+\begin{enumerate}
+\item (uniform boundedness on compacts) for every $T>0$,
+\[
+\sup_{w\in A}\ \sup_{t\in[0,T]} |w(t)| < \infty;
+\]
+\item (uniform equicontinuity on compacts) for every $T>0$,
+\[
+\lim_{\delta\downarrow 0}\ \sup_{w\in A}\ \omega_T(w,\delta) = 0.
+\]
+\end{enumerate}
+\end{theorem}
+
+\subsection{A tightness criterion on $C([0,\infty))$}
+
+Let $(P_n)_{n\in\mathbb{N}}\subset\mathcal{P}(C([0,\infty)))$.
+
+\begin{theorem}[Tightness criterion on \texorpdfstring{$C([0,\infty))$}]
+The sequence $(P_n)$ is tight if and only if both conditions hold:
+\begin{enumerate}
+\item (tightness at time $0$)
+\[
+\lim_{a\to\infty}\ \sup_{n\in\mathbb{N}} P_n\bigl(|w(0)|>a\bigr)=0;
+\]
+\item (tightness of modulus of continuity) for every $T>0$ and $\varepsilon>0$,
+\[
+\lim_{\delta\downarrow 0}\ \sup_{n\in\mathbb{N}} P_n\bigl(\omega_T(w,\delta)>\varepsilon\bigr)=0.
+\]
+\end{enumerate}
+\end{theorem}
+
+\subsection{Modifications and indistinguishability}
+
+Let $(\Omega,\mathcal{A},\mathbb{P})$ be a probability space and let $X,Y$ be real-valued processes.
+
+\begin{definition}[Modification]
+$X$ and $Y$ are modifications (versions) of each other if
+\[
+\mathbb{P}(X_t=Y_t)=1 \qquad \text{for every }t.
+\]
+\end{definition}
+
+\begin{definition}[Indistinguishability]
+$X$ and $Y$ are indistinguishable if
+\[
+\mathbb{P}\bigl(X_t=Y_t \ \text{for all }t\bigr)=1.
+\]
+Equivalently, there exists $N\in\mathcal{A}$ with $\mathbb{P}(N)=0$ such that for all $\omega\notin N$,
+\[
+X_t(\omega)=Y_t(\omega)\quad \text{for every }t.
+\]
+\end{definition}
+
+\begin{remark}
+If the index set is countable, modification and indistinguishability coincide.
+For uncountable index sets, modification is weaker in general.
+If both processes have almost surely continuous sample paths, then any two modifications are indistinguishable
+(agreement on a dense countable set plus continuity forces agreement for all times).
+\end{remark}
+
+\subsection{Holder continuity and Kolmogorov-Chentsov}
+
+\begin{definition}[Holder continuity]
+Let $\gamma\in(0,1]$. A function $w:[0,T]\to\mathbb{R}$ is $\gamma$-Holder continuous if there exists $K<\infty$ such that
+\[
+|w(t)-w(s)|\le K|t-s|^\gamma \qquad \forall s,t\in[0,T].
+\]
+\end{definition}
+
+\begin{theorem}[Kolmogorov-Chentsov]
+Let $X=(X_t)_{t\ge 0}$ be a real-valued process. Assume that for every $T>0$ there exist constants
+$\alpha>0$, $\beta>0$, and $C_T<\infty$ such that for all $s,t\in[0,T]$,
+\[
+\mathbb{E}\bigl[|X_t-X_s|^\alpha\bigr]\le C_T\,|t-s|^{1+\beta}.
+\]
+Then $X$ admits a modification $\widetilde{X}$ with locally $\gamma$-Holder continuous sample paths
+for every $\gamma\in(0,\beta/\alpha)$.
+\end{theorem}
+
+\subsection{Kolmogorov-type criterion for tightness in $C([0,\infty))$}
+
+\begin{theorem}[Kolmogorov tightness criterion]
+Let $(X^n)_{n\in\mathbb{N}}$ be a sequence of real-valued processes with (a.s.) continuous sample paths.
+Assume:
+\begin{enumerate}
+\item the family of initial laws $\{\mathcal{L}(X^n_0)\}$ is tight in $\mathbb{R}$;
+\item there exist $\alpha>0$, $\beta>0$, and for each $T>0$ a constant $C_T<\infty$ such that for all $n$ and $s,t\in[0,T]$,
+\[
+\mathbb{E}\bigl[|X^n_t-X^n_s|^\alpha\bigr]\le C_T\,|t-s|^{1+\beta}.
+\]
+\end{enumerate}
+Then the laws $\{\mathcal{L}(X^n)\}$ form a tight family in $\mathcal{P}(C([0,\infty)))$.
+\end{theorem}
+
+
+
+
+
+
 
