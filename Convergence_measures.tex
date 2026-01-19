@@ -445,138 +445,6 @@ If $E$ is complete, every $\beta$-Cauchy sequence is tight and admits a weak lim
 Completeness of $E$ ensures the limit is a Borel probability on $E$ (no mass “escapes” to a completion).
 \end{proof}
 
-\section{Tightness and Prokhorov's theorem}
-
-On non-compact spaces, weak convergence alone does not prevent probability mass from drifting off to infinity.
-A sequence of probability measures may converge weakly on every bounded region, yet lose mass globally, so that no limit probability measure exists.
-Tightness is the precise condition that rules out this phenomenon: it requires that, uniformly in the sequence, almost all mass is concentrated in a common compact set.
-In this sense, tightness is the probabilistic analogue of precompactness.
-
-\medskip
-
-\noindent
-Prokhorov’s theorem identifies tightness as the exact compactness criterion for weak convergence.
-On Polish spaces, it states that a family of probability measures is relatively compact for the weak topology if and only if it is tight.
-The theorem thus provides the missing link between analytic convergence (defined via test functions) and geometric control of mass (via compact sets).
-
-\medskip
-
-\noindent
-Conceptually, the theorem works by separating two difficulties:
-first, tightness ensures that mass cannot escape to infinity, so that potential limit points are genuine probability measures;
-second, once tightness is available, weak compactness follows from the metrizability and completeness properties established earlier via the Prokhorov metric.
-In this way, Prokhorov’s theorem explains why weak convergence behaves like ordinary compactness in finite-dimensional settings, despite the infinite-dimensional nature of $\mathcal{P}(X)$.
-
-
-\begin{definition}[Tightness]
-A family $\mathcal{K}\subset\mathcal{M}_1(E)$ is \emph{tight} if for every $\varepsilon>0$ there exists a compact set $K\subset E$ such that
-\[
-\inf_{P\in\mathcal{K}} P(K) > 1-\varepsilon.
-\]
-\end{definition}
-
-\begin{lemma}[Polish spaces: every probability measure is tight]
-Let $E$ be Polish. Then every $P\in\mathcal{M}_1(E)$ is tight. Consequently, every finite subset of $\mathcal{M}_1(E)$ is tight.
-\end{lemma}
-
-\begin{proof}
-On Polish spaces, Borel probability measures are Radon, hence tight: for each $\varepsilon>0$ there exists compact $K$ with $P(K)>1-\varepsilon$.
-For a finite set $\{P_1,\dots,P_m\}$, choose compacts $K_i$ with $P_i(K_i)>1-\varepsilon$, and take $K:=\cap_{i=1}^m K_i$.
-Then $K$ is compact and $P_i(K)\ge 1-\varepsilon$ for all $i$.
-\end{proof}
-
-\begin{remark}[Alternative definition of tightness]
-    Another reading of tightness is: for every tolerance $\epsilon > 0$, there exists a single compact set $K$ such that all measures in the family place \emph{at least} $1-\epsilon$ of their mass inside $K$, i.e., \emph{all} measures in the family have its mass inside $K$ except for a (small) $\epsilon$. Therefore, we can think in the other way around and define tightness on the part left out using $\sup_{P\in\mathcal{K}}P(K^c) < \epsilon$.
-\end{remark}
-
-\paragraph{Intuition behind the proof of Prokhorov’s theorem.}
-The proof of Prokhorov’s theorem hinges on the idea that tightness provides exactly the compactness needed to extract convergent subsequences.
-Tightness guarantees that, uniformly in the family, almost all mass lies in a sequence of compact sets, preventing escape to infinity.
-On each such compact region, probability measures behave much like measures on a compact space, where weak compactness is easier to obtain.
-Using separability, one tests convergence only on a countable convergence-determining class of functions and applies a diagonal argument to extract a subsequence whose integrals converge simultaneously for all tests.
-The limiting linear functional then corresponds to a probability measure, and tightness ensures that no mass is lost in the limit, completing the argument.
-
-\begin{theorem}[Prokhorov's theorem]
-\label{thm:prokhorov}
-Let $E$ be Polish and $\mathcal{K}\subset\mathcal{M}_1(E)$. The following are equivalent:
-\begin{enumerate}[label=(\alph*)]
-\item $\mathcal{K}$ is tight.
-\item For every $\varepsilon>0$ there exists compact $K\subset E$ with $\inf_{P\in\mathcal{K}}P(K)>1-\varepsilon$.
-\item $\mathcal{K}$ is relatively compact for weak convergence.
-\end{enumerate}
-\end{theorem}
-
-\begin{proof}
-\LabelProof{(a)$\Leftrightarrow$(b)} It is just the definition.
-
-\LabelProof{(b)$\Rightarrow$(c)} Let $(P_n)\subset\mathcal{K}$. Tightness provides compacts $K_m\uparrow$ such that
-$\inf_n P_n(K_m)\ge 1-2^{-m}$. Since $E$ is separable, there exists a countable convergence-determining class
-$\mathcal{C}\subset C_b(E)$. By a diagonal argument, extract a subsequence $(P_{n_k})$ such that $\int f\,dP_{n_k}$
-converges for all $f\in\mathcal{C}$.
-This identifies a unique limit probability measure $P$ (because $C_b(E)$ separates measures),
-and one concludes $P_{n_k}\Rightarrow P$.
-
-\LabelProof{(c)$\Rightarrow$(a)} If $\mathcal{K}$ were not tight, there would exist $\varepsilon_0>0$ such that for every compact $K$
-some $P\in\mathcal{K}$ satisfies $P(K)\le 1-\varepsilon_0$. Choose an increasing compact exhaustion $(K_m)$ of $E$
-and pick $P_m\in\mathcal{K}$ with $P_m(K_m)\le 1-\varepsilon_0$.
-Relative compactness yields a weakly convergent subsequence $P_{m_j}\Rightarrow P$.
-Using the Portmanteau inequality for closed sets (applied to each fixed $K_m$) one deduces $P(K_m)\ge 1-\varepsilon_0$ for all $m$,
-hence $P(\cup_m K_m)\ge 1-\varepsilon_0$. But $\cup_m K_m=E$, so $P(E)\ge 1-\varepsilon_0$, contradicting $P(E)=1$ unless $\varepsilon_0=0$.
-Thus $\mathcal{K}$ must be tight.
-\end{proof}
-
-\begin{theorem}[Prokhorov theorem on metric spaces]
-\label{thm:prokhorov_metric}
-Let $(X,d)$ be a metric space and let $\mathcal{F}\subset \mathcal{P}(X)$.
-If $\mathcal{F}$ is tight, then $\mathcal{F}$ is relatively compact for weak convergence, i.e. every sequence
-$(\mu_n)\subset \mathcal{F}$ admits a weakly convergent subsequence.
-
-More precisely, there exists a probability measure $\mu$ on the Borel $\sigma$-algebra of the completion
-$\overline{X}$ of $X$ such that, up to a subsequence,
-\[
-\mu_{n_k} \rightharpoonup \mu \quad \text{in } \mathcal{P}(\overline{X}).
-\]
-\end{theorem}
-
-\begin{proof}
-Let $(\mu_n)\subset\mathcal{F}$ be an arbitrary sequence.
-By tightness, for every $\varepsilon>0$ there exists a compact set $K_\varepsilon\subset X$ such that
-\[
-\mu_n(K_\varepsilon)\ge 1-\varepsilon
-\qquad\text{for all } n.
-\]
-
-Choose a sequence $\varepsilon_m\downarrow 0$ and corresponding compact sets $K_m:=K_{\varepsilon_m}$.
-Since $K_m$ is compact in the metric space $X$, it is totally bounded.
-Hence, for each $m$ and each $\delta>0$, $K_m$ can be covered by finitely many balls of radius $\delta$.
-
-Let $\overline{X}$ denote the completion of $X$.
-Each $K_m$ is relatively compact in $\overline{X}$, hence its closure $\overline{K_m}$ is compact in $\overline{X}$.
-Moreover,
-\[
-\mu_n(\overline{K_m}) \ge \mu_n(K_m) \ge 1-\varepsilon_m.
-\]
-
-Thus, the sequence $(\mu_n)$ is tight when viewed as a sequence of probability measures on $\overline{X}$.
-Since $\overline{X}$ is complete and separable (being the completion of a metric space),
-it is a Polish space.
-
-By Prokhorov's theorem on Polish spaces, there exists a subsequence $(\mu_{n_k})$ and a probability measure
-$\mu\in\mathcal{P}(\overline{X})$ such that
-\[
-\mu_{n_k} \rightharpoonup \mu \quad \text{in } \mathcal{P}(\overline{X}).
-\]
-
-This proves relative compactness.  
-The limit measure $\mu$ need not be supported on $X$, unless $X$ itself is complete.
-\end{proof}
-
-\begin{remark}
-If $X$ is Polish, then $X=\overline{X}$ and the limit measure belongs to $\mathcal{P}(X)$.
-Hence, in this case, tightness is equivalent to relative compactness in $\mathcal{P}(X)$,
-which recovers the classical Prokhorov theorem.
-\end{remark}
-
 \section{Portmanteau theorem}
 
 The definition of weak convergence is formulated through test
@@ -795,10 +663,140 @@ Together with \eqref{eq:prokhorov_one_side} (renaming $A$ as $B$) this shows tha
 Since $\varepsilon>0$ was arbitrary, we conclude $\rho(\mathbb{P}_n,\mathbb{P})\to 0$, i.e.\ \textnormal{(a)} holds.
 \end{proof}
 
-%------------------------------------------------
-% Arzelà--Ascoli (deterministic) + Tightness criterion (probabilistic)
-% on C([0,\infty);\R^d)
-%------------------------------------------------
+\chapter{Tightness}
+
+On non-compact spaces, weak convergence alone does not prevent probability mass from drifting off to infinity.
+A sequence of probability measures may converge weakly on every bounded region, yet lose mass globally, so that no limit probability measure exists.
+Tightness is the precise condition that rules out this phenomenon: it requires that, uniformly in the sequence, almost all mass is concentrated in a common compact set.
+In this sense, tightness is the probabilistic analogue of precompactness.
+
+\begin{definition}[Tightness]\label{def:tightness}
+A family $\mathcal{K}\subset\mathcal{M}_1(E)$ is \emph{tight} if for every $\varepsilon>0$ there exists a compact set $K\subset E$ such that
+\[
+\inf_{P\in\mathcal{K}} P(K) > 1-\varepsilon.
+\]
+\end{definition}
+
+\begin{lemma}[Polish spaces: every probability measure is tight]
+Let $E$ be Polish. Then every $P\in\mathcal{M}_1(E)$ is tight. Consequently, every finite subset of $\mathcal{M}_1(E)$ is tight.
+\end{lemma}
+
+\begin{proof}
+On Polish spaces, Borel probability measures are Radon, hence tight: for each $\varepsilon>0$ there exists compact $K$ with $P(K)>1-\varepsilon$.
+For a finite set $\{P_1,\dots,P_m\}$, choose compacts $K_i$ with $P_i(K_i)>1-\varepsilon$, and take $K:=\cap_{i=1}^m K_i$.
+Then $K$ is compact and $P_i(K)\ge 1-\varepsilon$ for all $i$.
+\end{proof}
+
+\begin{remark}[Alternative definition of tightness]
+    Another reading of tightness is: for every tolerance $\epsilon > 0$, there exists a single compact set $K$ such that all measures in the family place \emph{at least} $1-\epsilon$ of their mass inside $K$, i.e., \emph{all} measures in the family have its mass inside $K$ except for a (small) $\epsilon$. Therefore, we can think in the other way around and define tightness on the part which we left out using $\sup_{P\in\mathcal{K}}P(K^c) < \epsilon$.
+\end{remark}
+
+\medskip
+
+Prokhorov has identified tightness as the exact compactness criterion for weak convergence.
+On Polish spaces, his theorem (below) states that a family of probability measures is relatively compact for the weak topology if and only if it is tight.
+His theorem thus provides the missing link between analytic convergence (defined via test functions) and geometric control of mass (via compact sets).
+
+\medskip
+
+
+Conceptually, the theorem works by separating two difficulties:
+first, tightness ensures that mass cannot escape to infinity, so that potential limit points are genuine probability measures;
+second, once tightness is available, weak compactness follows from the metrizability and completeness properties established earlier via the Prokhorov metric.
+In this way, Prokhorov’s theorem explains why weak convergence behaves like ordinary compactness in finite-dimensional settings, despite the infinite-dimensional nature of $\mathcal{P}(X)$.
+
+
+
+
+\paragraph{Intuition behind the proof of Prokhorov’s theorem.}
+The proof of Prokhorov’s theorem hinges on the idea that tightness provides exactly the compactness needed to extract convergent subsequences.
+Tightness guarantees that, uniformly in the family, almost all mass lies in a sequence of compact sets, preventing escape to infinity.
+On each such compact region, probability measures behave much like measures on a compact space, where weak compactness is easier to obtain.
+Using separability, one tests convergence only on a countable convergence-determining class of functions and applies a diagonal argument to extract a subsequence whose integrals converge simultaneously for all tests.
+The limiting linear functional then corresponds to a probability measure, and tightness ensures that no mass is lost in the limit, completing the argument.
+
+\begin{theorem}[Prokhorov's theorem]
+\label{thm:prokhorov}
+Let $E$ be Polish and $\mathcal{K}\subset\mathcal{M}_1(E)$. The following are equivalent:
+\begin{enumerate}[label=(\alph*)]
+\item $\mathcal{K}$ is tight.
+\item For every $\varepsilon>0$ there exists compact $K\subset E$ with $\inf_{P\in\mathcal{K}}P(K)>1-\varepsilon$.
+\item $\mathcal{K}$ is relatively compact for weak convergence.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\LabelProof{(a)$\Leftrightarrow$(b)} It is just the definition.
+
+\LabelProof{(b)$\Rightarrow$(c)} Let $(P_n)\subset\mathcal{K}$. Tightness provides compacts $K_m\uparrow$ such that
+$\inf_n P_n(K_m)\ge 1-2^{-m}$. Since $E$ is separable, there exists a countable convergence-determining class
+$\mathcal{C}\subset C_b(E)$. By a diagonal argument, extract a subsequence $(P_{n_k})$ such that $\int f\,dP_{n_k}$
+converges for all $f\in\mathcal{C}$.
+This identifies a unique limit probability measure $P$ (because $C_b(E)$ separates measures),
+and one concludes $P_{n_k}\Rightarrow P$.
+
+\LabelProof{(c)$\Rightarrow$(a)} If $\mathcal{K}$ were not tight, there would exist $\varepsilon_0>0$ such that for every compact $K$
+some $P\in\mathcal{K}$ satisfies $P(K)\le 1-\varepsilon_0$. Choose an increasing compact exhaustion $(K_m)$ of $E$
+and pick $P_m\in\mathcal{K}$ with $P_m(K_m)\le 1-\varepsilon_0$.
+Relative compactness yields a weakly convergent subsequence $P_{m_j}\Rightarrow P$.
+Using the Portmanteau inequality for closed sets (applied to each fixed $K_m$) one deduces $P(K_m)\ge 1-\varepsilon_0$ for all $m$,
+hence $P(\cup_m K_m)\ge 1-\varepsilon_0$. But $\cup_m K_m=E$, so $P(E)\ge 1-\varepsilon_0$, contradicting $P(E)=1$ unless $\varepsilon_0=0$.
+Thus $\mathcal{K}$ must be tight.
+\end{proof}
+
+\begin{theorem}[Prokhorov theorem on metric spaces]
+\label{thm:prokhorov_metric}
+Let $(X,d)$ be a metric space and let $\mathcal{F}\subset \mathcal{P}(X)$.
+If $\mathcal{F}$ is tight, then $\mathcal{F}$ is relatively compact for weak convergence, i.e. every sequence
+$(\mu_n)\subset \mathcal{F}$ admits a weakly convergent subsequence.
+
+More precisely, there exists a probability measure $\mu$ on the Borel $\sigma$-algebra of the completion
+$\overline{X}$ of $X$ such that, up to a subsequence,
+\[
+\mu_{n_k} \rightharpoonup \mu \quad \text{in } \mathcal{P}(\overline{X}).
+\]
+\end{theorem}
+
+\begin{proof}
+Let $(\mu_n)\subset\mathcal{F}$ be an arbitrary sequence.
+By tightness, for every $\varepsilon>0$ there exists a compact set $K_\varepsilon\subset X$ such that
+\[
+\mu_n(K_\varepsilon)\ge 1-\varepsilon
+\qquad\text{for all } n.
+\]
+
+Choose a sequence $\varepsilon_m\downarrow 0$ and corresponding compact sets $K_m:=K_{\varepsilon_m}$.
+Since $K_m$ is compact in the metric space $X$, it is totally bounded.
+Hence, for each $m$ and each $\delta>0$, $K_m$ can be covered by finitely many balls of radius $\delta$.
+
+Let $\overline{X}$ denote the completion of $X$.
+Each $K_m$ is relatively compact in $\overline{X}$, hence its closure $\overline{K_m}$ is compact in $\overline{X}$.
+Moreover,
+\[
+\mu_n(\overline{K_m}) \ge \mu_n(K_m) \ge 1-\varepsilon_m.
+\]
+
+Thus, the sequence $(\mu_n)$ is tight when viewed as a sequence of probability measures on $\overline{X}$.
+Since $\overline{X}$ is complete and separable (being the completion of a metric space),
+it is a Polish space.
+
+By Prokhorov's theorem on Polish spaces, there exists a subsequence $(\mu_{n_k})$ and a probability measure
+$\mu\in\mathcal{P}(\overline{X})$ such that
+\[
+\mu_{n_k} \rightharpoonup \mu \quad \text{in } \mathcal{P}(\overline{X}).
+\]
+
+This proves relative compactness.  
+The limit measure $\mu$ need not be supported on $X$, unless $X$ itself is complete.
+\end{proof}
+
+\begin{remark}
+If $X$ is Polish, then $X=\overline{X}$ and the limit measure belongs to $\mathcal{P}(X)$.
+Hence, in this case, tightness is equivalent to relative compactness in $\mathcal{P}(X)$,
+which recovers the classical Prokhorov theorem.
+\end{remark}
+
+
 \section{Criteria for tightness}\label{sec:tight-criteria}
 A recurring theme in probability theory is the passage to the limit in a sequence of random objects.
 For real-valued random variables, compactness arguments are often reduced to showing that the laws do not
@@ -807,16 +805,12 @@ $C([0,\infty);\R^d)$, the situation is more delicate: in addition to controlling
 one must also control their \emph{oscillations}.  This is precisely what tightness accomplishes.
 
 \medskip
-\noindent
-Recall that a family of probability measures $(\Pp_n)$ on a metric space $E$ is called \emph{tight} if
-for every $\eta>0$ there exists a compact set $K\subset E$ such that $\Pp_n(K)\ge 1-\eta$ for all $n$.
-Tightness is the probabilistic analogue of precompactness:
+Recall definition \ref{def:tightness}, we can say that tightness is the probabilistic analogue of precompactness:
 it ensures that, along a subsequence, the measures $\Pp_n$ admit a weak limit.
-In particular, on Polish spaces, Prokhorov's theorem shows that tightness is the key compactness
+In particular, on Polish spaces, Prokhorov's theorem \ref{thm:prokhorov} shows that tightness is the key compactness
 condition for weak convergence of probability measures.
 
 \medskip
-\noindent
 In the present setting, we are interested in probability measures on the space of continuous paths
 \[
 E := C([0,\infty);\R^d),
@@ -826,36 +820,9 @@ numerical schemes, interacting particle systems).  Hence, we need a criterion th
 directly in terms of path properties of the underlying processes.
 
 \medskip
-\noindent
 The guiding idea comes from deterministic compactness.  A set of continuous functions is relatively compact
 (with respect to uniform convergence on compact time intervals) if and only if it is \emph{uniformly bounded}
 and \emph{equicontinuous}.  This is the content of the Arzel\`a--Ascoli theorem.
-The modulus of continuity
-\[
-w_T(\omega,\delta)=\sup\Bigl\{|\omega(t)-\omega(s)|:\ s,t\in[0,T],\ |t-s|<\delta\Bigr\}
-\]
-provides a convenient way to quantify equicontinuity: small values of $w_T(\omega,\delta)$ for small $\delta$
-mean that the path $\omega$ has no rapid oscillations on $[0,T]$.
-
-\medskip
-\noindent
-The tightness criterion below can be viewed as a \emph{probabilistic Arzel\`a--Ascoli theorem}.
-Condition \emph{(i)} prevents trajectories from becoming arbitrarily large on compact time horizons,
-while condition \emph{(ii)} rules out wild oscillations by requiring a uniform (in $n$) control of
-the modulus of continuity in probability.  Together these two bounds ensure that, with high probability,
-the paths lie in a compact subset of $C([0,\infty);\R^d)$.
-This makes the criterion a practical tool for proving weak convergence of processes and is the standard
-starting point for functional limit theorems (in particular for Donsker's invariance principle and diffusion
-approximations).
-
-\begin{definition}[Modulus of continuity]\label{def:modulus_continuity}
-Let $E:=C([0,\infty);\R^d)$. For $T>0$ and $\delta>0$ define
-\[
-w_T(\omega,\delta)
-:=\sup\bigl\{|\omega(t)-\omega(s)|:\ s,t\in[0,T],\ |t-s|<\delta\bigr\},
-\qquad \omega\in E.
-\]
-\end{definition}
 
 \begin{proposition}[Arzel\`a--Ascoli]\label{prop:AA_C0infty}
 Let $E:=C([0,\infty);\R^d)$ and let $A\subset E$.
@@ -874,6 +841,27 @@ intervals) if and only if the following two conditions hold:
 with $w_T$ as in Definition~\ref{def:modulus_continuity}.
 \end{enumerate}
 \end{proposition}
+
+The modulus of continuity defined below provides a convenient way to quantify equicontinuity: small values of $w_T(\omega,\delta)$ for small $\delta$
+mean that the path $\omega$ has no rapid oscillations on $[0,T]$.
+
+\begin{definition}[Modulus of continuity]\label{def:modulus_continuity}
+Let $E:=C([0,\infty);\R^d)$. For $T>0$ and $\delta>0$ define
+\[
+w_T(\omega,\delta)
+:=\sup\bigl\{|\omega(t)-\omega(s)|:\ s,t\in[0,T],\ |t-s|<\delta\bigr\},
+\qquad \omega\in E.
+\]
+\end{definition}
+
+\medskip
+The tightness criterion below can be viewed as a \emph{probabilistic Arzel\`a--Ascoli theorem}.
+Condition \emph{(i)} prevents trajectories from becoming arbitrarily large on compact time horizons,
+while condition \emph{(ii)} rules out wild oscillations by requiring a uniform (in $n$) control of
+the modulus of continuity in probability.  Together these two bounds ensure that, with high probability,
+the paths lie in a compact subset of $C([0,\infty);\R^d)$.
+This makes the criterion a practical tool for proving weak convergence of processes and is the standard
+starting point for functional limit theorems.
 
 \begin{theorem}[Tightness criterion based on Arzel\`a--Ascoli]\label{thm:tightness_C0infty}
 Let $E:=C([0,\infty);\R^d)$ and equip $E$ with the metric
@@ -907,11 +895,9 @@ where $w_T$ is the modulus of continuity from Definition~\ref{def:modulus_contin
 % Based on Section 23 (Theorem 55/56) in the attached notes.
 %------------------------------------------------
 
-\begin{proof}[Proof of Theorem~\ref{thm:tightness_C0infty}]
+\begin{proof}[Proof]
 We follow the Arzel\`a--Ascoli characterization of compact subsets of
 $(C([0,\infty);\R^d),d)$ and translate it into probabilistic language
-(the argument is exactly as in Theorem~56 of the notes). :contentReference[oaicite:0]{index=0}
-
 \medskip
 \noindent\textbf{Notation.}
 For $T>0$ write $\|\omega\|_{[0,T]}:=\sup_{t\in[0,T]}|\omega(t)|$ and
@@ -1008,7 +994,7 @@ K:=\bigcap_{T=1}^\infty A_T.
 By construction, $K$ is closed. Moreover, for each fixed $T$, the set $K$ is uniformly bounded
 on $[0,T]$ (by $\lambda_T$) and equicontinuous on $[0,T]$ (because
 $w_T(\omega,\delta_{T,k})\le 1/k$ for all $k$).
-Hence Arzel\`a--Ascoli implies that $K$ is compact in $(E,d)$. :contentReference[oaicite:1]{index=1}
+Hence Arzel\`a--Ascoli implies that $K$ is compact in $(E,d)$.
 
 Finally, using again the union bound,
 \[
@@ -1024,18 +1010,44 @@ for all $n\in\N$. This is exactly tightness.
 Combining Step~1 and Step~2 proves the theorem.
 \end{proof}
 
-%------------------------------------------------
-% Definitions used to apply the tightness criterion on C([0,∞);R^d)
-% and to prepare Kolmogorov--Chentsov.
-%------------------------------------------------
+\section{Tightness criteria in stochastic processes}
+The tightness criterion in Theorem~\ref{thm:tightness_C0infty} is a statement about probability
+measures on the path space $E=C([0,\infty);\R^d)$.  In applications, however, we rarely start from
+an abstract sequence $(\Pp_n)_{n\in\N}\subset\mathcal{P}(E)$.  Instead, we are typically given a
+sequence of \emph{stochastic processes} $(X^n)_{n\in\N}$ defined on (possibly different)
+probability spaces, and we are interested in the existence of subsequences converging in
+distribution to some limiting process $X$.
+
+The bridge between these two viewpoints is the \emph{law} (distribution) of a process:
+whenever $X^n$ has continuous sample paths, its law
+\[
+\Pp_n:=\mathcal{L}(X^n)\in\mathcal{P}\bigl(C([0,\infty);\R^d)\bigr)
+\]
+is a well-defined probability measure on the path space.  Thus, to prove convergence in
+distribution of processes, it suffices to show tightness of the associated laws $(\Pp_n)$ and then
+identify subsequential limits.  Theorem~\ref{thm:tightness_C0infty} reduces this tightness problem
+to two intuitive requirements: (i) the trajectories do not escape to infinity on finite time
+horizons, and (ii) the trajectories do not oscillate too fast (equicontinuity on compacts).
+
+At this point one encounters a practical issue: conditions \emph{(i)} and \emph{(ii)} in
+Theorem~\ref{thm:tightness_C0infty} are formulated in terms of the sup--norm and the modulus of
+continuity of the entire sample path $\omega$.  For a given process $X^n$, these are often hard to
+estimate directly.  In contrast, one can frequently obtain sharp bounds on the \emph{increments}
+$X^n_t-X^n_s$ via moment estimates (e.g.\ from martingale inequalities,
+Gaussian estimates, or independence).  The Kolmogorov criterion for tightness is precisely the
+tool that translates such increment bounds into the modulus-of-continuity estimate required by
+Arzel\`a--Ascoli: moment control of increments implies that, with high probability, paths are
+uniformly H\"older continuous on compacts, hence equicontinuous, and therefore tight.
+
+In summary, the change of scope from measure to processes is a
+natural viewpoint in probability theory.  It allows us to replace abstract compactness arguments
+on $\mathcal{P}(E)$ by concrete, checkable conditions on the processes themselves, ultimately
+leading to a practical tightness criterion (Kolmogorov--Chentsov/Kolmogorov tightness criterion)
+used throughout weak convergence of stochastic processes.
+
 
 In order to apply the tightness criterion of Theorem~\ref{thm:tightness_C0infty} to a sequence of
-processes $(X^n)_{n\in\N}$, one typically considers their \emph{laws}
-\[
-\Pp_n := \mathcal{L}(X^n)\in \mathcal{P}\bigl(C([0,\infty);\R^d)\bigr),
-\]
-and verifies tightness of $(\Pp_n)_{n\in\N}$ through estimates on the sample paths of $X^n$.
-For this, we recall two standard notions identifying processes which coincide ``up to null sets''.
+processes $(X^n)_{n\in\N}$, we recall two standard notions identifying processes which coincide ``up to null sets''.
 
 \begin{definition}[Modification]\label{def:modification}
 Let $(\Omega,\mathcal{A},\Pp)$ be a probability space and let
@@ -1074,8 +1086,7 @@ they are automatically indistinguishable.
 \end{remark}
 
 \medskip
-For tightness on $C([0,\infty);\R^d)$ and for the Kolmogorov--Chentsov theorem,
-a key role is played by H\"older regularity of sample paths.
+Furthermore, to apply the Kolmogorov criterion, we need to introduce (remember) H\"older continuity.
 
 \begin{definition}[Local H\"older continuity]\label{def:holder_local}
 Let $\alpha\in(0,1]$ and $T>0$.
@@ -1111,33 +1122,355 @@ mechanism behind the tightness criterion of Theorem~\ref{thm:tightness_C0infty}.
 \end{remark}
 
 \medskip
-The Kolmogorov--Chentsov theorem will provide sufficient moment conditions on the increments
+The criterion is indeed split in two theorems. The first -- Kolmogorov--Chentsov theorem -- will provide sufficient moment conditions on the increments
 of a stochastic process guaranteeing the existence of a \emph{continuous} (in fact H\"older continuous)
 modification. This is the main tool for producing probability measures on
 $C([0,\infty);\R^d)$ starting from a process given only by its finite-dimensional distributions.
 
-\begin{theorem}[Kolmogorov-Chentsov]
-Let $X=(X_t)_{t\ge 0}$ be a real-valued process. Assume that for every $T>0$ there exist constants
-$\alpha>0$, $\beta>0$, and $C_T<\infty$ such that for all $s,t\in[0,T]$,
-\[
-\mathbb{E}\bigl[|X_t-X_s|^\alpha\bigr]\le C_T\,|t-s|^{1+\beta}.
-\]
-Then $X$ admits a modification $\widetilde{X}$ with locally $\gamma$-Holder continuous sample paths
-for every $\gamma\in(0,\beta/\alpha)$.
+\begin{theorem}[Kolmogorov--Chentsov]\label{thm:kolmogorov_chentsov}
+Let $(\Omega,\mathcal{A},\Pp)$ be a probability space and let
+$X=(X_t)_{t\in[0,T]}$ be an $\R^d$-valued stochastic process.
+Assume that there exist constants $p>0$, $\beta>0$ and $C>0$ such that
+\begin{equation}\label{eq:KC_assumption}
+\E\bigl[|X_t-X_s|^p\bigr]\le C\,|t-s|^{1+\beta}
+\qquad\forall\, s,t\in[0,T].
+\end{equation}
+Then there exists a modification $\widetilde X$ of $X$ such that
+for every $\alpha\in\bigl(0,\beta/p\bigr)$ there exists an a.s.\ finite random variable
+$K_\alpha$ with
+\begin{equation}\label{eq:KC_holder}
+|\widetilde X_t(\omega)-\widetilde X_s(\omega)|
+\le K_\alpha(\omega)\,|t-s|^\alpha
+\qquad \forall\, s,t\in[0,T],\ \text{for a.e.\ }\omega.
+\end{equation}
+In particular, $\widetilde X$ has (a.s.) continuous sample paths on $[0,T]$.
+
+Moreover, repeating the argument on $[0,m]$ for $m\in\N$ shows that one can obtain a modification
+on $[0,\infty)$ whose paths are locally $\alpha$-H\"older continuous for every $\alpha<\beta/p$.
 \end{theorem}
 
-\begin{theorem}[Kolmogorov tightness criterion]
-Let $(X^n)_{n\in\mathbb{N}}$ be a sequence of real-valued processes with (a.s.) continuous sample paths.
-Assume:
-\begin{enumerate}
-\item the family of initial laws $\{\mathcal{L}(X^n_0)\}$ is tight in $\mathbb{R}$;
-\item there exist $\alpha>0$, $\beta>0$, and for each $T>0$ a constant $C_T<\infty$ such that for all $n$ and $s,t\in[0,T]$,
+\begin{proof}[Proof]
+The proof is a quantitative version of the idea
+\emph{``moment control of increments $\Rightarrow$ small increments with high probability
+$\Rightarrow$ only finitely many bad oscillations $\Rightarrow$ H\"older continuity.''}
+
+\medskip
+\noindent\LabelProof{Step 1: Reduction to the scalar case and choice of exponent}
+Since $|x| \le \sum_{j=1}^d |x_j|$ and $(a_1+\cdots+a_d)^p \le d^{p-1}(a_1^p+\cdots+a_d^p)$ for $p\ge 1$
+(one can treat $p\in(0,1)$ similarly),
+it suffices to prove the statement for real-valued processes and the same moment bound
+(up to changing the constant $C$).
+Fix once and for all
 \[
-\mathbb{E}\bigl[|X^n_t-X^n_s|^\alpha\bigr]\le C_T\,|t-s|^{1+\beta}.
+\alpha\in\bigl(0,\beta/p\bigr),
+\qquad \text{and choose }\ \theta>0\ \text{such that }\ \alpha=\frac{\beta-\theta}{p}.
 \]
+Equivalently, $p\alpha=\beta-\theta$ with $\theta\in(0,\beta)$.
+
+\medskip
+\noindent\LabelProof{Step 2: Dyadic increments and a key probability estimate}
+For each level $m\in\N$ consider the dyadic grid
+\[
+D_m:=\Bigl\{\frac{kT}{2^m}: k=0,1,\dots,2^m\Bigr\}.
+\]
+Define the maximal dyadic increment on this grid:
+\[
+\Delta_m := \max_{0\le k\le 2^m-1}\Bigl|X_{\frac{(k+1)T}{2^m}}-X_{\frac{kT}{2^m}}\Bigr|.
+\]
+We will show that $\Delta_m$ decays roughly like $2^{-m\alpha}$.
+
+Set $\lambda_m := 2^{-m\alpha}$.
+Using Markov's inequality and the union bound,
+\begin{align*}
+\Pp\bigl(\Delta_m > \lambda_m\bigr)
+&\le \sum_{k=0}^{2^m-1}
+\Pp\Bigl(\Bigl|X_{\frac{(k+1)T}{2^m}}-X_{\frac{kT}{2^m}}\Bigr|>\lambda_m\Bigr)\\
+&\le \sum_{k=0}^{2^m-1}
+\frac{\E\Bigl[\bigl|X_{\frac{(k+1)T}{2^m}}-X_{\frac{kT}{2^m}}\bigr|^p\Bigr]}{\lambda_m^p}.
+\end{align*}
+By the increment moment bound \eqref{eq:KC_assumption},
+\[
+\E\Bigl[\Bigl|X_{\frac{(k+1)T}{2^m}}-X_{\frac{kT}{2^m}}\Bigr|^p\Bigr]
+\le C\Bigl(\frac{T}{2^m}\Bigr)^{1+\beta}.
+\]
+Hence
+\begin{align*}
+\Pp(\Delta_m > \lambda_m)
+&\le 2^m\,
+\frac{C\,(T/2^m)^{1+\beta}}{(2^{-m\alpha})^p}
+= C\,T^{1+\beta}\,2^m\,2^{-m(1+\beta)}\,2^{mp\alpha}\\
+&= C\,T^{1+\beta}\,2^{-m\bigl(\beta-p\alpha\bigr)}
+= C\,T^{1+\beta}\,2^{-m\theta}.
+\end{align*}
+Since $\theta>0$, the series $\sum_{m=1}^\infty 2^{-m\theta}$ converges. Therefore,
+\begin{equation}\label{eq:BC_summable}
+\sum_{m=1}^\infty \Pp(\Delta_m > 2^{-m\alpha}) < \infty.
+\end{equation}
+
+\medskip
+\noindent\LabelProof{Step 3: Borel--Cantelli $\Rightarrow$ dyadic increments are eventually small}
+By \eqref{eq:BC_summable} and the Borel--Cantelli lemma,
+\[
+\Pp\bigl(\Delta_m > 2^{-m\alpha}\ \text{i.o.}\bigr)=0.
+\]
+Thus there exists a full-measure event $\Omega_0$ such that for every $\omega\in\Omega_0$
+there exists $m_0(\omega)$ with
+\begin{equation}\label{eq:dyadic_control}
+\Delta_m(\omega)\le 2^{-m\alpha}\qquad\forall m\ge m_0(\omega).
+\end{equation}
+
+Intuition: for large $m$ the mesh size $T/2^m$ is tiny, and the moment condition forces
+\emph{most} increments to be tiny; Borel--Cantelli tells us that eventually
+\emph{all} increments on the dyadic grid are tiny.
+
+\medskip
+\noindent\LabelProof{Step 4: H\"older control on dyadic rationals}
+Fix $\omega\in\Omega_0$.
+Let $s<t$ be points in the union of dyadic grids
+\[
+D:=\bigcup_{m=1}^\infty D_m,
+\]
+and choose $m$ so large that $s,t\in D_m$.
+Write $s=\frac{iT}{2^m}$ and $t=\frac{jT}{2^m}$ with $i<j$.
+Then by telescoping,
+\[
+|X_t(\omega)-X_s(\omega)|
+\le \sum_{\ell=i}^{j-1}\Bigl|X_{\frac{(\ell+1)T}{2^m}}(\omega)-X_{\frac{\ell T}{2^m}}(\omega)\Bigr|
+\le (j-i)\,\Delta_m(\omega).
+\]
+Using \eqref{eq:dyadic_control} (for large enough $m$),
+\[
+|X_t(\omega)-X_s(\omega)|
+\le (j-i)\,2^{-m\alpha}
+= \Bigl(\frac{(j-i)T}{2^m}\Bigr)^\alpha \,T^{1-\alpha}\,(j-i)^{1-\alpha}.
+\]
+Since $(j-i)T/2^m = t-s$ and $(j-i)^{1-\alpha}\le \bigl(2^m(t-s)/T\bigr)^{1-\alpha}$, we obtain
+(after a short rearrangement) the bound
+\[
+|X_t(\omega)-X_s(\omega)|
+\le C_\alpha(\omega)\,|t-s|^\alpha
+\qquad\forall\, s,t\in D,
+\]
+for some finite constant $C_\alpha(\omega)$ depending on $\omega$ and $\alpha$.
+(One convenient choice is
+$C_\alpha(\omega):=\sup_{m\ge m_0(\omega)} 2^{m\alpha}\Delta_m(\omega)$, which is finite by
+\eqref{eq:dyadic_control}.)
+
+\medskip
+\noindent\LabelProof{Step 5: Construction of a continuous modification}
+For $\omega\in\Omega_0$, the map $t\mapsto X_t(\omega)$ is now H\"older continuous on the dense set $D$.
+Hence it has a unique continuous extension to $[0,T]$, which we denote by
+\[
+\widetilde X_t(\omega):=\lim_{\substack{r\to t\\ r\in D}} X_r(\omega),
+\qquad t\in[0,T],\ \omega\in\Omega_0.
+\]
+On the null set $\Omega\setminus\Omega_0$ define $\widetilde X(\omega)$ arbitrarily (e.g.\ $0$).
+
+Then $\widetilde X(\omega)$ is continuous for every $\omega\in\Omega_0$ by construction,
+and the H\"older estimate \eqref{eq:KC_holder} extends from $D$ to all $s,t\in[0,T]$
+by density and continuity.
+
+\medskip
+\noindent\LabelProof{Step 6: $\widetilde X$ is a modification of $X$}
+Fix any $t\in[0,T]$.
+Choose a sequence $(r_n)_{n\in\N}\subset D$ with $r_n\to t$.
+By definition of $\widetilde X_t$ and by \eqref{eq:KC_assumption},
+\[
+\E\bigl[|X_{r_n}-X_t|^p\bigr]\le C|r_n-t|^{1+\beta}\to 0,
+\]
+so $X_{r_n}\to X_t$ in $L^p$, hence (along a subsequence) almost surely.
+But on $\Omega_0$ we also have $X_{r_n}\to \widetilde X_t$ by definition.
+Therefore $X_t=\widetilde X_t$ almost surely, i.e.\ $\widetilde X$ is a modification of $X$.
+
+\medskip
+This proves the theorem on $[0,T]$. For $[0,\infty)$ one applies the argument on each $[0,m]$,
+$m\in\N$, and intersects the full-measure events to obtain local H\"older continuity.
+\end{proof}
+
+
+The second theorem -- Kolmogorov tightness criterion -- uses the Kolmogorov--Chentsov theorem to give
+sufficient conditions for tightness of a sequence of processes with continuous sample paths.
+
+%------------------------------------------------
+% Kolmogorov criterion for tightness on C([0,T];R^d)
+% (stepwise + intuitive proof, in the style used above)
+%------------------------------------------------
+
+\begin{theorem}[Kolmogorov criterion for tightness]\label{thm:kolmogorov_tightness}
+Let $T>0$ and let $(X^n)_{n\in\N}$ be a sequence of $\R^d$-valued stochastic processes on $[0,T]$
+(with measurable sample paths).
+Assume that:
+\begin{enumerate}[label=\textnormal{(\roman*)}, leftmargin=3.2em]
+\item \emph{Tight initial laws:} the family $\{\mathcal{L}(X_0^n)\}_{n\in\N}$ is tight in $\R^d$.
+\item \emph{Uniform increment moment bound:} there exist constants $p>0$, $\beta>0$ and $C>0$ such that
+\begin{equation}\label{eq:kolmo_moment_bound}
+\E\bigl[|X_t^n-X_s^n|^p\bigr]\le C\,|t-s|^{1+\beta}
+\qquad\forall\, s,t\in[0,T],\ \forall\,n\in\N.
+\end{equation}
 \end{enumerate}
-Then the laws $\{\mathcal{L}(X^n)\}$ form a tight family in $\mathcal{P}(C([0,\infty)))$.
+Then the sequence of laws $\Pp_n:=\mathcal{L}(X^n)$ is tight in $\mathcal{P}(C([0,T];\R^d))$.
+
+In particular, if each $X^n$ has a continuous modification (e.g.\ by Kolmogorov--Chentsov),
+then we may assume $X^n\in C([0,T];\R^d)$ and tightness holds in the path space.
 \end{theorem}
+
+\begin{proof}[Proof (following the Arzel\`a--Ascoli tightness criterion)]
+We verify the two conditions of Theorem~\ref{thm:tightness_C0infty} on the finite horizon $[0,T]$,
+namely:
+\[
+\text{(A) tightness of }\sup_{t\in[0,T]}|X_t^n|
+\qquad\text{and}\qquad
+\text{(B) stochastic equicontinuity via }w_T(X^n,\delta).
+\]
+Throughout the proof, constants may depend on $T,p,\beta,C$ but never on $n$.
+
+\medskip
+\noindent\LabelProof{Step 1: A dyadic increment estimate (uniform in $n$)}
+Fix $\alpha\in(0,\beta/p)$ and set $\theta:=\beta-p\alpha>0$.
+For $m\in\N$ consider the dyadic grid $t_k:=kT2^{-m}$, $k=0,\dots,2^m$, and define
+\[
+\Delta_m^n:=\max_{0\le k\le 2^m-1}\bigl|X^n_{t_{k+1}}-X^n_{t_k}\bigr|.
+\]
+Then for every $\lambda>0$ (by union bound and Markov's inequality),
+\begin{align*}
+\Pp\bigl(\Delta_m^n>\lambda\bigr)
+&\le \sum_{k=0}^{2^m-1} \Pp\bigl(|X^n_{t_{k+1}}-X^n_{t_k}|>\lambda\bigr)\\
+&\le \sum_{k=0}^{2^m-1} \frac{\E\bigl[|X^n_{t_{k+1}}-X^n_{t_k}|^p\bigr]}{\lambda^p}
+\le 2^m\frac{C (T2^{-m})^{1+\beta}}{\lambda^p}.
+\end{align*}
+Choosing $\lambda=2^{-m\alpha}$ yields
+\begin{equation}\label{eq:dyadic_tail_bound}
+\sup_{n\in\N}\Pp\bigl(\Delta_m^n>2^{-m\alpha}\bigr)
+\le C\,T^{1+\beta}\,2^{-m(\beta-p\alpha)}
+= C\,T^{1+\beta}\,2^{-m\theta}.
+\end{equation}
+This is the basic estimate: \emph{large oscillations on a very fine grid are uniformly unlikely.}
+
+\medskip
+\noindent\LabelProof{Step 2: Stochastic equicontinuity (condition (B))}
+Fix $\varepsilon>0$.
+Let $m\in\N$ and choose $\delta_m:=T2^{-m}$.
+If $|t-s|<\delta_m$, then $s$ and $t$ lie in at most two neighbouring dyadic intervals of level $m$,
+hence one has the deterministic bound
+\begin{equation}\label{eq:modulus_vs_dyadic}
+w_T(X^n,\delta_m)\le 2\,\Delta_m^n.
+\end{equation}
+Therefore, using \eqref{eq:dyadic_tail_bound},
+\[
+\sup_{n\in\N}\Pp\bigl(w_T(X^n,\delta_m)\ge\varepsilon\bigr)
+\le \sup_{n\in\N}\Pp\Bigl(\Delta_m^n\ge \frac{\varepsilon}{2}\Bigr).
+\]
+Now pick $m$ so large that $2^{-m\alpha}\le \varepsilon/2$; then
+\[
+\Pp\Bigl(\Delta_m^n\ge \frac{\varepsilon}{2}\Bigr)
+\le \Pp\bigl(\Delta_m^n\ge 2^{-m\alpha}\bigr).
+\]
+Hence by \eqref{eq:dyadic_tail_bound},
+\[
+\sup_{n\in\N}\Pp\bigl(w_T(X^n,\delta_m)\ge\varepsilon\bigr)
+\le C\,T^{1+\beta}\,2^{-m\theta}.
+\]
+Letting $m\to\infty$ (equivalently $\delta_m\downarrow 0$) gives
+\[
+\lim_{\delta\downarrow 0}\ \sup_{n\in\N}\Pp\bigl(w_T(X^n,\delta)\ge\varepsilon\bigr)=0,
+\]
+which is exactly stochastic equicontinuity.
+
+\medskip
+\noindent\LabelProof{Step 3: Tightness of the sup--norm (condition (A))}
+Fix $\eta>0$. We will show that there exists $M>0$ such that
+\[
+\sup_{n\in\N}\Pp\Bigl(\sup_{t\in[0,T]}|X_t^n|>M\Bigr)\le \eta.
+\]
+
+\smallskip
+\emph{Step 3a: Control the initial value.}
+By tightness of $\{\mathcal{L}(X_0^n)\}$, choose $R>0$ such that
+\begin{equation}\label{eq:init_tight}
+\sup_{n\in\N}\Pp(|X_0^n|>R)\le \eta/2.
+\end{equation}
+
+\smallskip
+\emph{Step 3b: Control the increments on a coarse grid.}
+Pick $m\in\N$ large enough so that
+\[
+\sup_{n\in\N}\Pp\bigl(w_T(X^n,\delta_m)>1\bigr)\le \eta/4,
+\qquad \delta_m:=T2^{-m},
+\]
+which is possible by Step~2 with $\varepsilon=1$.
+Let $t_k:=k\delta_m$, $k=0,\dots,2^m$. On the event $\{w_T(X^n,\delta_m)\le 1\}$ we have
+\[
+\sup_{t\in[0,T]}|X_t^n|
+\le \max_{0\le k\le 2^m}|X_{t_k}^n| + 1.
+\]
+Thus it remains to control the maximum over the \emph{finite} set of grid values.
+
+Using the increment bound \eqref{eq:kolmo_moment_bound} and Markov's inequality,
+for any $a>0$ and each $k$,
+\[
+\Pp\bigl(|X_{t_k}^n-X_0^n|>a\bigr)
+\le \frac{\E\bigl[|X_{t_k}^n-X_0^n|^p\bigr]}{a^p}
+\le \frac{C\,t_k^{1+\beta}}{a^p}
+\le \frac{C\,T^{1+\beta}}{a^p}.
+\]
+By union bound over $k=0,\dots,2^m$ we obtain
+\[
+\Pp\Bigl(\max_{0\le k\le 2^m}|X_{t_k}^n-X_0^n|>a\Bigr)
+\le 2^m\,\frac{C\,T^{1+\beta}}{a^p}.
+\]
+Choose $a=a(\eta,m)$ so large that
+\begin{equation}\label{eq:grid_tight}
+2^m\,\frac{C\,T^{1+\beta}}{a^p}\le \eta/4.
+\end{equation}
+
+\smallskip
+\emph{Step 3c: Combine the estimates.}
+Set $M:=R+a+1$. Then
+\begin{align*}
+\Pp\Bigl(\sup_{t\in[0,T]}|X_t^n|>M\Bigr)
+&\le \Pp(|X_0^n|>R)
+ +\Pp\Bigl(\max_{k}|X_{t_k}^n-X_0^n|>a\Bigr)
+ +\Pp\bigl(w_T(X^n,\delta_m)>1\bigr)\\
+&\le \eta/2+\eta/4+\eta/4=\eta,
+\end{align*}
+uniformly in $n$, by \eqref{eq:init_tight}, \eqref{eq:grid_tight} and the choice of $m$.
+This proves (A).
+
+\medskip
+\noindent\LabelProof{Step 4: Conclusion (tightness)}
+Steps~2 and 3 verify the two conditions of the Arzel\`a--Ascoli tightness criterion
+(Theorem~\ref{thm:tightness_C0infty} restricted to $[0,T]$).
+Hence the sequence of laws $\Pp_n=\mathcal{L}(X^n)$ is tight in
+$\mathcal{P}(C([0,T];\R^d))$.
+\end{proof}
+
+\section{Conclusion on weak convergence}
+
+Weak convergence provides a robust and flexible notion of convergence for probability measures: instead of requiring
+$\mu_n(A)\to\mu(A)$ for all measurable sets (too rigid in practice), it asks that expectations of \emph{bounded continuous observables}
+stabilize, i.e.\ $\int f\,d\mu_n\to\int f\,d\mu$ for all $f\in C_b(E)$.
+This viewpoint is both conceptually natural (``distributions are determined by what they predict on observables'')
+and technically powerful, because $C_b(E)$ is separating: if two measures agree on all bounded continuous tests,
+then they are the same.
+
+A key message of this chapter is that weak convergence can be recognized in several equivalent ways.
+The Portmanteau theorem gives a dictionary between the test-function formulation and setwise criteria:
+weak convergence is equivalent to one-sided bounds on probabilities of closed/open sets and to convergence on
+$\mu$-continuity sets (where boundaries carry no mass).
+The Prokhorov metric then turns this topology into a geometric, quantitative notion of distance between measures,
+so that one can speak of Cauchy sequences and stability of limits in a metric framework.
+
+Finally, on non-compact spaces, weak convergence requires a mechanism preventing ``escape of mass to infinity''.
+Tightness is exactly this mechanism, and Prokhorov’s theorem identifies it as the precise compactness criterion:
+on Polish spaces, tightness $\Longleftrightarrow$ relative weak compactness.
+In practice, this means that to prove convergence in law one often proceeds in two steps:
+(i) prove tightness (compactness), and (ii) identify the limit by checking convergence on a convergence-determining class.
+
+Weak convergence is therefore indispensable across analysis and probability:
+it is the language behind convergence in distribution (CLT and functional limit theorems),
+markov chain approximations in stochastic control, non-parametric stochastics for continuous processes and many other applications.
+In all these settings, weak convergence captures the correct ``macroscopic'' notion of convergence:
+what matters is that all bounded continuous observables have asymptotically the same expectation.
 
 
 
