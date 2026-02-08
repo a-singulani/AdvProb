@@ -1,0 +1,694 @@
+\chapter{Ergodic theorems}
+
+Recall the classical law of large numbers: if \(X_0,X_1,\dots\) are i.i.d.\ integrable random variables, then
+\[
+\frac1n\sum_{k=0}^{n-1}X_k \xrightarrow[n\to\infty]{} \E[X_0]
+\quad \text{a.s.}
+\]
+The key assumption here is \emph{independence}. In many situations, however, the sequence \((X_k)\) is not independent:
+for instance time series, dynamical systems, or Markov chains. Still, one often expects that \emph{time averages}
+\[
+\frac1n\sum_{k=0}^{n-1}X_k(\omega)
+\]
+converge to a deterministic quantity that describes the \emph{typical long-time behavior} of the system.
+Ergodic theory provides conditions under which such a replacement is valid: we may ``skip independence'' but keep
+a suitable invariance (stationarity) and an irreducibility-type property (ergodicity).
+
+\medskip
+
+\noindent
+\textbf{Guiding principle.}
+Ergodic theorems identify situations in which
+\[
+\text{time average} \ \approx\ \text{space average}.
+\]
+The time average is computed along a single trajectory \(\omega \mapsto (X_k(\omega))\),
+whereas the space average is an expectation with respect to the underlying probability measure \(\Pp\).
+
+%========================================================
+\section{Setting and notation}
+Let
+\[
+E=\{1,\dots,\ell\},
+\qquad (X_t)_{t\in\N} \ \text{a Markov chain on } E.
+\]
+We write the law (distribution) of \(X_t\) as the row vector
+\[
+\alpha_t = (\alpha_t^1,\dots,\alpha_t^\ell),
+\qquad \alpha_t^i := \Pp(X_t=i).
+\]
+Let \(P=(p_{ij})_{i,j\in E}\) be the transition matrix, i.e.
+\[
+p_{ij} := \Pp(X_{t+1}=j \mid X_t=i).
+\]
+Then the distribution evolves as
+\[
+\alpha_{t+1} = \alpha_t P,
+\qquad\text{hence}\qquad
+\alpha_t = \alpha_0 P^t.
+\]
+
+\paragraph{Stationary distributions.}
+In ergodic theory one is interested in \emph{long--time averages} along trajectories and their relation to
+\emph{space averages} with respect to an invariant law. For a Markov chain with transition matrix $P$,
+the distribution at time $t$ evolves by
+\[
+\alpha_{t+1}=\alpha_t P.
+\]
+Hence we need a notion of a probability law that is \emph{preserved by the dynamics} (i.e.\ invariant under one step of the chain):
+a probability vector $\pi$ such that
+\[
+\pi=\pi P.
+\]
+If the chain starts in such a law, $\alpha_0=\pi$, then $\alpha_t=\pi$ for every $t\ge 0$, so the process is
+\emph{stationary in time} and time shifts do not change its distribution. This is the natural probabilistic analogue
+of an \emph{invariant measure} in dynamical systems.
+
+Stationary distributions are crucial because they provide the canonical candidate for the ``equilibrium'' law
+governing asymptotic behavior: under suitable irreducibility/aperiodicity assumptions, one expects
+\[
+\alpha_t \;\to \pi \quad (t\to\infty),
+\]
+and, more importantly for ergodic theorems, they are the measures with respect to which time averages
+\[
+\frac1n\sum_{t=0}^{n-1} f(X_t)
+\]
+can be compared to the corresponding space average $\sum_{i=1}^\ell f(i)\,\pi^i$.
+Thus the stationary distributions singles out exactly those laws for which the dynamics does not ``drift'' in distribution,
+making them the correct reference measures for formulating and proving ergodic results.
+
+
+\begin{definition}[Stationary distributions]
+
+A probability vector \(\pi = (\pi^1,\dots,\pi^\ell)\) is called a \emph{stationary distribution} if
+\[
+\pi = \pi P
+\qquad\textrm{or equivalently}\qquad
+\pi^T = P^T \pi^T.
+\]
+In particular, if \(\alpha_0=\pi\), then \(\alpha_t=\pi\) for all \(t\), i.e.\ the chain is stationary in time.
+
+\end{definition}
+
+\paragraph{Ergodic Markov chains.}
+A central goal of ergodic theorems is to formalize the idea that a system \emph{settles into equilibrium} and
+that long--time observations become independent of the initial condition. For a Markov chain, the most direct
+way to express ``equilibrium in the long run'' is in terms of the $t$--step transition probabilities
+\[
+p_{ij}^{(t)}=\Pp(X_t=j\mid X_0=i)=(P^t)_{ij}.
+\]
+If, as $t\to\infty$, these probabilities converge to a limit $\pi_j$ that is \emph{independent of the starting state $i$},
+then the chain has \emph{forgotten its initial state}: regardless of where we start, the law of $X_t$ converges to the
+same distribution $\pi$. This is precisely the type of asymptotic stability one needs in order to speak about a
+\emph{unique equilibrium law} and to justify replacing time averages along a single trajectory by expectations under $\pi$.
+
+\begin{definition}[Ergodic Markov Chains]
+
+For \(t\ge 0\), denote the \(t\)-step transition probabilities by
+\[
+p_{ij}^{(t)} := (P^t)_{ij} = \Pp(X_t=j \mid X_0=i).
+\]
+The chain is called \emph{ergodic} (in the sense used in the notes) if the limit
+\[
+\pi_j := \lim_{t\to\infty} p_{ij}^{(t)}
+\]
+exists, is \emph{independent of \(i\)}, and satisfies
+\[
+\pi_j>0,
+\qquad
+\sum_{j\in E}\pi_j = 1.
+\]
+In this case, \(\pi\) is necessarily the stationary distribution and the chain forgets its initial state in the long run.
+    
+\end{definition}
+
+In short, ergodicity packages the two key asymptotic features---\emph{convergence to equilibrium} and \emph{loss of memory of the initial state}---into a single clean condition.
+
+\begin{remark}
+    
+The additional requirements $\pi_j>0$ and $\sum_{j}\pi_j=1$ ensure that the limit is a genuine probability distribution
+with full support (no state is ``asymptotically ignored''), matching the intuitive picture that in equilibrium the chain
+keeps visiting every state. Moreover, the definition is tailored so that, once the limit exists,
+$\pi$ must be stationary: since each row of $P^t$ converges to $\pi$, one obtains $\pi=\pi P$, and hence $\pi$ is the
+invariant (equilibrium) distribution. 
+
+\end{remark}
+
+%========================================================
+\section{Stationary stochastic processes}
+
+For Markov chains we singled out a \emph{stationary distribution} $\pi$ as an equilibrium law satisfying
+$\pi=\pi P$, so that if $X_0\sim\pi$ then the one--time marginal distribution does not change with $t$.
+We then called a chain \emph{ergodic} if, regardless of the initial state, the $t$--step transition
+probabilities converge to a limit $\pi$ independent of the start, i.e.\ the chain \emph{forgets its past} and
+approaches equilibrium. Both notions are, however, tied to a particular model class (Markov chains) and are phrased
+mainly in terms of \emph{marginals} such as $\mathcal{L}(X_t)$. 
+
+In ergodic theory one wants a concept that applies to
+\emph{arbitrary} stochastic processes and captures invariance not only of single-time laws but of the \emph{entire}
+finite-dimensional distributions. This leads to the definition of a stationary process: the joint law of
+$(X_t)_{t\in I}$ is invariant under time shifts, meaning that for every shift $s$ the shifted process
+$(X_{t+s})_{t\in I}$ has the same distribution as $(X_t)_{t\in I}$. In particular, all marginals are time-homogeneous,
+and the process has no distinguished ``origin of time''---exactly the setting in which one can hope to relate
+time averages along trajectories to expectations under the common (invariant) law.
+
+
+
+\begin{definition}
+
+Let \(I\) be an index set (typically \(I=\N\) or \(I=\Z\)). A stochastic process
+\[
+X=(X_t)_{t\in I} \quad \text{on } (\Omega,\A,\Pp)
+\]
+is called \emph{stationary} if it is invariant under time shifts:
+\[
+(X_{t+s})_{t\in I} \ \stackrel{d}{=} \ (X_t)_{t\in I}
+\qquad \forall s\in I.
+\]
+
+Equivalently, for any \(t_1,\dots,t_m\in I\),
+\[
+(X_{t_1},\dots,X_{t_m}) \ \stackrel{d}{=} \ (X_{t_1+s},\dots,X_{t_m+s})
+\qquad \forall s\in I.
+\]
+    
+\end{definition}
+
+\begin{remark}
+To use the shift operator as an \emph{invertible} time-translation (a standard setup in ergodic theory), we can extend a stationary one-sided process on $\N$ to a two-sided stationary process on $\Z$.
+
+\begin{lemma}[Lemma (two-sided extension)]
+Every stationary process \(X=(X_t)_{t\in\N}\) can be extended to a stationary process
+\[
+\bar X=(\bar X_t)_{t\in\Z}.
+\]
+(Conceptually: stationarity allows one to consistently define the joint laws backwards in time.)
+
+\end{lemma}
+    
+\end{remark}
+
+
+
+%========================================================
+\section{Measure-preserving dynamical systems}
+
+Up to now, ``stationarity'' meant that the probabilistic description of a process does not change under a time shift.
+The next step in ergodic theory is to turn this symmetry into a \emph{dynamical system} by introducing a measurable
+map $T:\Omega\to\Omega$ that represents ``one step forward in time'' (for a process, $T$ is typically the left shift on
+the path space). Once we have $T$, we can ask a basic structural question:
+
+\medskip
+\emph{Which properties of the system can be detected from infinitely long observation along the orbit
+$\omega, T\omega, T^2\omega,\dots$?}
+
+\medskip
+The answer is encoded by the \emph{invariant $\sigma$-algebra} $\mathcal{I}$: an event $A$ is $T$-invariant if it is
+unaffected by moving one step forward in time, so membership in $A$ depends only on the ``tail'' behavior of the orbit.
+These events represent the \emph{persistent information} that the dynamics cannot wash out. Measure-preservation is the
+minimal compatibility condition ensuring that shifting time does not change probabilities, i.e.\ $T$ does not distort
+the underlying law.
+
+Finally, \emph{ergodicity} expresses the idea that the system has \emph{no nontrivial persistent information}:
+the only invariant events have probability $0$ or $1$. Equivalently, the only random variables that remain unchanged
+under the time shift (i.e.\ $X=X\circ T$ a.s.) are constants. This viewpoint is the bridge to ergodic theorems:
+it formalizes ``the system cannot decompose into different invariant regimes'', and it prepares the key conclusion that
+long-time averages cannot depend on hidden invariant features of the initial state.
+
+\paragraph{Invariant events and the invariant \(\sigma\)-algebra.}
+Let \((\Omega,\A,\Pp)\) be a probability space and \(T:\Omega\to\Omega\) be measurable. The \emph{invariant $\sigma$-algebra} of $T$ is represents the collection of all events that are unchanged under the dynamics.
+
+\begin{definition}[Invariant and quasi-invariant sets]
+A set \(A\in\A\) is called
+\begin{itemize}
+\item \emph{\(T\)-invariant} if \(T^{-1}(A)=A\),
+\item \emph{quasi-invariant} if \(\mathbf{1}_{T^{-1}(A)}=\mathbf{1}_A\) \(\Pp\)-a.s.
+\end{itemize}
+The collection of invariant sets forms a \(\sigma\)-algebra:
+\[
+\I := \{A\in\A \,:\, T^{-1}(A)=A\},
+\]
+called the \emph{invariant \(\sigma\)-algebra}.
+\end{definition}
+
+\paragraph{Measure-preservation.} We are interesting in systems $T$ that advances in time but does not distort probabilities, so the dynamics is compatible with the reference law $\Pp$. 
+This is exactly the condition that guarantees that time shifts leave distributions (and hence expectations) unchanged, making long-time averages comparable to $\Pp$-averages. 
+It is therefore the natural framework in which ergodic statements (``time averages = space averages'') can even be formulated.
+
+\begin{definition}[Measure-preserving system]
+The map \(T\) is called \emph{measure-preserving} if
+\[
+\Pp(T^{-1}(A)) = \Pp(A)
+\qquad \forall A\in\A.
+\]
+In this case, \((\Omega,\A,\Pp,T)\) is called a \emph{measure-preserving dynamical system}.
+\end{definition}
+
+\paragraph{Ergodicity.}
+The invariant $\sigma$-algebra $\mathcal I$ collects exactly those events whose occurrence is unchanged by the time-shift,
+so they represent the ``information'' about the system that persists forever along an orbit.
+Requiring $\mathcal I$ to be $\Pp$-trivial means there are no nontrivial invariant regimes of positive probability:
+every invariant event either happens almost surely or almost never.
+Equivalently, the only random variables that are unchanged by the dynamics ($X=X\circ T$ a.s.) are constants, which captures
+the idea that long-time behavior cannot depend on hidden time-invariant features of the initial state.
+
+
+\begin{definition}[Ergodicity]
+A measure-preserving system \((\Omega,\A,\Pp,T)\) is called \emph{ergodic} if the invariant \(\sigma\)-algebra \(\I\)
+is \(\Pp\)-trivial, i.e.
+\[
+A\in\I \ \Longrightarrow\ \Pp(A)\in\{0,1\}.
+\]
+\end{definition}
+
+If the system is ergodic, the invariant information is trivial, hence there exist observable which are almost surely constant. This is the key mechanism behind ``time averages cannot depend on the initial condition''. The next lemma identifies $\mathcal I$-measurable random variables as exactly those observables that are unchanged by the dynamics, i.e.\ $X(\omega)=X(T\omega)$ almost surely, so they represent the ``time-invariant information'' of the system. 
+
+
+\begin{lemma}[Invariant random variables]\label{lem:invariant_rv}
+Let \((\Omega,\A,\Pp,T)\) be measure-preserving and \(X:\Omega\to\R\) a random variable.
+\begin{enumerate}[label=(\alph*)]
+\item \(X\) is \(\I\)-measurable \(\iff\) \(X = X\circ T\) \(\Pp\)-a.s.
+\item If the system is ergodic, then any \(\I\)-measurable \(X\) is \(\Pp\)-a.s.\ constant.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) ``\(\Rightarrow\)'' follows since \(\I\)-measurability means invariance of all level sets, which is equivalent to
+\(X(\omega)=X(T\omega)\) a.s.  ``\(\Leftarrow\)'' is immediate from the definition of \(\I\).
+(b) If \(X\) is \(\I\)-measurable, then \(\{X\le c\}\in\I\) for every \(c\in\R\). Ergodicity forces
+\(\Pp(X\le c)\in\{0,1\}\), which implies that \(X\) is a.s.\ constant.
+\end{proof}
+
+%========================================================
+\section{The canonical shift system of a process}
+
+Stationarity is a statement about \emph{time shifts},i.e., looking at a process from time $0$ or from time $s$ should make no
+difference in distribution. To exploit this symmetry systematically, it is convenient to encode \emph{one whole
+realization} of the process as a single point $\omega$ in a new space, the \emph{path space} $E^\N$. On this space,
+``moving one step forward in time'' becomes an honest deterministic map $T$ (the left shift), and iterating $T$
+corresponds exactly to observing later and later parts of the same trajectory.
+
+\paragraph{Path space and the shift map.}
+Let \((E,\E)\) be a measurable space and consider the path space
+\[
+\bigl(E^\N,\,\E^{\otimes \N}\bigr).
+\]
+Define the (left) shift
+\[
+T:E^\N \to E^\N,
+\qquad
+T((x_0,x_1,x_2,\dots)) := (x_1,x_2,x_3,\dots).
+\]
+Then
+\[
+T^n((x_0,x_1,x_2,\dots)) = (x_n,x_{n+1},x_{n+2},\dots).
+\]
+
+\medskip
+Once we view trajectories as points, the random variables of the process become the simplest possible observables:
+the coordinate maps $X_n(\omega)=\omega_n$. The identity $X_n=X_0\circ T^n$ then says in one line that \emph{the entire
+process is generated by repeatedly applying the same time-shift to the same observable} $X_0$.
+This is the key bridge between probability and dynamics; questions about long-time behavior of $(X_n)$ turn into
+questions about iterates $T^n$.
+
+\paragraph{Coordinate process.}
+Define the coordinate maps
+\[
+X_n:E^\N \to E,
+\qquad
+X_n((x_k)_{k\in\N}) := x_n.
+\]
+They satisfy the fundamental relation
+\[
+X_n = X_0\circ T^n
+\qquad (n\in\N).
+\]
+
+\medskip
+
+Finally, the stationarity assumption becomes a structural property of the shift system. The law $\Pp$ on path space is invariant under $T$, i.e.\ $\Pp(T^{-1}A)=\Pp(A)$. In other words, a stationary process
+is precisely a \emph{measure-preserving dynamical system} on its canonical path space.
+This reformulation is useful because it lets us apply the general machinery of ergodic theory (invariant
+$\sigma$-algebra, ergodicity, ergodic theorems) directly to stochastic processes by studying the single map $T$.
+
+\paragraph{Stationarity as measure-preservation}
+Let \(\Pp\) be the law of a process \((X_n)_{n\in\N}\) on \(E^\N\). Then the process is stationary if and only if
+\[
+\Pp(T^{-1}(A))=\Pp(A)\qquad\forall A\in \E^{\otimes \N},
+\]
+i.e.\ \((E^\N,\E^{\otimes \N},\Pp,T)\) is a measure-preserving dynamical system.
+Thus, stationary processes can be studied through measure-preserving dynamics.
+
+%========================================================
+\section{Ergodic theorem setting and time averages}
+
+Having recast stationarity as measure-preservation, we can now formulate the central question of ergodic theory in its
+cleanest form: \emph{what does one learn about the law $\Pp$ by observing a single trajectory for a long time?}
+A measurable function $f:\Omega\to\R$ plays the role of an \emph{observable} (a quantity we can measure from the state
+$\omega$), and iterating the dynamics produces the sequence of observations
+\[
+X_n(\omega)=f(T^n\omega).
+\]
+Thus the process is generated by repeatedly applying the same time shift to the same observable, and measure-preservation
+guarantees that these observations form a stationary process.
+
+\medskip
+The objects of interest are the \emph{time averages}
+\[
+S_n(\omega)=\frac1n\sum_{k=0}^{n-1} f(T^k\omega),
+\]
+which represent empirical averages along one orbit.
+The purpose of this section is to understand the limit of $S_n(\omega)$ as $n\to\infty$ and, in particular, to connect it
+to the corresponding \emph{space average} $\int_\Omega f\,d\Pp$; this is the precise mathematical meaning of the slogan
+``time averages equal ensemble averages'' under suitable ergodicity assumptions.
+
+
+Let \((\Omega,\A,\Pp,T)\) be a measure-preserving dynamical system and let
+\[
+X_0=f:\Omega\to\R
+\quad\text{be measurable}.
+\]
+Define
+\[
+X_n(\omega) := f(T^n\omega) = X_0(T^n\omega),
+\qquad n\in\N.
+\]
+Then \((X_n)_{n\in\N}\) is a real-valued stationary process.
+
+The associated time averages are
+\[
+S_n(\omega)
+:= \frac1n\sum_{k=0}^{n-1}X_k(\omega)
+= \frac1n\sum_{k=0}^{n-1} f(T^k\omega),
+\qquad n\ge 1,
+\]
+with \(T^0=\textrm{id}\).
+
+%========================================================
+For proving the main result of this chapter, we will need the lemma below. 
+
+\begin{lemma}[Hopf maximal ergodic lemma]
+Assume \(X_0\in L^1(\Pp)\). Define the running maximum
+\[
+M_n := \max\{0,S_1,S_2,\dots,S_n\}.
+\]
+Then
+\[
+\E\bigl[ X_0\, \mathbf{1}_{\{M_n>0\}} \bigr] \ge 0
+\qquad \forall n\in\N.
+\]
+\end{lemma}
+
+\begin{proof}
+Let $f:=X_0\in L^1(\Pp)$ and define the (non-averaged) partial sums
+\[
+\Sigma_0:=0,
+\qquad
+\Sigma_k(\omega):=\sum_{j=0}^{k-1} f(T^j\omega),\quad k\ge 1.
+\]
+Then $S_k(\omega)=\frac{1}{k}\Sigma_k(\omega)$, so
+\[
+M_n(\omega)>0
+\ \Longleftrightarrow\
+\exists\,k\in\{1,\dots,n\}\ \text{with}\ S_k(\omega)>0
+\ \Longleftrightarrow\
+\exists\,k\in\{1,\dots,n\}\ \text{with}\ \Sigma_k(\omega)>0.
+\]
+Hence, if we set
+\[
+m_n(\omega):=\max\{\Sigma_0(\omega),\Sigma_1(\omega),\dots,\Sigma_n(\omega)\},
+\qquad
+A:=\{M_n>0\}=\{m_n>0\},
+\]
+it suffices to prove $\E[f\,\mathbf 1_A]\ge 0$.
+
+\medskip
+\Step{1: Choose a first time of reaching the (positive) maximum}
+On $A$ define
+\[
+\tau(\omega):=\min\{1\le k\le n:\ \Sigma_k(\omega)=m_n(\omega)\}.
+\]
+Then $\tau(\omega)\in\{1,\dots,n\}$ and $\Sigma_{\tau(\omega)}(\omega)=m_n(\omega)>0$.
+
+\medskip
+\Step{2: Compare $m_n(\omega)$ and $m_n(T\omega)$}
+For $\omega\in A$, we have $\tau(\omega)-1\in\{0,\dots,n-1\}$, hence by definition of $m_n(T\omega)$,
+\[
+m_n(T\omega)\ \ge\ \Sigma_{\tau(\omega)-1}(T\omega).
+\]
+But
+\[
+\Sigma_{\tau-1}(T\omega)
+=\sum_{j=0}^{\tau-2} f(T^{j+1}\omega)
+=\sum_{j=1}^{\tau-1} f(T^{j}\omega)
+=\Sigma_\tau(\omega)-f(\omega)
+=m_n(\omega)-f(\omega).
+\]
+Therefore, for $\omega\in A$,
+\[
+m_n(T\omega)\ \ge\ m_n(\omega)-f(\omega)
+\quad\Longrightarrow\quad
+f(\omega)\ \ge\ m_n(\omega)-m_n(T\omega).
+\]
+
+\medskip
+\Step{3: Extend the inequality to all $\omega$}
+If $\omega\notin A$, then $m_n(\omega)=0$ and $\mathbf 1_A(\omega)=0$, so
+\[
+f(\omega)\mathbf 1_A(\omega)=0\ \ge\ m_n(\omega)-m_n(T\omega)
+\]
+since the right-hand side is $\le 0$. Hence, for all $\omega\in\Omega$,
+\[
+f(\omega)\mathbf 1_A(\omega)\ \ge\ m_n(\omega)-m_n(T\omega).
+\]
+
+\medskip
+\Step{4: Integrate and use measure-preservation}
+Integrating and using that $T$ is measure-preserving (so $\E[m_n\circ T]=\E[m_n]$), we obtain
+\[
+\E\bigl[f\,\mathbf 1_A\bigr]
+\ \ge\
+\E[m_n]-\E[m_n\circ T]
+\ =\ 0.
+\]
+Since $A=\{M_n>0\}$, this is exactly
+\[
+\E\bigl[X_0\,\mathbf 1_{\{M_n>0\}}\bigr]\ge 0,
+\]
+as claimed.
+\end{proof}
+
+
+\noindent
+\emph{Remark}
+The event \(\{M_n>0\}\) means that at some time \(1\le k\le n\) the average \(S_k\) becomes positive.
+The lemma states that the contribution of \(X_0\) on this event must have nonnegative expectation.
+This inequality is the key estimate that leads to almost sure convergence of \(S_n\).
+
+%========================================================
+\section{Birkhoff's individual ergodic theorem}
+
+We are now ready to state the main result that justifies \emph{``time averages equal space averages''}
+for systems generated by a measure-preserving time shift. In the setting of a dynamical system
+$(\Omega,\mathcal A,\Pp,T)$ and an observable $f\in L^1(\Pp)$, we observe the dependent sequence
+$X_n=f\circ T^n$ along a single trajectory and form the empirical (time) averages
+\[
+S_n(\omega)=\frac1n\sum_{k=0}^{n-1} f(T^k\omega).
+\]
+The question is whether these averages converge, and if so, what they converge to and how the answer depends on
+possible invariant structure (encoded by the invariant $\sigma$-algebra $\mathcal I$).
+
+\medskip
+Birkhoff's individual ergodic theorem gives a complete answer: for every integrable observable the time averages
+converge almost surely (and in $L^1$), and the limit is the $\mathcal I$-measurable part of $f$, namely
+the conditional expectation $\E[f\mid\mathcal I]$. In particular, when the system is ergodic (so $\mathcal I$ is trivial),
+the limit becomes the constant $\E[f]$, showing that a single typical long trajectory is representative of the whole
+distribution.
+
+
+\begin{theorem}[Birkhoff (individual ergodic theorem)]
+Let \((\Omega,\A,\Pp,T)\) be measure-preserving and \(f\in L^1(\Pp)\). Define \(X_n=f\circ T^n\) and
+\[
+S_n=\frac1n\sum_{k=0}^{n-1}f\circ T^k.
+\]
+Then \(S_n\) converges \(\Pp\)-a.s.\ and in \(L^1(\Pp)\) to the conditional expectation of \(f\) w.r.t.\ the invariant \(\sigma\)-algebra \(\I\):
+\[
+\lim_{n\to\infty} S_n
+= \E[f \mid \I]
+= \E[X_0 \mid \I]
+\qquad \Pp\text{-a.s.}
+\]
+If the system is ergodic, then \(\I\) is trivial and hence
+\[
+\lim_{n\to\infty} S_n = \E[f] = \E[X_0]
+\qquad \Pp\text{-a.s.}
+\]
+\end{theorem}
+
+\begin{proof}
+Write $f:=X_0\in L^1(\Pp)$ and $X_n=f\circ T^n$.  Set
+\[
+S_n(\omega)=\frac1n\sum_{k=0}^{n-1} f(T^k\omega),\qquad
+\overline f(\omega):=\limsup_{n\to\infty} S_n(\omega),\qquad
+\underline f(\omega):=\liminf_{n\to\infty} S_n(\omega).
+\]
+
+\medskip
+\Step{1: $\overline f$ and $\underline f$ are $T$-invariant}
+Using
+\[
+S_n(T\omega)
+=\frac1n\sum_{k=0}^{n-1} f(T^{k+1}\omega)
+=\frac1n\sum_{k=1}^{n} f(T^{k}\omega)
+=S_n(\omega)+\frac{f(T^n\omega)-f(\omega)}{n},
+\]
+we get $S_n(T\omega)-S_n(\omega)\to 0$ for a.e.\ $\omega$ (since $f(T^n\omega)$ is finite a.e.).
+Hence
+\[
+\overline f\circ T=\overline f,\qquad \underline f\circ T=\underline f \qquad \Pp\text{-a.s.}
+\]
+In particular, $\overline f$ and $\underline f$ are $\mathcal I$-measurable (by Lemma~\ref{lem:invariant_rv}(a)).
+
+\medskip
+\Step{2: A key inequality from Hopf's maximal lemma}
+Fix any $\mathcal I$-measurable (equivalently $T$-invariant) function $g\in L^1(\Pp)$ and apply the
+Hopf maximal ergodic lemma to $h:=f-g\in L^1(\Pp)$.
+Denote the corresponding time averages by
+\[
+S_n(h)=\frac1n\sum_{k=0}^{n-1} (f-g)\circ T^k.
+\]
+Since $g\circ T^k=g$ a.s., we have the identity
+\[
+S_n(h)=S_n(f)-g\qquad\text{a.s. for every }n.
+\]
+Define the running maximum $M_n(h):=\max\{0,S_1(h),\dots,S_n(h)\}$ and the event
+\[
+A_n:=\{M_n(h)>0\}=\Bigl\{\max_{1\le k\le n}\bigl(S_k(f)-g\bigr)>0\Bigr\}.
+\]
+Hopf's lemma yields, for every $n$,
+\[
+\E\bigl[(f-g)\,\mathbf 1_{A_n}\bigr]\ge 0.
+\]
+Since $A_n\uparrow A:=\bigcup_{n\ge 1}A_n=\{\sup_{k\ge 1}(S_k(f)-g)>0\}$, by monotone convergence,
+\[
+\E\bigl[(f-g)\,\mathbf 1_{A}\bigr]\ge 0.
+\]
+Now observe that $\{\overline f>g\}\subset A$: if $\overline f(\omega)>g(\omega)$, then for some $k$ we must have
+$S_k(f)(\omega)>g(\omega)$, hence $\sup_k(S_k(f)-g)(\omega)>0$.
+Therefore, with $B:=\{\overline f>g\}$,
+\begin{equation}\label{eq:keyHopfIneq}
+\E\bigl[(f-g)\,\mathbf 1_{B}\bigr]\ge 0
+\qquad\Longleftrightarrow\qquad
+\int_{B} f\,d\Pp \ \ge\ \int_{B} g\,d\Pp.
+\end{equation}
+
+\medskip
+\Step{3: Minimality of $\overline f$ among invariant majorants}
+Let $g\in L^1(\Pp)$ be $\mathcal I$-measurable and satisfy $g\ge \overline f$ a.s.
+Then $B=\{\overline f>g\}$ has $\Pp(B)=0$, and \eqref{eq:keyHopfIneq} gives
+\[
+\int_\Omega f\,d\Pp \ \le\ \int_\Omega g\,d\Pp.
+\]
+(Indeed, $\int_B f\ge \int_B g$ is trivial when $\Pp(B)=0$, and on $B^c$ we have $f\le g$ only in average; the
+argument is standard: apply \eqref{eq:keyHopfIneq} to $g_\varepsilon:=g-\varepsilon$ and let $\varepsilon\downarrow 0$
+to deduce $\int f\le \int g$.)
+
+In particular, taking $g:=\overline f$ itself shows $\overline f\in L^1(\Pp)$ and the inequality is sharp.
+
+\medskip
+\Step{4: Maximality of $\underline f$ among invariant minorants}
+Apply Step~2 to $-f$ and $-g$ (or repeat the argument with $\underline f$).
+Equivalently: for any $\mathcal I$-measurable $g\in L^1(\Pp)$ with $g\le \underline f$ a.s., one obtains
+\[
+\int_\Omega f\,d\Pp \ \ge\ \int_\Omega g\,d\Pp.
+\]
+In particular, taking $g:=\underline f$ shows $\underline f\in L^1(\Pp)$.
+
+\medskip
+\Step{5: Conclude $\overline f=\underline f$ a.s.\ and define the limit}
+From Steps~3--4 with $g=\overline f$ and $g=\underline f$ we obtain
+\[
+\int_\Omega \overline f\,d\Pp \ \le\ \int_\Omega f\,d\Pp \ \le\ \int_\Omega \underline f\,d\Pp.
+\]
+But always $\underline f\le \overline f$ a.s., hence
+\[
+0\ \le\ \int_\Omega (\overline f-\underline f)\,d\Pp
+\ \le\ \int_\Omega \overline f\,d\Pp-\int_\Omega \underline f\,d\Pp
+\ \le\ 0,
+\]
+so $\int (\overline f-\underline f)\,d\Pp=0$ and therefore $\overline f=\underline f$ a.s.
+Thus $S_n(\omega)$ converges a.s.; denote the limit by
+\[
+f^*(\omega):=\lim_{n\to\infty} S_n(\omega).
+\]
+By Step~1, $f^*$ is $T$-invariant, hence $\mathcal I$-measurable.
+
+\medskip
+\Step{6: Identify the limit as $\E[f\mid\mathcal I]$}
+Let $A\in\mathcal I$ be invariant. Consider the induced measure-preserving system on $A$ and apply the Hopf inequality
+to $f$ restricted to $A$ (equivalently, apply the previous steps to the function $f\,\mathbf 1_A$ and use that
+$\mathbf 1_A\circ T=\mathbf 1_A$ a.s.). One obtains
+\[
+\int_A f^*\,d\Pp=\int_A f\,d\Pp
+\qquad\forall A\in\mathcal I.
+\]
+Since $f^*$ is $\mathcal I$-measurable, this is exactly the defining property of the conditional expectation:
+\[
+f^*=\E[f\mid\mathcal I]\qquad \Pp\text{-a.s.}
+\]
+(Indeed, $Y=\E[f\mid\mathcal I]$ is the unique $\mathcal I$-measurable random variable satisfying
+$\int_A Y\,d\Pp=\int_A f\,d\Pp$ for all $A\in\mathcal I$.)
+
+\medskip
+\Step{ 7: $L^1$-convergence}
+First assume $f$ is bounded: $|f|\le C$. Then $|S_n|\le C$ and $S_n\to f^*$ a.s.,
+so dominated convergence yields $S_n\to f^*$ in $L^1(\Pp)$.
+
+For general $f\in L^1(\Pp)$, define truncations $f_m:=(-m)\vee f\wedge m\in L^\infty$.
+By the bounded case, $S_n(f_m)\to \E[f_m\mid\mathcal I]$ in $L^1$.
+Moreover, the averaging operator is an $L^1$-contraction:
+\[
+\|S_n(f-f_m)\|_{L^1}\le \frac1n\sum_{k=0}^{n-1}\| (f-f_m)\circ T^k\|_{L^1}
+=\|f-f_m\|_{L^1},
+\]
+using measure-preservation, and conditional expectation is also an $L^1$-contraction:
+\[
+\|\E[f-f_m\mid\mathcal I]\|_{L^1}\le \|f-f_m\|_{L^1}.
+\]
+Hence, for every $n,m$,
+\[
+\|S_n(f)-\E[f\mid\mathcal I]\|_{L^1}
+\le \|S_n(f)-S_n(f_m)\|_{L^1}
++\|S_n(f_m)-\E[f_m\mid\mathcal I]\|_{L^1}
++\|\E[f_m-f\mid\mathcal I]\|_{L^1}
+\]
+\[
+\le 2\|f-f_m\|_{L^1}+\|S_n(f_m)-\E[f_m\mid\mathcal I]\|_{L^1}.
+\]
+Let $n\to\infty$ (for fixed $m$) and then $m\to\infty$ (since $f_m\to f$ in $L^1$) to conclude
+\[
+S_n(f)\to \E[f\mid\mathcal I]\qquad\text{in }L^1(\Pp).
+\]
+
+\medskip
+\Step{8: The ergodic case}
+If the system is ergodic, $\mathcal I$ is $\Pp$-trivial, so $\E[f\mid\mathcal I]$ is a.s.\ constant and equals $\E[f]$.
+Thus $\lim_{n\to\infty}S_n=\E[f]$ a.s.\ (and in $L^1$).
+\end{proof}
+
+
+\noindent
+\textbf{Interpretation.}
+The limit \(\E[f\mid\I]\) is the ``best invariant approximation'' of \(f\): it depends only on the part of the
+probability space that cannot be changed by shifting along trajectories.
+In an ergodic system, there are no nontrivial invariant events, so the limit must be a constant; thus
+time averages coincide with the global expectation.
+
+\medskip
+
+\noindent
+\textbf{Takeaway.}
+Birkhoff's theorem is the law of large numbers for dependent data produced by a measure-preserving system:
+stationarity replaces i.i.d., and ergodicity replaces the absence of hidden invariant structure.
+
+
