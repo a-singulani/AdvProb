@@ -3,7 +3,7 @@
 % =================================================
 In the finite-horizon optimization problem we defined, for each starting time $n$ and state $x$, the value function
 \[
-V_n(x)=\sup_{\pi}\mathbb{E}_x^{\pi}\Big[\sum_{k=n}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big],
+V_n(x)=\sup_{\pi}\mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big],
 \]
 i.e.\ the best expected total reward achievable from $(n,x)$. The difficulty is that the supremum is taken over \emph{entire policies}, so $V_n$ is not obviously computable by a direct pointwise maximization. The Bellman equation provides the missing bridge: it turns this global optimization into a local recursion by exploiting the Markov property. Intuitively, once we are at time $n$ in state $x$ and choose an action $a\in D_n(x)$, the problem splits into two pieces: the \emph{immediate} reward $r_n(x,a)$, and the \emph{future} optimal performance starting from the random next state $X_{n+1}$, whose law is $Q_n(\cdot\mid x,a)$. Thus the continuation value is summarized by a single function, namely $V_{n+1}$, and ``optimizing from now on'' reduces to choosing the best current action in view of this continuation value. This leads to the backward recursion
 \[
@@ -15,7 +15,7 @@ which is the Bellman equation. The rest of this chapter formalizes this idea via
 \section{Operators}
 It is convenient to introduce some operators to ease the introduction of the Bellman equations and its analysis. We set
 \[
-\mathcal{\mathbb{M}}(E) := \{v:E\to[-\infty,\infty)\;:\; v\text{ is measurable}\}.
+\mathcal{\mathbb{M}}(E) := \{v:E\to[-\infty,\infty)\;|\; v\text{ is measurable}\}.
 \]
 
 \begin{definition}[Bellman operators]
@@ -114,7 +114,7 @@ Given $X_{n+1}=x'$, the future from time $n+1$ onward under the tail policy has 
 Therefore,
 \[
 \mathbb{E}_{n,x}^{\pi}\Big[\sum_{k=n+1}^{N-1} r_k(X_k,f_k(X_k)) + g_N(X_N)\Big]
-=\mathbb{E}_{n,x}^{\pi}\big[V_{n+1}^{\pi}(X_{n+1})\big].
+=V_{n+1}^{\pi}(X_{n+1})
 \]
 
 \Step{4 (Kernel representation)}

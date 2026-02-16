@@ -349,6 +349,113 @@ updating from time \(t\) to \(t+1\) is exactly the problem of computing
 That is precisely what Theorem~\ref{thm:gaussian_regression} provides, producing the Kalman-type ``mean + gain $\times$ innovation'' update and the corresponding covariance reduction.
 
 
+\begin{lemma}[Conditional Gaussian regression]\label{lem:cond_gauss_regression}
+Let $(\Omega,\mathcal F,\mathbb P)$ be a probability space and let $\mathcal G\subset\mathcal F$ be a sub-$\sigma$-algebra.
+Let $X:\Omega\to\mathbb R^{n}$ and $Z:\Omega\to\mathbb R^{m}$ be square-integrable random vectors.
+Assume that, $\mathbb P$-a.s., the conditional law of $(X,Z)$ given $\mathcal G$ is (multivariate) Gaussian, i.e.,
+there exist $\mathcal G$-measurable random vectors $\mu_X\in\mathbb R^{n}$, $\mu_Z\in\mathbb R^{m}$ and
+$\mathcal G$-measurable random matrices
+\[
+\Sigma_{XX}\in\mathbb R^{n\times n},\qquad
+\Sigma_{XZ}\in\mathbb R^{n\times m},\qquad
+\Sigma_{ZZ}\in\mathbb R^{m\times m},
+\]
+such that for $\mathbb P$-a.e.\ $\omega$,
+\[
+\mathcal L\big((X,Z)\mid \mathcal G\big)(\omega)
+=\mathcal N\!\left(
+\begin{pmatrix}\mu_X(\omega)\\ \mu_Z(\omega)\end{pmatrix},
+\begin{pmatrix}\Sigma_{XX}(\omega) & \Sigma_{XZ}(\omega)\\
+\Sigma_{XZ}(\omega)^\top & \Sigma_{ZZ}(\omega)
+\end{pmatrix}
+\right).
+\]
+Then, with $\mu_X=\mathbb E[X\mid \mathcal G]$, $\mu_Z=\mathbb E[Z\mid \mathcal G]$,
+$\Sigma_{XZ}=\mathrm{Cov}(X,Z\mid \mathcal G)$ and $\Sigma_{ZZ}=\mathrm{Cov}(Z\mid \mathcal G)$, we have
+\begin{equation}\label{eq:cond_gauss_regression}
+\mathbb E\big[X\mid \mathcal G, Z\big]
+=
+\mu_X + \Sigma_{XZ}\,\Sigma_{ZZ}^{+}\,(Z-\mu_Z)
+\qquad \mathbb P\text{-a.s.},
+\end{equation}
+where $\Sigma_{ZZ}^{+}$ denotes the Moore--Penrose pseudoinverse.
+
+If $\Sigma_{ZZ}$ is $\mathbb P$-a.s.\ invertible, then $\Sigma_{ZZ}^{+}=\Sigma_{ZZ}^{-1}$ and
+\eqref{eq:cond_gauss_regression} becomes the familiar gain-times-innovation formula.
+\end{lemma}
+
+\begin{proof}
+Fix $t$-like notation $\mathcal G$ and define $Y:=(X,Z)$.
+Let $\pi_X:\mathbb R^{n+m}\to\mathbb R^{n}$ and $\pi_Z:\mathbb R^{n+m}\to\mathbb R^{m}$
+be the coordinate projections, so that $X=\pi_X(Y)$ and $Z=\pi_Z(Y)$.
+
+\medskip
+\noindent\textbf{Step 1 (Work under the conditional probability).}
+Let $\mathbb P(\cdot\mid \mathcal G)(\omega)$ be a regular conditional probability kernel for $\mathcal G$.
+For $\mathbb P$-a.e.\ $\omega$, set
+\[
+\mathbb P^\omega(A):=\mathbb P(A\mid \mathcal G)(\omega),\qquad A\in\mathcal F.
+\]
+By assumption, under $\mathbb P^\omega$ the vector $Y=(X,Z)$ is an \emph{ordinary} Gaussian vector in
+$\mathbb R^{n+m}$ with mean and covariance given by the $\mathcal G$-measurable blocks
+$\mu_X(\omega),\mu_Z(\omega)$ and $\Sigma_{ij}(\omega)$.
+
+\medskip
+\noindent\textbf{Step 2 (Apply unconditional Gaussian regression under $\mathbb P^\omega$).}
+For each such $\omega$, apply the standard Gaussian regression formula (Theorem~4.5 )
+to the jointly Gaussian pair $(X,Z)$ under the probability measure $\mathbb P^\omega$:
+\begin{equation}\label{eq:regression_under_Pomega}
+\mathbb E_{\mathbb P^\omega}[X\mid Z]
+=
+\mathbb E_{\mathbb P^\omega}[X]
++
+\mathrm{Cov}_{\mathbb P^\omega}(X,Z)\;
+\mathrm{Cov}_{\mathbb P^\omega}(Z)^{+}\,
+\bigl(Z-\mathbb E_{\mathbb P^\omega}[Z]\bigr).
+\end{equation}
+By the definition of the conditional mean/covariance blocks, we have for $\mathbb P$-a.e.\ $\omega$:
+\[
+\mathbb E_{\mathbb P^\omega}[X]=\mu_X(\omega),\quad
+\mathbb E_{\mathbb P^\omega}[Z]=\mu_Z(\omega),\quad
+\mathrm{Cov}_{\mathbb P^\omega}(X,Z)=\Sigma_{XZ}(\omega),\quad
+\mathrm{Cov}_{\mathbb P^\omega}(Z)=\Sigma_{ZZ}(\omega).
+\]
+Substituting these identities into \eqref{eq:regression_under_Pomega} yields, for $\mathbb P$-a.e.\ $\omega$,
+\begin{equation}\label{eq:pathwise_formula}
+\mathbb E_{\mathbb P^\omega}[X\mid Z]
+=
+\mu_X(\omega)+\Sigma_{XZ}(\omega)\Sigma_{ZZ}(\omega)^{+}\bigl(Z-\mu_Z(\omega)\bigr).
+\end{equation}
+
+\medskip
+\noindent\textbf{Step 3 (Identify $\mathbb E[X\mid \mathcal G,Z]$).}
+By the defining property of regular conditional probabilities,
+for any bounded Borel function $\varphi:\mathbb R^{m}\to\mathbb R$,
+\[
+\mathbb E\!\left[X\,\varphi(Z)\mid \mathcal G\right](\omega)
+=
+\int X(\omega')\,\varphi(Z(\omega'))\,\mathbb P^\omega(d\omega').
+\]
+Moreover, the conditional expectation $\mathbb E[X\mid \mathcal G,Z]$ is characterized as the
+$\sigma(\mathcal G,Z)$-measurable random vector $U$ such that for all bounded
+$\sigma(\mathcal G,Z)$-measurable scalars $H$,
+\[
+\mathbb E[XH]=\mathbb E[UH].
+\]
+Using the kernel $\mathbb P^\omega$ and taking $H=h(\omega)\,\varphi(Z)$ with bounded
+$\mathcal G$-measurable $h$ and bounded Borel $\varphi$, one checks that
+\[
+\mathbb E[X\mid \mathcal G,Z](\omega)=\mathbb E_{\mathbb P^\omega}[X\mid Z]
+\qquad\text{for }\mathbb P\text{-a.e.\ }\omega.
+\]
+Combining this identification with the pathwise formula \eqref{eq:pathwise_formula} gives
+\eqref{eq:cond_gauss_regression}.
+
+\medskip
+Finally, when $\Sigma_{ZZ}$ is invertible, the pseudoinverse equals the inverse and the stated simplification follows.
+\end{proof}
+
+
 
 
 
