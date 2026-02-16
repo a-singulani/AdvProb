@@ -7,3 +7,8 @@ main.pdf
 main.toc
 main.synctex.gz
 .DS_Store
+proof_ideas.aux
+proof_ideas.fdb_latexmk
+proof_ideas.fls
+proof_ideas.log
+proof_ideas.synctex.gz

@@ -123,7 +123,7 @@ after observing \(\xi_0,\dots,\xi_t\), our knowledge about the hidden state \(\t
 \(\theta_t\mid \F_t^\xi\).
 In a general nonlinear/non-Gaussian model this conditional law is an infinite-dimensional object (a full density or measure),
 so an ``exact'' filter would require propagating an entire function over time (which is why particle filters exist).
-The point of Theorem~2.2 is that for the model \eqref{eq:theta}--\eqref{eq:xi} this complexity collapses:
+The point of Theorem~\ref{thm:cond_gaussian} is that for the model \eqref{eq:theta}--\eqref{eq:xi} this complexity collapses:
 \emph{given the observation history, the state remains Gaussian}.
 A Gaussian law is completely determined by its mean and covariance, so instead of propagating an entire distribution we only
 need to propagate the finite-dimensional pair \(\bigl(m(t),Y(t)\bigr)\).
@@ -142,7 +142,7 @@ Once we have joint (conditional) Gaussianity, the update step
 \(\theta_{t+1}\mid \F_{t+1}^\xi=\sigma(\F_t^\xi,\xi_{t+1})\)
 is obtained by the standard Gaussian conditioning (normal-correlation) formulas,
 which is exactly what produces the recursion for \(m(t+1)\) and \(Y(t+1)\).
-So Theorem~2.2 is the bridge that justifies replacing the abstract filtering problem
+So Theorem~\ref{thm:cond_gaussian} is the bridge that justifies replacing the abstract filtering problem
 ``compute \(\mathcal{L}(\theta_t\mid \F_t^\xi)\)'' by the concrete matrix recursion of the generalized Kalman filter.
 
 
@@ -151,6 +151,7 @@ one can show that for each \(t\) the conditional distribution of \(\theta_t\) gi
 This is one of the main structural results used to justify that it is enough to propagate \((m(t),Y(t))\).
 
 \begin{theorem}[Conditional Gaussianity: informal statement]
+\label{thm:cond_gaussian}
 Assume the coefficients in \eqref{eq:theta}--\eqref{eq:xi} are square-integrable and uniformly bounded in \(t\) in probability,
 and \(\E(\|\theta_0\|^2+\|\xi_0\|^2)<\infty\).
 Then for each \(t\ge 0\),
@@ -159,8 +160,6 @@ Then for each \(t\ge 0\),
 \quad\text{(almost surely)}.
 \]
 \end{theorem}
-
-% --- Paste this right after Theorem 2.2 in your notes (or right after its statement) ---
 
 \begin{proof}[Proof (split into steps, following Lipster--Shiryayev)]
 We prove by induction on $t$ that the conditional law of $\theta_t$ given $\F_t^\xi$ is (a.s.) Gaussian.
@@ -297,6 +296,7 @@ We learned that under certain conditions we know that $(\theta_{t+1},\xi{t+1})$ 
 The only twist is that the conditional covariance of \(\xi\) may be singular; then one uses a pseudo-inverse.
 
 \begin{theorem}[Normal correlation / Gaussian regression with pseudo-inverse]
+\label{thm:gaussian_regression}
 Let \(X\in\R^k\), \(Z\in\R^\ell\) be jointly Gaussian with mean
 \(\E[X]=m_X\), \(\E[Z]=m_Z\) and block covariance
 \[
@@ -323,7 +323,7 @@ or redundant (hence \(\Sigma_{ZZ}\) becomes singular).
 \end{remark}
 
 \paragraph{Motivation and intuition.}
-Theorem~3.1 is the mathematical engine behind the Kalman update.
+Theorem~\ref{thm:gaussian_regression} is the mathematical engine behind the Kalman update.
 In filtering, after time \(t\) we have a \emph{prior} joint (conditional) Gaussian law for the pair
 \((X,Z)=(\theta_{t+1},\xi_{t+1})\) given the past \(\F_t^\xi\); when the new measurement \(Z\) is revealed,
 we need the \emph{posterior} law of \(X\mid Z\).
@@ -338,17 +338,15 @@ noiseless components, or linear dependencies), but the regression/projection vie
 \(\Sigma_{ZZ}\pinv\) selects the minimum-norm gain consistent with the information contained in \(Z\),
 and the formulas remain valid for any positive semidefinite \(\Sigma_{ZZ}\).
 
-% --- Add this paragraph right after the motivation for Theorem 3.1 (or at the end of Section 3) ---
-
-\paragraph{Relation to Theorem~2.2 (Conditional Gaussianity).}
-Theorem~2.2 is the \emph{structural} statement that makes Theorem~3.1 applicable at every time step:
+\paragraph{Relation to Theorem~\ref{thm:cond_gaussian} (Conditional Gaussianity).}
+Theorem~\ref{thm:cond_gaussian} is the \emph{structural} statement that makes Theorem~\ref{thm:gaussian_regression} applicable at every time step:
 it tells us that, under the model \eqref{eq:theta}--\eqref{eq:xi}, the relevant random objects remain Gaussian after conditioning on the
-available information. More precisely, Theorem~2.2 implies that given \(\F_t^\xi\) the pair
+available information. More precisely, Theorem~\ref{thm:cond_gaussian} implies that given \(\F_t^\xi\) the pair
 \((\theta_{t+1},\xi_{t+1})\) is \emph{jointly Gaussian} (because it is an affine function of the conditionally Gaussian \(\theta_t\)
 and fresh Gaussian noises with \(\F_t^\xi\)-measurable coefficients). Once this joint (conditional) Gaussianity holds,
 updating from time \(t\) to \(t+1\) is exactly the problem of computing
 \(\theta_{t+1}\mid \sigma(\F_t^\xi,\xi_{t+1})\), i.e.\ conditioning one component of a jointly Gaussian vector on the other.
-That is precisely what Theorem~3.1 provides, producing the Kalman-type ``mean + gain $\times$ innovation'' update and the corresponding covariance reduction.
+That is precisely what Theorem~\ref{thm:gaussian_regression} provides, producing the Kalman-type ``mean + gain $\times$ innovation'' update and the corresponding covariance reduction.
 
 
 

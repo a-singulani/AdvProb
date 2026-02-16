@@ -1,0 +1,337 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\setlist[itemize]{noitemsep,topsep=2pt}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Pp}{\mathbb{P}}
+\title{Proof summaries}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\noindent\textbf{How to use.} For each theorem, the bullet points are the ``story'' of the proof: (i) main tool/lemma, (ii) key decomposition/induction, (iii) conclusion/identification.\par\bigskip
+\subsection*{Theorem 1.6 (Conditional expectation existence)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Define a finite measure $Q$ on $(\Omega,\mathcal F)$ by $Q(F)=\int_F X\,d\mathbb P$ (first for $X\ge0$).
+\item Note $Q\ll \mathbb P|_{\mathcal F}$, so Radon--Nikodym gives an $\mathcal F$-measurable density $Z=\frac{dQ}{d\mathbb P|_{\mathcal F}}$ with $\int_F Z\,d\mathbb P=\int_F X\,d\mathbb P$ for all $F\in\mathcal F$.
+\item For general $X\in L^1$, apply the nonnegative case to $X^+$ and $X^-$ and set $Z=Z^+-Z^-$.
+\item Uniqueness: if $Z,Z'$ both work, test on $\{Z-Z'>1/n\}\in\mathcal F$ to force $\mathbb P(Z>Z')=\mathbb P(Z'<Z)=0$.
+\end{itemize}
+
+\subsection*{Theorem 1.8 (Properties of conditional expectation)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Fix versions $X_0=\mathbb E[X\mid\mathcal F]$, $Y_0=\mathbb E[Y\mid\mathcal F]$ and always prove identities by checking the defining property on every $F\in\mathcal F$ and then invoking a.s.\ uniqueness.
+\item Linearity and constants: build the candidate (e.g. $aX_0+bY_0$ or the constant $c$), verify it is $\mathcal F$-measurable, and match integrals over $F\in\mathcal F$.
+\item Monotonicity: consider $A=\{X_0>Y_0\}\in\mathcal F$ and integrate $Y_0-X_0$ over $A$; the sign contradiction forces $\mathbb P(A)=0$.
+\item Tower property: test on $G\in\mathcal G\subset\mathcal F$ and use the defining identity twice.
+\item Measurable factor / independence: prove first for indicators $Z=\mathbf 1_{F_0}$, extend to simple functions and then to general $Z$ by dominated convergence; for independence test $\int_F X\,d\mathbb P=\mathbb E[X]\mathbb P(F)$.
+\end{itemize}
+
+\subsection*{Theorem 1.9 (Best approximation / orthogonal projection)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Let $X_0=\mathbb E[X\mid\mathcal F]$ and take any $Y\in L^2(\Omega,\mathcal F,\mathbb P)$.
+\item Show orthogonality: $\mathbb E[(X-X_0)(X_0-Y)]=\mathbb E\big[\mathbb E[X-X_0\mid\mathcal F](X_0-Y)\big]=0$ (tower + $\mathcal F$-measurable factor).
+\item Apply Pythagoras in $L^2$: $\|X-Y\|_2^2=\|X-X_0\|_2^2+\|X_0-Y\|_2^2\ge \|X-X_0\|_2^2$.
+\item Equality iff $\|X_0-Y\|_2=0$, i.e. $Y=X_0$ a.s., so $X_0$ is the orthogonal projection / best $L^2$ predictor.
+\end{itemize}
+
+\subsection*{Theorem 1.10 (Jensen inequality)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use the supporting-line characterization of convexity: for each $x_0$, $g(x)\ge g(x_0)+m_{x_0}(x-x_0)$ for some slope $m_{x_0}$ (e.g. right derivative).
+\item Choose a countable set of supporting lines (take $x_0\in I\cap\mathbb Q$) so that $g$ is the pointwise supremum of these affine functions.
+\item Insert $X$ and take $\mathbb E[\cdot\mid\mathcal F]$: conditional expectation preserves affine functions, so each supporting-line inequality becomes an inequality involving $\mathbb E[X\mid\mathcal F]$.
+\item Take the supremum over the countable family (so no measurability issues beyond a single null set) to get $g(\mathbb E[X\mid\mathcal F])\le \mathbb E[g(X)\mid\mathcal F]$ a.s.
+\end{itemize}
+
+\subsection*{Theorem 2.4 (Existence of an RCD for real-valued random variables)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item For each rational $r$, pick a version $F(r,\omega)=\mathbb P(Y\le r\mid\mathcal F)(\omega)$; these are $\mathcal F$-measurable numbers in $[0,1]$.
+\item Use monotonicity of conditional expectation to enforce $r\mapsto F(r,\omega)$ nondecreasing outside one null set (take a countable union over $r\le s$ in $\mathbb Q$).
+\item Force right limits and boundary conditions ($F(-n)\downarrow0$, $F(n)\uparrow1$) outside another null set using dominated convergence.
+\item Define for all real $z$ the right-continuous hull $\tilde F(z,\omega)=\inf\{F(r,\omega):r\in\mathbb Q, r>z\}$; for each good $\omega$ this is a genuine cdf.
+\item Let $\vartheta(\omega,\cdot)$ be the probability measure with cdf $\tilde F(\cdot,\omega)$; measurability on the generating class $(-\infty,r]$ and a $\pi$--$\lambda$ (monotone class) argument give measurability for all Borel sets.
+\item Verify the defining identity first on $(-\infty,r]$ and extend to all $B\in\mathcal B(\mathbb R)$ by uniqueness of measures on generators.
+\end{itemize}
+
+\subsection*{Theorem 2.8 (Polish $\implies$ Borel space)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use that a Polish space has a countable base (separability) and nice limit behavior (completeness), which yields a standard Borel structure.
+\item Concretely, one can embed $E$ as a Borel subset of a universal Polish space (e.g. $[0,1]^{\mathbb N}$) via a Borel isomorphism built from a countable base / separating family.
+\item Thus $(E,\mathcal B(E))$ is measurably isomorphic to a Borel subset of $\mathbb R$, i.e. a Borel (standard Borel) space.
+\end{itemize}
+
+\subsection*{Theorem 2.10 (Existence of RCDs for Borel-valued random variables)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Take a measurable isomorphism $\xi:(E,\mathcal E)\to (B,\mathcal B(B))$ with $B\subset\mathbb R$ Borel (exists since $E$ is a Borel space).
+\item Push $Y$ forward to a real-valued variable $\tilde Y=\xi\circ Y$ and apply the real-valued existence theorem to get an RCD $\vartheta_{\tilde Y,\mathcal F}$.
+\item Pull the kernel back: define $\vartheta_{Y,\mathcal F}(\omega,A)=\vartheta_{\tilde Y,\mathcal F}(\omega,\xi(A))$; measurability and the defining identity transfer through the isomorphism.
+\end{itemize}
+
+\subsection*{Theorem 2.11 (Integral representation of conditional expectation)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item First prove for simple $f=\sum_i \alpha_i\mathbf 1_{A_i}$ using the RCD property: $\mathbb E[f(X)\mathbf 1_B]=\sum_i \alpha_i\mathbb P(B\cap\{X\in A_i\})=\int_B\int f\,d\vartheta_{X,\mathcal F}\,d\mathbb P$.
+\item Approximate any nonnegative $f$ by an increasing sequence of simple functions and pass to the limit via monotone convergence (both inside the kernel integral and in expectation).
+\item Recognize the resulting $\mathcal F$-measurable function $\omega\mapsto\int f\,d\vartheta_{X,\mathcal F}(\omega,\cdot)$ as the unique version of $\mathbb E[f(X)\mid\mathcal F]$ by testing against indicators of $B\in\mathcal F$.
+\end{itemize}
+
+\subsection*{Theorem 2.12 (Disintegration lemma for probability measures on products)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Work on the probability space $(E\times F,\mathcal E\otimes\mathcal F,\mu)$ with coordinate projections $X(x,y)=x$ and $Y(x,y)=y$.
+\item By existence of RCDs on Borel spaces, take an RCD of $Y$ given $\sigma(X)$; it is a kernel $\vartheta_{Y,\sigma(X)}(\omega,\cdot)$.
+\item Factor the $\sigma(X)$-measurable map $\omega\mapsto\vartheta_{Y,\sigma(X)}(\omega,B)$ through $X$ to get a measurable $\kappa(x,B)$ (use the factorization lemma).
+\item Then $\kappa(x,\cdot)$ is a probability measure for $\mu_E$-a.e.\ $x$; redefine on a null set to get it for all $x$.
+\item Finally, the RCD identity on sets $A\times F$ yields $\mu(A\times B)=\int_A \kappa(x,B)\,\mu_E(dx)$, and uniqueness follows from agreement on a countable generator + monotone class.
+\end{itemize}
+
+\subsection*{Theorem 3.7 (Snell envelope recursion and existence of an optimal rule)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Backward induction on time: at $N$ you must stop, so $U_N=Z_N$.
+\item For the recursion, fix $T\in\mathcal T_{n-1}$ and split on $\{T=n-1\}$ vs. $\{T\ge n\}$; on the second event use the tower property and the definition of $U_n$ to bound $\mathbb E[Z_T\mid\mathcal F_{n-1}]$ by $\max\{Z_{n-1},\mathbb E[U_n\mid\mathcal F_{n-1}]\}$.
+\item Taking the essential supremum over $T$ gives $U_{n-1}\le$ RHS; equality comes from considering the two candidate strategies: stop now or continue optimally from $n$.
+\item Define $T_n^*=\min\{k\ge n:U_k=Z_k\}$; measurability of $\{T_n^*=k\}$ follows from adaptedness of $U,Z$.
+\item Optimality is proved by induction using the recursion: on the continuation set $\{T_n^*\ge n+1\}$ you have $U_n=\mathbb E[U_{n+1}\mid\mathcal F_n]$, and eventually $U_n=\mathbb E[Z_{T_n^*}\mid\mathcal F_n]$.
+\end{itemize}
+
+\subsection*{Theorem 3.10 (Dynamic programming / Bellman recursion)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use induction to show the Snell envelope has the Markov form $U_n=V_n(X_n)$.
+\item Assume $U_n=V_n(X_n)$; then by the Snell recursion $U_{n-1}=\max\{g_{n-1}(X_{n-1}),\mathbb E[V_n(X_n)\mid\mathcal F_{n-1}]\}$.
+\item By the Markov property, $\mathbb E[V_n(X_n)\mid\mathcal F_{n-1}]=\mathbb E[V_n(X_n)\mid X_{n-1}]=\int_E V_n(y)Q(X_{n-1},dy)$, which defines $V_{n-1}$.
+\item The optimal stopping time is the first entry into the stopping region $\{x:g_n(x)=V_n(x)\}$ (same hitting-time idea as in Theorem 3.7).
+\end{itemize}
+
+\subsection*{Theorem 3.14 (Martingale optimality principle)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Part (i) is the minimality property of the Snell envelope: by definition it dominates $Z$ and is the smallest supermartingale doing so.
+\item For any stopping time $T$, optional sampling for supermartingales gives $\mathbb E[Z_T]\le \mathbb E[U_T]\le \mathbb E[U_0]$, proving (ii).
+\item For $T^*=\min\{n:U_n=Z_n\}$, the Snell recursion implies that $U$ is a martingale up to $T^*$, hence $\mathbb E[U_{T^*}]=\mathbb E[U_0]$ and $U_{T^*}=Z_{T^*}$; therefore (iii).
+\end{itemize}
+
+\subsection*{Theorem 3.15 (Doob decomposition)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Define the compensator increments $\Delta A_n := Y_{n-1}-\mathbb E[Y_n\mid\mathcal F_{n-1}]\ge0$; this is exactly the supermartingale drift.
+\item Let $A_0=0$ and $A_n=\sum_{k=1}^n \Delta A_k$; then $A$ is predictable and increasing.
+\item Set $M_n:=Y_n+A_n$ and check the martingale property by direct conditioning: $\mathbb E[M_n\mid\mathcal F_{n-1}]=Y_{n-1}+A_{n-1}=M_{n-1}$.
+\item Thus $Y=M-A$; uniqueness follows from uniqueness of conditional expectations / increments.
+\end{itemize}
+
+\subsection*{Theorem 3.21 (Threshold rule and asymptotics)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Reduce the secretary problem to a 1D Markov optimal stopping problem using the relative rank process $X_n$ and the Snell/Bellman recursion for success probabilities.
+\item Show the continuation value $c_n=\mathbb E[U_{n+1}\mid\mathcal F^X_n]$ becomes an explicit average because $X_{n+1}$ is conditionally uniform on $\{1,\dots,n+1\}$ given past relative ranks (symmetry of random permutations).
+\item The stopping rule compares `stop now' (only beneficial when $X_n=1$) versus `continue' (value $c_n$), yielding a threshold index $m$ where the inequality flips.
+\item Asymptotics come from approximating sums by integrals, giving $m\approx N/e$ and success probability $\approx 1/e$.
+\end{itemize}
+
+\subsection*{Theorem 4.3 (Conditional Gaussianity: informal statement)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Exploit linear-Gaussian dynamics: $(X_{n+1},Y_{n+1})$ is an affine function of $(X_n)$ plus independent Gaussian noise.
+\item By induction, conditional on past observations $\mathcal Y_n$, the state $X_n$ remains Gaussian (Gaussian family closed under affine maps and conditioning).
+\item Compute how the mean and covariance propagate: prediction via the linear dynamics, update via Gaussian conditioning (a regression formula).
+\end{itemize}
+
+\subsection*{Theorem 4.5 (Normal correlation / Gaussian regression with pseudo-inverse)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Write the joint vector $(X,Y)$ as Gaussian with block covariance; compute the conditional mean as the $L^2$-best linear predictor (orthogonal projection in a Gaussian Hilbert space).
+\item Use the normal equations to solve for the regression matrix; when the covariance is not invertible use the Moore--Penrose pseudo-inverse to get the minimal-norm solution.
+\item Show the conditional covariance is the Schur complement (or its pseudo-inverse analogue), and verify the result by checking characteristic functions / completing the square in the Gaussian density.
+\end{itemize}
+
+\subsection*{Theorem 2.2 (Conditional Gaussianity)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Set up the linear state-space model and show $(X_n,Y_n)$ is jointly Gaussian for each fixed $n$ by affine transformations of Gaussians.
+\item Use that conditioning a multivariate Gaussian remains Gaussian with explicitly updated mean/covariance (given by regression).
+\item Conclude that the filtering distribution $\mathcal L(X_n\mid\mathcal Y_n)$ is Gaussian and therefore fully described by $(m_n,\Sigma_n)$.
+\end{itemize}
+
+\subsection*{Theorem 5.4 (Equivalent disturbance representation)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Unroll the controlled dynamics to express $X_n$ as a measurable function of initial state, policy decisions, and an i.i.d.\ disturbance sequence.
+\item Construct the disturbance space as a product space and define the controlled process as a coordinate map; verify it has the same transition kernel as the original model.
+\item This gives an equivalent `canonical' representation where randomness is separated (noise) from control (policy), which simplifies measurability and dynamic programming arguments.
+\end{itemize}
+
+\subsection*{Theorem 5.13 (History dependence does not improve the value)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Compare a history-dependent policy with its `Markovized' version: at each time $n$ pick an action distribution depending only on the current state, equal to the conditional law of the original action given the state.
+\item Show by induction that both policies generate the same state distribution at all times (use the tower property and the transition kernel).
+\item Therefore they have the same expected total reward, so optimizing over Markov policies is sufficient.
+\end{itemize}
+
+\subsection*{Theorem 6.4 (Reward Iteration)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Define reward iteration under a fixed policy by repeatedly applying the one-step operator $T_n^{f_n}$ backward from time $N$.
+\item Prove by induction on $n$ that the iterates equal the conditional expected remaining reward starting from state $x$ at time $n$.
+\item The key step is the tower property + Markov property to replace conditioning on full history by conditioning on the current state.
+\end{itemize}
+
+\subsection*{Theorem 6.6 (Verification Theorem)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Take a candidate function sequence $(v_n)$ satisfying the Bellman inequalities $v_n\ge T_nv_{n+1}$ and terminal condition; show by backward induction that $v_n$ dominates the value function $V_n$ (monotonicity of $T_n$).
+\item If equality holds and maximizers exist, build a policy choosing stage-wise maximizers; then reward iteration shows this policy attains $v_n$.
+\item Conclude $v_n=V_n$ and the constructed policy is optimal.
+\end{itemize}
+
+\subsection*{Theorem 6.8 (Structure Theorem)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Backward induction using the structure assumption: start with $V_N=g_N\in M_N$.
+\item Assume $V_{n+1}\in M_{n+1}$; then closure (SAN-ii) gives measurability of $T_nV_{n+1}$ and keeps you in $M_n$.
+\item Upper bound: any policy value satisfies $V_n^\pi\le T_nV_{n+1}$, hence $V_n\le T_nV_{n+1}$ after taking the supremum.
+\item Lower bound: pick a maximizer $f_n^*$ for $V_{n+1}$ (SAN-iii) and patch with $\varepsilon$-optimal continuation to show $V_n\ge T_nV_{n+1}$.
+\item Collect the maximizers over all times and apply the verification theorem to get an optimal policy.
+\end{itemize}
+
+\subsection*{Theorem 7.15 (Daniell–Kolmogorov)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Define a pre-measure on cylinder sets using the consistent finite-dimensional distributions.
+\item Show this pre-measure is countably additive on the algebra of cylinder sets (consistency is crucial).
+\item Apply Carathéodory’s extension theorem to extend uniquely to the product $\sigma$-algebra, obtaining a probability measure on the path space.
+\item Finally, the coordinate maps on the product space form the desired process with the given finite-dimensional laws.
+\end{itemize}
+
+\subsection*{Theorem 7.18 (Existence of stochastic processes in Lusin spaces)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Reduce the problem to the standard Borel/Polish case by representing the Lusin space as a Borel subset of a Polish space via a measurable isomorphism.
+\item Apply Daniell--Kolmogorov on the Polish model space to get a process there.
+\item Push the process forward through the isomorphism to obtain a process with the desired finite-dimensional distributions on the original Lusin space.
+\end{itemize}
+
+\subsection*{Theorem 8.1 (Existence (L´evy–Ciesielski / Haar–Schauder Construction)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Choose an orthonormal basis of $L^2[0,1]$ with good path properties (Haar functions) and define $B_t$ as a random series with i.i.d.\ Gaussian coefficients (L\'evy--Ciesielski).
+\item Use Kolmogorov’s three-series / $L^2$ estimates to show the series converges uniformly a.s., giving continuous sample paths.
+\item Compute covariances to verify $\mathbb E[B_t]=0$ and $\mathrm{Cov}(B_s,B_t)=\min\{s,t\}$, hence the finite-dimensional distributions are those of Brownian motion.
+\item Independence of increments follows from orthogonality of basis pieces corresponding to disjoint intervals.
+\end{itemize}
+
+\subsection*{Theorem 9.2 (Optional Stopping Theorem)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item First prove the inequality for bounded stopping times by writing $\mathbb E[M_T]=\sum_n \mathbb E[M_n\mathbf 1_{\{T=n\}}]$ and using the martingale property stepwise.
+\item For general integrable/bounded-below martingales, approximate $T$ by $T\wedge n$ and pass to the limit using dominated/monotone convergence plus uniform integrability assumptions.
+\item The key idea is: martingales have zero conditional drift, so stopping cannot create expected gain unless integrability fails.
+\end{itemize}
+
+\subsection*{Theorem 9.3 (Skorokhod embedding)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Construct a stopping time $\tau$ as the first exit time of Brownian motion from a carefully chosen interval depending on the target law $\mu$.
+\item Use the martingale $B_t$ and (optional stopping) on bounded approximations to ensure $\mathbb E[B_\tau]=0$ and to match second moments.
+\item Choose the interval/randomization so that the distribution of $B_\tau$ matches $\mu$ exactly (typically via quantile or potential-theoretic arguments).
+\item Uniform integrability / bounded stopping-time approximations justify passing limits and conclude $B_\tau\sim\mu$.
+\end{itemize}
+
+\subsection*{Theorem 9.12 (Strong Markov property)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use the exponential martingale $M_t(\theta)=\exp(i\theta B_t-\tfrac12\theta^2 t)$ and optional stopping at $T\wedge n$ to compute conditional characteristic functions of increments after $T$.
+\item Let $n\to\infty$ and use continuity of paths + dominated convergence to pass from $T\wedge n$ to $T$.
+\item The conditional characteristic function of $B_{T+t}-B_T$ given $\mathcal F_T$ equals $\exp(-\tfrac12\theta^2 t)$, hence the increment is $N(0,t)$.
+\item Because this conditional characteristic function is deterministic, the increment is independent of $\mathcal F_T$; iterate to obtain independent stationary increments after $T$.
+\end{itemize}
+
+\subsection*{Theorem 9.14 (Reflection principle)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item For $a>0$, relate paths that hit level $a$ before time $t$ to paths whose endpoint exceeds $a$ by reflecting the trajectory after the first hitting time $\tau_a$.
+\item Show the reflection map preserves Wiener measure and swaps the events $\{\sup_{s\le t}B_s\ge a,\ B_t<b\}$ and $\{B_t>2a-b\}$.
+\item This yields $\mathbb P(\sup_{s\le t}B_s\ge a)=2\mathbb P(B_t\ge a)$ and more general joint identities for $(\sup B_s, B_t)$.
+\end{itemize}
+
+\subsection*{Theorem 10.18 (Relation E to M (E)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Show that integration against bounded continuous test functions determines a probability measure on a Polish space (separating class).
+\item Use regularity and a monotone class argument to pass from indicators of open/closed sets to bounded continuous functions, connecting set-based and function-based descriptions.
+\item Conclude that the embedding $\mu\mapsto\big(\int f\,d\mu\big)_{f\in C_b(E)}$ is injective and metrizable via the Prokhorov metric framework.
+\end{itemize}
+
+\subsection*{Theorem 10.19 (Portmanteau theorem and Prokhorov metric)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item ($\Rightarrow$) If $\mu_n\Rightarrow\mu$, approximate indicators of open/closed sets by bounded continuous functions from below/above to get the liminf/limsup inequalities.
+\item ($\Leftarrow$) Conversely, use the inequalities for all closed sets (or a convergence-determining class) to show convergence of integrals for bounded continuous functions via approximation.
+\item Relate these conditions to the Prokhorov metric by showing $d_P(\mu_n,\mu)\to0$ iff the portmanteau inequalities hold.
+\end{itemize}
+
+\subsection*{Theorem 11.4 (Prokhorov’s theorem)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use tightness to extract a subsequence that is Cauchy in the Prokhorov metric by a diagonal argument over a countable determining class (e.g. bounded Lipschitz functions).
+\item Show completeness/compactness: on a Polish space, tightness gives relative compactness of $\{\mu_n\}$ and any limit point is a probability measure.
+\item Conversely, if $\{\mu_n\}$ is relatively compact, show it must be tight; otherwise mass would escape to infinity and prevent weakly convergent subsequences.
+\end{itemize}
+
+\subsection*{Theorem 11.5 (Prokhorov theorem on metric spaces)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Adapt Prokhorov’s theorem from Polish spaces to general metric spaces by working on the completion or by restricting to the support of tight measures.
+\item Show that tightness still prevents mass escape and yields sequential compactness in the weak topology (often for Radon measures).
+\item Conversely, weak relative compactness forces tightness by testing on complements of large compact sets and using the portmanteau theorem.
+\end{itemize}
+
+\subsection*{Theorem 11.9 (Tightness criterion based on Arzel`a–Ascoli)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use Arzel\`a--Ascoli: relative compactness in $C([0,T];E)$ follows from (i) tightness at a fixed time (or at $0$) and (ii) uniform control of the modulus of continuity.
+\item Translate (ii) into a probabilistic equicontinuity condition: for each $\varepsilon$ choose $\delta$ so that increments over intervals of length $\delta$ are small with high probability, uniformly in $n$.
+\item Combine with a diagonal/compactness argument to get tightness of the laws on path space.
+\end{itemize}
+
+\subsection*{Theorem 11.16 (Kolmogorov–Chentsov)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Assume moment bounds on increments: $\mathbb E[d(X_t,X_s)^\alpha]\le C|t-s|^{1+\beta}$.
+\item Apply Markov’s inequality on dyadic grids and a Borel--Cantelli argument to show that, a.s., increments decay like $|t-s|^\gamma$ for some $\gamma<\beta/\alpha$.
+\item Upgrade the dyadic control to all times by chaining (triangle inequality), yielding a modification with $\gamma$-H\"older continuous paths.
+\end{itemize}
+
+\subsection*{Theorem 11.17 (Kolmogorov criterion for tightness)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Use Kolmogorov–Chentsov to get H\"older-continuous modifications under uniform increment moment bounds, which implies tightness in $C([0,T];E)$.
+\item Alternatively, combine moment bounds with the Arzel\`a--Ascoli tightness criterion by controlling the modulus of continuity in probability.
+\item Conclude that the family of process laws is tight on path space; hence weakly convergent subsequences exist.
+\end{itemize}
+
+\subsection*{Theorem 12.12 (Birkhoff (individual ergodic theorem)}
+\textbf{Proof idea.}
+\begin{itemize}
+\item Define $\overline f=\limsup S_n$ and $\underline f=\liminf S_n$ and first show they are $T$-invariant using $S_n\circ T-S_n\to0$.
+\item Apply Hopf’s maximal ergodic lemma to $h=f-g$ where $g$ is any invariant integrable function: it yields $\mathbb E[(f-g)\mathbf 1_{\{\sup_k (S_k(f)-g)>0\}}]\ge0$, giving the key comparison inequality.
+\item Use this inequality twice to show $\int \overline f\,d\mathbb P\le \int g\,d\mathbb P$ for invariant majorants $g$ and $\int \underline f\,d\mathbb P\ge \int g\,d\mathbb P$ for invariant minorants; choosing $g=\underline f$ and $g=\overline f$ forces $\overline f=\underline f$ a.s.
+\item Let $f^*=\lim S_n$; it is invariant, hence $\mathcal I$-measurable. Identify it by testing on invariant sets $A\in\mathcal I$: Hopf’s inequality applied to $f\mathbf 1_A$ gives $\int_A f^*=\int_A f$, which characterizes $\mathbb E[f\mid\mathcal I]$.
+\item $L^1$ convergence follows by dominated convergence for bounded $f$ and truncation plus $L^1$-contraction for general $f\in L^1$.
+\end{itemize}
+
+\end{document}
