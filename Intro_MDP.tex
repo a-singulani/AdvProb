@@ -7,8 +7,6 @@ Markov Decision Processes (MDPs) formalize \emph{sequential decision-making unde
 
 The key structural property is the \emph{Markov property}: given the current state and chosen action, the future evolution is conditionally independent of the past. This permits a ``local-to-global'' principle: instead of optimizing over entire sequences of actions at once, one can solve the problem recursively by reducing a multi-stage optimization to a sequence of one-stage optimizations. This principle is \emph{dynamic programming}.
 
-These notes develop the finite-horizon theory for general (possibly uncountable) state and action spaces, in the notation of the lecture notes. The exposition is written to be both rigorous and memorable: before each major theorem we give an intuitive explanation, and proofs are split into small steps.
-
 \section{Basic definitions}
 Before anything else we must define the elements that formalize the description of a Markov process. Although this section is rather dry and technical, it serves as a cornerstone to establish notation for discussion of the far more interesting Finite-Horizon Optimization (decision) Problem .    
 
