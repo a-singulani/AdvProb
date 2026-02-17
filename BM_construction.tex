@@ -1,4 +1,141 @@
-\chapter{Construction of Brownian Motion}
+\chapter{Brownian Motion}
+
+Brownian motion is the canonical model for \emph{random continuous motion}.
+It appears (i) as a mathematical idealization of the irregular movement of particles
+suspended in a fluid, (ii) as a universal scaling limit of many random-walk models,
+and (iii) as the driving noise in stochastic differential equations.
+
+In these notes we work on the time interval $[0,1]$ for simplicity. (Once existence is
+established on $[0,1]$, the extension to $[0,\infty)$ can be obtained by concatenation
+of independent copies, or by standard projective/extension arguments.)
+
+\begin{definition}[Standard Brownian motion on $[0,1]$]
+A stochastic process $B=(B_t)_{t\in[0,1]}$ on a probability space
+$(\Omega,\mathcal F,\Prob)$ is called a \emph{standard Brownian motion} if
+\begin{enumerate}
+\item $B_0=0$ almost surely,
+\item $t\mapsto B_t(\omega)$ is continuous on $[0,1]$ for $\Prob$-almost every $\omega$,
+\item for all $0\le s<t\le 1$,
+\[
+B_t-B_s \sim \mathcal N(0,t-s),
+\]
+\item increments over disjoint intervals are independent.
+(Equivalently: for any $0\le t_0<t_1<\dots<t_m\le 1$, the increments
+$B_{t_1}-B_{t_0},\dots,B_{t_m}-B_{t_{m-1}}$ are independent.)
+\end{enumerate}
+\end{definition}
+
+Intuitively:
+\emph{stationary increments} means the law of $B_t-B_s$ depends only on $t-s$,
+\emph{independent increments} means there is no memory across disjoint time intervals,
+and \emph{continuity} rules out jumps.
+
+\section{Properties of the standard Brownian motion}
+A key fact (and the entry point for the construction in the next chapter) is that
+Brownian motion is a centered Gaussian process with covariance $\min(s,t)$.
+
+\begin{proposition}[Mean and covariance]
+Let $B$ be a Brownian motion on $[0,1]$. Then for all $s,t\in[0,1]$,
+\[
+\E[B_t]=0,
+\qquad
+\E[B_sB_t]=\min(s,t).
+\]
+\end{proposition}
+
+\begin{proof}
+First we show that $\E[B_t]=0$ for all $t\in[0,1]$.
+Indeed, for $0\le s<t\le 1$ we have $B_t-B_s\sim\mathcal N(0,t-s)$, hence
+$\E[B_t-B_s]=0$ and therefore $\E[B_t]=\E[B_s]$.
+Thus $t\mapsto \E[B_t]$ is constant, and since $B_0=0$ a.s.\ we get
+$\E[B_t]=\E[B_0]=0$.
+
+
+Next, we show that $\E[B_sB_t]=\min(s,t)$. Fix $0\le s\le t\le 1$. By the increment decomposition,
+\[
+B_t = B_s + (B_t-B_s),
+\]
+and by definition the increment $B_t-B_s$ is independent of $B_s$ and has mean $0$.
+Therefore
+\[
+\E[B_sB_t]
+=\E\!\big[B_s(B_s+(B_t-B_s))\big]
+=\E[B_s^2] + \E[B_s]\E[B_t-B_s]
+=\E[B_s^2].
+\]
+But $B_s\sim\mathcal N(0,s)$, hence $\E[B_s^2]=\Var(B_s)=s=\min(s,t)$.
+\end{proof}
+
+\begin{proposition}[Conversely: covariance $\min(s,t)$ determines Brownian motion]
+Let $B=(B_t)_{t\in[0,1]}$ be a \emph{centered Gaussian process} such that $B_0=0$ a.s.,
+$t\mapsto B_t(\omega)$ is continuous for $\Prob$-a.e.\ $\omega$, and
+\[
+\E[B_sB_t]=\min(s,t)\qquad (s,t\in[0,1]).
+\]
+Then $B$ is a standard Brownian motion on $[0,1]$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+For $0\le s<t\le 1$,
+\[
+\Var(B_t-B_s)
+=\E[(B_t-B_s)^2]
+=\E[B_t^2]+\E[B_s^2]-2\E[B_sB_t]
+=t+s-2s=t-s,
+\]
+so $B_t-B_s\sim\mathcal N(0,t-s)$ (Gaussianity is preserved under linear maps).
+For disjoint intervals $[s,t]$ and $[u,v]$ with $t\le u$, compute
+\[
+\Cov(B_t-B_s,\;B_v-B_u)
+=\min(t,v)-\min(t,u)-\min(s,v)+\min(s,u)=0.
+\]
+Because the pair of increments is jointly Gaussian, zero covariance implies
+independence. This gives independent increments. Continuity and $B_0=0$ are assumed,
+hence $B$ is Brownian motion.
+\end{proof}
+
+\paragraph{Marginals and finite-dimensional distributions}
+From the definition (or from the covariance characterization) we immediately have
+\[
+B_t \sim \mathcal N(0,t),\qquad t\in[0,1].
+\]
+More generally, for any $0\le t_1<\dots<t_m\le 1$, the vector
+$(B_{t_1},\dots,B_{t_m})$ is multivariate normal, since it can be written as a linear
+transform of the independent Gaussian increments
+\[
+\Delta_j := B_{t_j}-B_{t_{j-1}},\qquad t_0:=0.
+\]
+
+\paragraph{Scaling and symmetry}
+For $c>0$, the rescaled process
+\[
+\widetilde B_t := \frac{1}{\sqrt c}\, B_{ct},
+\qquad t\in\Big[0,\frac{1}{c}\Big],
+\]
+is again a standard Brownian motion (on its time domain). Also, $(-B_t)_{t\in[0,1]}$
+has the same law as $(B_t)_{t\in[0,1]}$.
+
+\paragraph{Regularity}
+Brownian paths are continuous but extremely rough: they are almost surely nowhere
+differentiable. A useful quantitative statement (proved later in many courses, e.g.
+via Kolmogorov--Chentsov or directly from the series construction) is that for every
+$\alpha\in(0,\tfrac12)$ the paths are $\alpha$-H\"older continuous on $[0,1]$
+almost surely, while no exponent $\alpha\ge \tfrac12$ is possible almost surely.
+
+\section{Construction of Brownian motion}
+The definition of Brownian motion postulates the existence of a process with very
+specific properties. Standard constructions include:
+\begin{itemize}
+\item Kolmogorov extension (construct consistent finite-dimensional distributions) +
+      a continuity theorem (obtain a continuous modification),
+\item the L\'evy--Ciesielski (Haar--Schauder) construction: an explicit random series
+      built from a complete orthonormal system of $L^2([0,1])$,
+\item invariance principles (Brownian motion as a scaling limit of random walks).
+\end{itemize}
+We now construct a centered Gaussian process with covariance $\min(s,t)$ and continuous paths, and then identify it as Brownian motion.
+Below we follow the Haar--Schauder approach, since it gives an explicit
+realization \emph{and} a natural approximation scheme by truncating the series.
+
 
 Brownian motion can be characterized as a centered Gaussian process whose covariance
 structure is given by
@@ -174,3 +311,97 @@ This construction provides both a theoretical realization of Brownian motion
 and a practical approximation scheme: truncating the series yields continuous
 random paths converging uniformly almost surely.
 \end{remark}
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[x=11cm,y=1.2cm,>=Latex]
+
+% Parameters as labels (we draw generically; coordinates are symbolic on the axis)
+% We'll place the key points at 0.20, 0.55, 0.90 just for the sketch geometry:
+\def\a{0.20} % (k-1)2^{-n}
+\def\m{0.55} % (k-1/2)2^{-n}
+\def\b{0.90} % k2^{-n}
+
+% axes
+\draw[->] (0,0) -- (1.05,0) node[below] {$t$};
+\draw[->] (0,-1.15) -- (0,1.15);
+
+% y-level marks (symbolic)
+\draw (-0.02,1) -- (0.02,1) node[left] {$2^{n/2}$};
+\draw (-0.02,-1) -- (0.02,-1) node[left] {$-2^{n/2}$};
+
+% Haar function g_{k,n}
+% zero part (optional faint guide)
+\draw[gray!40] (0,0) -- (\a,0);
+\draw[gray!40] (\b,0) -- (1,0);
+
+% left half: +2^{n/2}
+\draw[thick] (\a,0) -- (\a,1);
+\draw[thick] (\a,1) -- (\m,1);
+
+% jump at midpoint
+\draw[thick] (\m,1) -- (\m,-1);
+
+% right half: -2^{n/2}
+\draw[thick] (\m,-1) -- (\b,-1);
+\draw[thick] (\b,-1) -- (\b,0);
+
+% x-ticks and labels
+\draw (\a,0.04) -- (\a,-0.04) node[below=4pt] {$(k-1)2^{-n}$};
+\draw (\m,0.04) -- (\m,-0.04) node[below=4pt] {$(k-\tfrac12)2^{-n}$};
+\draw (\b,0.04) -- (\b,-0.04) node[below=4pt] {$k2^{-n}$};
+
+% braces / interval labels (optional)
+\node[above] at ({(\a+\m)/2},1) {$I_{k,n}^\ell$};
+\node[below] at ({(\m+\b)/2},-1) {$I_{k,n}^r$};
+
+\node at (0.53,1.05) {$g_{k,n}$};
+
+\end{tikzpicture}
+\caption{Sketch of the Haar function $g_{k,n}(t)=2^{n/2}(1_{I^\ell_{k,n}}(t)-1_{I^r_{k,n}}(t))$.}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[x=11cm,y=2.2cm,>=Latex]
+
+% Place the endpoints for the sketch geometry (symbolic labels on ticks)
+\def\a{0.20} % a=(k-1)2^{-n}
+\def\m{0.55} % m=(k-1/2)2^{-n}
+\def\b{0.90} % b=k2^{-n}
+
+% Height corresponds to ||f_{k,n}||_\infty = 2^{-n/2-1}
+\def\H{0.55}
+
+% axes
+\draw[->] (0,0) -- (1.05,0) node[below] {$t$};
+\draw[->] (0,0) -- (0,0.85);
+
+% peak height tick
+\draw (-0.02,\H) -- (0.02,\H) node[left] {$2^{-n/2-1}$};
+
+% baseline faint
+\draw[gray!40] (0,0) -- (\a,0);
+\draw[gray!40] (\b,0) -- (1,0);
+
+% tent function f_{k,n}
+\draw[thick] (\a,0) -- (\m,\H) -- (\b,0);
+
+% x-ticks and labels
+\draw (\a,0.02) -- (\a,-0.02) node[below=4pt] {$(k-1)2^{-n}$};
+\draw (\m,0.02) -- (\m,-0.02) node[below=4pt] {$(k-\tfrac12)2^{-n}$};
+\draw (\b,0.02) -- (\b,-0.02) node[below=4pt] {$k2^{-n}$};
+
+% annotations
+\node[above] at ({(\a+\m)/2},{\H/2}) {$\text{slope }=2^{n/2}$};
+\node[above] at ({(\m+\b)/2},{\H/2}) {$\text{slope }=-2^{n/2}$};
+\node[above] at (\m,\H) {$f_{k,n}(m)=2^{-n/2-1}$};
+
+\node at (0.56,0.80) {$f_{k,n}$};
+
+\end{tikzpicture}
+\caption{Sketch of the Schauder function $f_{k,n}(t)=\int_0^t g_{k,n}(u)\,du$ (a continuous ``tent'' supported on $I_{k,n}$).}
+\end{figure}
+
+
