@@ -1,0 +1,48 @@
+Why is “conditioning on X=x” subtle in measure theory?	Conditional expectations are only defined a.s., so versions can differ on null sets that may depend on the event being conditioned.
+How is E[Y | X=x] defined via factorization?	If Z=E[Y|σ(X)]=ξ(X) a.s. for measurable ξ, define E[Y|X=x]=ξ(x).
+How is conditional probability P(A|X=x) defined in Chapter 2?	P(A|X=x)=E[1_A | X=x].
+What is the main problem with defining P(Y∈B|X=x) separately for each B?	The null set where a version is undefined can depend on B, so you cannot get one pointwise object valid for all B at once.
+What is a regular conditional distribution (RCD) of Y given F?	A kernel ϑ(ω,·) that is a probability measure in the set argument and F-measurable in ω, satisfying the defining integral identity.
+Kernel measurability condition for an RCD: for fixed A, what must hold?	ω↦ϑ(ω,A) is F-measurable.
+Kernel measure condition for an RCD: for fixed ω, what must hold?	A↦ϑ(ω,A) is a probability measure on the target measurable space.
+What is the defining identity for an RCD of Y given F?	For all C∈F: ∫_C ϑ(ω,A) dP = P(C ∩ {Y∈A}).
+How does an RCD “regularize” conditional probabilities?	It provides a genuine probability measure (a.s.) for almost every ω, simultaneously for all measurable sets A.
+What is a “kernel” in this chapter’s sense?	A map ϑ:Ω×E→[0,1] that is measurable in ω (for fixed set) and a probability measure in the set variable (for fixed ω).
+What is a Borel space?	A measurable space isomorphic to a Borel subset of ℝ with its Borel σ-algebra.
+What is a Polish space?	A complete separable metric space (with its Borel σ-algebra when used as a measurable space).
+What is a Lusin measurable space?	A measurable space isomorphic to a Borel subset of some Polish space.
+Why are Borel/Lusin spaces “well-behaved” for conditional laws?	They admit countable generators and measurable isomorphisms that enable constructing measurable versions of conditional probabilities.
+What is an isomorphism of measurable spaces?	A bijection ξ with ξ and ξ^{-1} both measurable.
+What is an isomorphism of measure spaces (extra condition)?	Measures match under pushforward: μ̃ = μ∘ξ^{-1}.
+State the existence result for RCDs in Borel spaces (informal).	If Y takes values in a Borel space and F is a sub-σ-algebra, an RCD of Y given F exists.
+What is the key reduction idea in the Borel-valued existence proof?	Use a measurable isomorphism into a Borel subset of ℝ and reduce to the real-valued case.
+In the real-valued construction, what is F(r,ω)?	F(r,ω)=E[1_{Y≤r} | F](ω) for rational r.
+Why use only rational r in constructing the conditional distribution function?	ℚ is countable, so you can take unions of null sets and keep them null.
+How is monotonicity enforced for r↦F(r,ω)?	Remove a null set so that for ω outside it, F(r,ω) is nondecreasing in r over ℚ.
+How are right limits used to define a distribution function on all real z?	Define F̃(z,ω)=inf{F(r,ω): r∈ℚ, r>z}.
+What boundary conditions must hold for F̃(·,ω) to be a distribution function?	Limit 0 at −∞ and limit 1 at +∞ (outside a null set).
+How is the kernel ϑ(ω,·) obtained once F̃(·,ω) is built?	ϑ(ω,·) is the unique probability measure on (ℝ,B(ℝ)) with distribution function F̃(·,ω).
+How is measurability of ω↦ϑ(ω,B) proved for all Borel B?	Show it on a generating π-system (−∞,r] then extend by a π–λ/monotone class argument.
+What does Theorem “integral representation” say about E[f(X)|F]?	E[f(X)|F](ω)=∫ f(x) ϑ_{X,F}(ω,dx) a.s.
+What integrability condition is needed for the integral representation?	E[|f(X)|] < ∞.
+What is the main proof technique for the integral representation theorem?	Approximate f by increasing simple functions and apply monotone convergence.
+What does “regularized conditional expectation” mean here?	A version of E[f(X)|F] written as an integral against a random probability measure (kernel).
+What is the disintegration lemma (informal statement)?	A joint measure can be factored into a marginal and a conditional kernel: μ(dx,dy)=ϑ(y,dx)ν(dy).
+In disintegration, what is ν?	The marginal distribution of Y.
+In disintegration, what is ϑ(y,·)?	A conditional distribution of X given Y=y (a probability measure for each y).
+What measurability is required for y↦ϑ(y,A)?	It must be measurable for each measurable set A.
+Why is disintegration the “measure-level” replacement for conditional densities?	It works even when densities do not exist (mixed discrete/continuous or singular cases).
+How does disintegration compute expectations of g(X,Y)?	E[g(X,Y)]=∫ (∫ g(x,y)ϑ(y,dx)) ν(dy).
+How does an RCD connect to conditional probabilities?	ϑ(ω,A) acts like P(Y∈A | F)(ω).
+If F=σ(Z), how does an RCD typically depend on ω?	It depends on ω through the observed variable Z(ω) (a σ(Z)-measurable dependence).
+In Definition of E[Y|X=x], why is ξ only unique P_X-a.s.?	Because Z=ξ(X) holds only P-a.s., so ξ can differ on a P_X-null set.
+What does an RCD guarantee “simultaneously” that separate versions don’t?	A single measurable kernel gives conditional probabilities for all measurable sets (up to one null set).
+What is the key equation for RCDs on indicators?	E[1_{Y∈A}1_C]=∫_C ϑ(ω,A)dP for all C∈F.
+How can you read ϑ(ω,·) as a distribution?	For a.e. ω, it is a full probability law of Y given the information F at ω.
+Why do we require the set-function A↦ϑ(ω,A) to be a probability measure?	So it behaves like an honest conditional law (countable additivity, total mass 1).
+What fails in “pathological” measurable spaces that motivates Borel/Lusin assumptions?	You may not be able to select conditional laws in a jointly measurable way.
+What is the practical consequence of being a Borel space for conditioning?	Conditional probabilities can be constructed by defining them on a countable generator and extending.
+How does the kernel representation help computation?	It turns conditional expectations into integrals against a (random) probability measure.
+What does ϑ_{X,F}(ω,A) represent when X is the conditioned variable?	The conditional probability that X lies in A given F at outcome ω.
+Why is “conditioning on X=x” meaningful even if P(X=x)=0?	Because ξ(x) is defined as a measurable version (unique P_X-a.s.), giving a pointwise conditional expectation.
+What is the main conceptual message of Chapter 2?	To make conditioning “pointwise” and measurable, use regular conditional distributions (kernels), not just a.s. versions.

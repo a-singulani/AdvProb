@@ -57,7 +57,7 @@ Prokhorov-type theorems show that (on Polish spaces, and in a suitable sense on 
 compactness condition for weak convergence. Conceptually:
 \[
 \text{tightness} \quad \Longleftrightarrow \quad \text{``no loss of mass at infinity''} \quad
-\Longrightarrow \quad \text{existence of weakly convergent subsequences.}
+\Longrightarrow \quad \text{existence of weakly convergent subseq.}
 \]
 
 \medskip
@@ -462,7 +462,7 @@ Let $(E,d)$ be a metric space and let $\mathcal{E}:=\mathcal{B}(E)$ be its Borel
 Let $(\mathbb{P}_n)_{n\in\mathbb{N}}\subset \mathcal{P}(E)$ and $\mathbb{P}\in\mathcal{P}(E)$ be Borel probability measures.
 Consider the following statements:
 \begin{enumerate}[label=\textnormal{(\alph*)}, leftmargin=3.2em]
-  \item $\displaystyle \lim_{n\to\infty}\rho(\mathbb{P}_n,\mathbb{P})=0$, where $\rho$ denotes the Prokhorov metric.
+  \item $\displaystyle \lim_{n\to\infty}\beta(\mathbb{P}_n,\mathbb{P})=0$, where $\beta$ denotes the Prokhorov metric.
   \item $\mathbb{P}_n \Rightarrow \mathbb{P}$ (weak convergence).
   \item $\displaystyle \lim_{n\to\infty}\int_E f\,d\mathbb{P}_n=\int_E f\,d\mathbb{P}\qquad \forall\, f\in C_b(E)$,
         where $f$ is uniformily continuous.
@@ -472,7 +472,7 @@ Consider the following statements:
         i.e.\ for all $\mathbb{P}$-continuity sets $A$.
 \end{enumerate}
 Then \textnormal{(b)}--\textnormal{(f)} are equivalent, and \textnormal{(a)} implies \textnormal{(b)}.
-Moreover, if $(E,d)$ is separable, then \textnormal{(a)}--\textnormal{(f)} are equivalent (in particular, $\rho$ metrizes weak convergence).
+Moreover, if $(E,d)$ is separable, then \textnormal{(a)}--\textnormal{(f)} are equivalent (in particular, $\beta$ metrizes weak convergence).
 \end{theorem}
 
 \begin{proof}[Equivalence of \textnormal{(b)}--\textnormal{(f)}]
@@ -590,9 +590,9 @@ Combining Steps~1--5 gives the equivalence of \textnormal{(b)}--\textnormal{(f)}
 
 
 \begin{proof}[Proof of \textnormal{(a)} $\Rightarrow$ \textnormal{(b)}]
-Assume \textnormal{(a)}, i.e.\ $\rho(\mathbb{P}_n,\mathbb{P})\to 0$ as $n\to\infty$, where $\rho$ is the Prokhorov metric.
-Fix a closed set $F\in\mathcal{E}$. By the definition of $\rho$, for each $n$ there exists $\varepsilon_n\downarrow 0$
-(with $\varepsilon_n \ge \rho(\mathbb{P}_n,\mathbb{P})$) such that
+Assume \textnormal{(a)}, i.e.\ $\beta(\mathbb{P}_n,\mathbb{P})\to 0$ as $n\to\infty$, where $\beta$ is the Prokhorov metric.
+Fix a closed set $F\in\mathcal{E}$. By the definition of $\beta$, for each $n$ there exists $\varepsilon_n\downarrow 0$
+(with $\varepsilon_n \ge \beta(\mathbb{P}_n,\mathbb{P})$) such that
 \[
 \mathbb{P}_n(F)\le \mathbb{P}(F^{\varepsilon_n})+\varepsilon_n,
 \]
@@ -658,9 +658,9 @@ Hence, for all $n\ge N(\varepsilon)$ and all Borel $B$,
 \]
 Together with \eqref{eq:prokhorov_one_side} (renaming $A$ as $B$) this shows that for all $n\ge N(\varepsilon)$,
 \[
-\rho(\mathbb{P}_n,\mathbb{P}) \le 2\varepsilon.
+\beta(\mathbb{P}_n,\mathbb{P}) \le 2\varepsilon.
 \]
-Since $\varepsilon>0$ was arbitrary, we conclude $\rho(\mathbb{P}_n,\mathbb{P})\to 0$, i.e.\ \textnormal{(a)} holds.
+Since $\varepsilon>0$ was arbitrary, we conclude $\beta(\mathbb{P}_n,\mathbb{P})\to 0$, i.e.\ \textnormal{(a)} holds.
 \end{proof}
 
 \chapter{Tightness}
@@ -728,10 +728,10 @@ Let $E$ be Polish and $\mathcal{K}\subset\mathcal{M}_1(E)$. The following are eq
 \begin{proof}
 \LabelProof{(a)$\Leftrightarrow$(b)} It is just the definition.
 
-\LabelProof{(b)$\Rightarrow$(c)} Let $(P_n)\subset\mathcal{K}$. Tightness provides compacts $K_m\uparrow$ such that
+\LabelProof{(b)$\Rightarrow$(c)} Let $(P_n)\subset\mathcal{K}$. Tightness provides compacts sets $(K_m)_{m \geq 1}$ such that
 $\inf_n P_n(K_m)\ge 1-2^{-m}$. Since $E$ is separable, there exists a countable convergence-determining class
-$\mathcal{C}\subset C_b(E)$. By a diagonal argument, extract a subsequence $(P_{n_k})$ such that $\int f\,dP_{n_k}$
-converges for all $f\in\mathcal{C}$.
+$\mathcal{C}\subset C_b(E)$. Next, $\int f dP_n$ is bounded, thus by Bolzano-Weierstrass, there exists a subsequence $(P_{n_k})$ such that $\int f\,dP_{n_k}$
+converges for all $f\in\mathcal{C}$. We know that, if $(\mu_n) \in \mathcal{M}_1(E)$ is tight and $\int f d\mu_n$ converges for all $f$ in a countable separting class, then there exist $\mu \in \mathcal{M}_1(E)$ such that $\int f d\mu_n \to \int f d\mu$ for all $f\in\mathcal{C}$.
 This identifies a unique limit probability measure $P$ (because $C_b(E)$ separates measures),
 and one concludes $P_{n_k}\Rightarrow P$.
 

@@ -1,0 +1,52 @@
+What is the goal of filtering in Chapter 4?	Estimate the hidden state θ_t using the observation history.
+What is the observation filtration F_t^ξ?	F_t^ξ = σ(ξ_0, ξ_1, …, ξ_t).
+What are the two processes in the filtering setup?	An unobserved state θ_t and an observation/measurement ξ_t.
+Write the state equation (model) for θ_{t+1}.	θ_{t+1}=a0(t)+a1(t)θ_t+b1(t)ε1(t+1)+b2(t)ε2(t+1).
+Write the observation equation (model) for ξ_{t+1}.	ξ_{t+1}=A0(t)+A1(t)θ_t+B1(t)ε1(t+1)+B2(t)ε2(t+1).
+What are ε1(t) and ε2(t) assumed to be?	i.i.d. standard Gaussian vectors, independent across time and mutually independent.
+What measurability/adaptedness is assumed for the coefficients?	a0,a1,b1,b2,A0,A1,B1,B2 are F_t^ξ-measurable (can depend on past observations).
+What is the conditional mean m(t)?	m(t)=E[θ_t | F_t^ξ].
+What is the conditional covariance Y(t)?	Y(t)=Cov(θ_t | F_t^ξ).
+What is meant by “conditionally Gaussian sequence” here?	For each t, the conditional law of θ_t given F_t^ξ is (a.s.) Gaussian.
+Why do (m(t), Y(t)) summarize the full conditional law of θ_t?	A Gaussian distribution is determined by its mean and covariance.
+What is the key step from time t to t+1 in filtering?	Update from the prior (given F_t^ξ) to the posterior (given F_{t+1}^ξ=σ(F_t^ξ, ξ_{t+1})).
+What is the “innovation” ν_{t+1}?	ν_{t+1}=ξ_{t+1}−E[ξ_{t+1} | F_t^ξ].
+What is the prediction formula for E[θ_{t+1} | F_t^ξ]?	E[θ_{t+1} | F_t^ξ]=a0(t)+a1(t)m(t).
+What is the prediction formula for E[ξ_{t+1} | F_t^ξ]?	E[ξ_{t+1} | F_t^ξ]=A0(t)+A1(t)m(t).
+Express ν_{t+1} using coefficients and m(t).	ν_{t+1}=ξ_{t+1}−A0(t)−A1(t)m(t).
+Write the state prediction error θ_{t+1}−E[θ_{t+1}|F_t^ξ].	a1(t)(θ_t−m(t))+b1(t)ε1(t+1)+b2(t)ε2(t+1).
+Write the observation prediction error ξ_{t+1}−E[ξ_{t+1}|F_t^ξ].	A1(t)(θ_t−m(t))+B1(t)ε1(t+1)+B2(t)ε2(t+1).
+Define d11^ξ(t)=Cov(θ_{t+1} | F_t^ξ).	d11^ξ(t)=a1(t)Y(t)a1(t)^T + b1(t)b1(t)^T + b2(t)b2(t)^T.
+Define d22^ξ(t)=Cov(ξ_{t+1} | F_t^ξ).	d22^ξ(t)=A1(t)Y(t)A1(t)^T + B1(t)B1(t)^T + B2(t)B2(t)^T.
+Define d12^ξ(t)=Cov(θ_{t+1}, ξ_{t+1} | F_t^ξ).	d12^ξ(t)=a1(t)Y(t)A1(t)^T + b1(t)B1(t)^T + b2(t)B2(t)^T.
+What theorem powers the Kalman update in these notes?	Gaussian conditioning / normal correlation (Gaussian regression).
+State the Gaussian regression mean formula with pseudo-inverse.	E[X|Z]=m_X + Σ_XZ Σ_ZZ^+ (Z−m_Z) for jointly Gaussian (X,Z).
+State the Gaussian regression covariance formula with pseudo-inverse.	Cov(X|Z)=Σ_XX − Σ_XZ Σ_ZZ^+ Σ_ZX.
+What is Σ_ZZ^+?	The Moore–Penrose pseudo-inverse of Σ_ZZ.
+Why do we need a pseudo-inverse in filtering?	The conditional covariance of observations can be singular (redundant/noiseless information).
+What is the generalized Kalman gain K(t)?	K(t)=d12^ξ(t) (d22^ξ(t))^+.
+Write the generalized Kalman mean update m(t+1).	m(t+1)=E[θ_{t+1}|F_t^ξ] + K(t) ν_{t+1}.
+Write the generalized Kalman covariance update Y(t+1).	Y(t+1)=d11^ξ(t) − d12^ξ(t)(d22^ξ(t))^+ d12^ξ(t)^T.
+What is the “prior” at time t+1?	The conditional law of θ_{t+1} given F_t^ξ (before seeing ξ_{t+1}).
+What is the “posterior” at time t+1?	The conditional law of θ_{t+1} given F_{t+1}^ξ (after seeing ξ_{t+1}).
+What does the update do conceptually to the mean?	Prior mean + gain × innovation.
+What does the update do conceptually to the covariance?	Subtract the part “explained” by the new measurement (variance reduction).
+When does the generalized update reduce to the familiar classical form?	When coefficients/noise covariances are deterministic and the relevant covariance is invertible (no pseudo-inverse needed).
+In the classical Kalman filter, what is the standard gain formula?	K=Σ^- H^T (HΣ^-H^T+Σ_R)^{-1}.
+In the classical Kalman filter, what is the standard mean update?	x̂ = x̂^- + K(z − Hx̂^-).
+In the classical Kalman filter, what is the standard covariance update?	Σ = Σ^- − K(HΣ^-H^T+Σ_R)K^T.
+What is the 1D vehicle tracking state vector in the example?	X_k=(p_k, v_k)^T (position, velocity).
+What is the sampling interval symbol in the example?	Δ>0.
+Write the deterministic kinematics for p_k and v_k with acceleration u.	p_k=p_{k−1}+Δv_{k−1}+(1/2)Δ^2 u_{k−1}; v_k=v_{k−1}+Δu_{k−1}.
+How is random acceleration modeled in the example?	Replace u_{k−1} by u_{k−1}+E_{k−1} with E_k~N(0,σ_E^2) i.i.d.
+What is the example’s state transition matrix A?	A=[[1,Δ],[0,1]].
+What is the example’s process-noise covariance Σ_W (up to σ_E^2 scaling)?	Σ_W=σ_E^2[[ (1/4)Δ^4, (1/2)Δ^3 ],[ (1/2)Δ^3, Δ^2 ]].
+What is observed in the example measurement equation?	Only position: z_k = H X_k + R_k with H=[1,0].
+What is the measurement noise assumption in the example?	R_k~N(0,σ_R^2).
+What is the “core mathematical tool” highlighted in the chapter takeaway?	Gaussian conditioning (normal correlation).
+What does “innovation” measure?	The new information in ξ_{t+1} not predictable from past observations.
+What does the Kalman gain balance?	How much to trust the new measurement vs the prior uncertainty.
+What does “conditionally Gaussianity propagates” mean?	If θ_t|F_t^ξ is Gaussian, then θ_{t+1}|F_{t+1}^ξ is Gaussian as well.
+Why does the filtering problem become finite-dimensional here?	The full posterior is summarized by updating only mean and covariance.
+What role does measurability of coefficients (F_t^ξ-measurable) play?	It keeps the conditional Gaussian structure valid when conditioning on the observation history.
+What is the main reason the pseudo-inverse is acceptable in the update?	The regression/projection formulas remain valid for positive semidefinite (possibly singular) covariance.
