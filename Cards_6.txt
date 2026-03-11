@@ -1,0 +1,60 @@
+What is the Bellman equation recursion for the value functions?	VN = gN, and for n=0,...,N-1: Vn(x)=sup_{a∈Dn(x)}{ rn(x,a) + ∫_E Vn+1(x') Qn(dx'|x,a) }.
+What is the key intuition behind the Bellman equation?	Total value = immediate reward + expected continuation value from the next state.
+What is M(E) in Chapter 6?	M(E) := { v:E→[-∞,∞) | v is measurable }.
+Define (L_n v)(x,a).	(Lnv)(x,a) := rn(x,a) + ∫_E v(x') Qn(dx'|x,a), for (x,a)∈Dn.
+Define (T_n^f v)(x).	(Tn^f v)(x) := (Lnv)(x, f(x)), for x∈E and decision rule f∈Fn.
+Define (T_n v)(x).	(Tnv)(x) := sup_{a∈Dn(x)} (Lnv)(x,a), for x∈E.
+What is the domain where L_n v is defined?	On admissible state-action pairs (x,a) ∈ Dn ⊂ E×A.
+In L_n v, what kernel determines the next-state averaging?	The transition kernel Qn(·|x,a).
+What does Remark 6.2(a) say about T_n v?	Tnv = sup_{f∈Fn} Tn^f v.
+What does Remark 6.2(b) warn about measurability?	Even if v is measurable, Tn v need not be measurable (sup over uncountable actions can break measurability).
+Lemma 6.3: if v≤w pointwise, what inequality holds for L_n?	Ln v(x,a) ≤ Ln w(x,a) for all (x,a)∈Dn.
+Lemma 6.3: if v≤w pointwise, what inequality holds for T_n^f?	Tn^f v(x) ≤ Tn^f w(x) for all x and all decision rules f.
+Lemma 6.3: if v≤w pointwise, what inequality holds for T_n?	Tn v(x) ≤ Tn w(x) for all x.
+Why does v≤w imply ∫ v dQ ≤ ∫ w dQ in Lemma 6.3?	Because Qn(·|x,a) is a probability measure and integration preserves pointwise inequalities.
+What is “reward iteration” conceptually?	A backward recursion that computes the value Vn^π of a fixed policy π stage by stage.
+Theorem 6.4: what is V_N^π?	VN^π = gN.
+Theorem 6.4: what is the recursion for V_n^π?	For n=0,...,N-1: Vn^π = Tn^{f_n} Vn+1^π (if π=(f0,...,fN-1)).
+Theorem 6.4: what is the concatenated operator formula for V_n^π?	Vn^π = Tn^{f_n} Tn+1^{f_{n+1}} ··· T_{N-1}^{f_{N-1}} gN.
+In Thm 6.4 Step 1, how is Vn^π(x) split?	Immediate reward rn(x,f_n(x)) + expected future rewards from time n+1 onward.
+Why can rn(Xn,f_n(Xn)) be replaced by rn(x,f_n(x)) under P_{n,x}^π?	Because Xn=x holds P_{n,x}^π-a.s.
+In Thm 6.4, what is the tower property used for?	To condition the future tail reward on Xn+1.
+In Thm 6.4, what does the Markov/time-shift step give?	Given Xn+1=x', the conditional expected future reward equals Vn+1^π(x').
+Under P_{n,x}^π, what is the law of Xn+1?	Xn+1 ∼ Qn(·|x, f_n(x)).
+In reward iteration, what random variable serves as the continuation value?	Vn+1^π(Xn+1).
+What does the operator Tn^f represent in words?	“One-step lookahead value” if you choose action f(x) now and then use continuation v.
+Section 6.3: what is the intuition behind maximizers?	A maximizer is a decision rule that attains the Bellman supremum (pointwise in the state).
+Definition 6.5: when is f a maximizer of v at time n?	If Tn^f v = Tn v.
+Definition 6.5: what does maximizer mean pointwise in x?	For each x, f(x) maximizes a↦(Lnv)(x,a) over a∈Dn(x).
+Verification theorem: what recursion must (v_n) satisfy?	vN=gN and vn = Tn v_{n+1} for n=0,...,N-1.
+Theorem 6.6(a): what bound does a Bellman-satisfying (v_n) provide?	vn ≥ Vn for all n.
+Theorem 6.6(b): what extra condition yields vn=Vn and an optimal policy?	Exist maximizers f_n^* of v_{n+1} for every n; then π^*=(f0^*,...,f_{N-1}^*) is optimal.
+In the proof of Thm 6.6, what direction is the induction?	Backward induction (from N down to 0).
+In Thm 6.6 proof, what property lets you compare Tn vn+1 and Tn Vn+1?	Monotonicity of Tn.
+How is any fixed policy π bounded in Thm 6.6 proof?	Vn^π = Tn^{f_n} Vn+1^π ≤ Tn^{f_n} Vn+1 ≤ Tn Vn+1.
+Why does taking sup over π matter in Thm 6.6?	Sup_π Vn^π = Vn, so the bound becomes a bound on the optimal value.
+How is the candidate optimal policy π^* constructed in Thm 6.6(b)?	Choose maximizers f_n^* at each stage and set π^*=(f0^*,...,f_{N-1}^*).
+What is shown by backward induction in Thm 6.6(b) once π^* is defined?	Vn^{π^*} = vn for all n.
+Why is a structure assumption needed (Section 6.5 motivation)?	Tn v may be non-measurable and the supremum may fail to be attained without extra assumptions.
+SAN (Structure Assumption) item (i): what must hold at terminal time?	gN ∈ MN.
+SAN item (ii): what closure property is required?	If v∈M_{n+1}, then Tn v is well-defined and belongs to Mn.
+SAN item (iii): what existence property is required?	For every v∈M_{n+1}, there exists a maximizer f_n ∈ Δn.
+In SAN, what is Δn a subset of?	Δn ⊂ Fn (a selected class of decision rules).
+Structure theorem 6.8(a): what does it conclude about Vn and the Bellman equation?	Vn ∈ Mn for all n and Vn = Tn Vn+1 with VN=gN.
+Structure theorem 6.8(b): how can Vn be written as a composition of operators?	Vn = Tn Tn+1 ··· T_{N-1} gN.
+Structure theorem 6.8(c): what does it guarantee exists?	Maximizers f_n^* ∈ Δn for Vn+1, and any such sequence yields an optimal policy.
+In Thm 6.8 proof, what yields the “upper bound” Vn ≤ Tn Vn+1?	Reward iteration for any π plus monotonicity gives Vn^π ≤ Tn Vn+1, then take sup over π.
+How is the “lower bound” Vn ≥ Tn Vn+1 obtained in Thm 6.8?	Use a maximizer f_n^* and an ε-optimal continuation policy from time n+1 onward.
+What is an ε-optimal continuation policy (as used in Thm 6.8)?	A policy π^ε such that Vn+1^{π^ε}(x') ≥ Vn+1(x') − ε for each x'.
+Which operator property is crucial in the ε-argument of Thm 6.8?	Monotonicity of Tn^{f_n^*}.
+Why do we let ε ↓ 0 in Thm 6.8?	To remove the ε-gap and conclude Vn ≥ Tn Vn+1 exactly.
+Corollary 6.9 (dynamic programming principle): what is the intermediate-time formula?	For n≤m≤N: Vn(x)=sup_π E_{n,x}^π[ ∑_{k=n}^{m-1} rk(Xk,fk(Xk)) + Vm(Xm) ].
+In Corollary 6.9, what role does Vm(Xm) play?	It is the continuation value when stopping the optimization at time m.
+Backward induction algorithm (Remark 6.10): what is step 1?	Set VN := gN.
+Backward induction algorithm (Remark 6.10): what is step 2?	For n=N-1,...,0 compute Vn(x)=sup_{a∈Dn(x)}{rn(x,a)+∫ Vn+1 dQn} and pick a maximizer f_n^*(x).
+What does Remark 6.10 conclude about the policy π^* built from maximizers?	π^*=(f0^*,...,f_{N-1}^*) is optimal.
+What phenomenon does Section 6.6 highlight?	A policy can be optimal even if it is not a maximizer at states that are never visited.
+Example 6.11: how is the transition kernel defined?	Qn({x'}|x,a) = 1{a = x'} (the action forces the next state).
+Example 6.11: what are the rewards rn and g2?	rn(x,a)=a and g2(x)=x.
+Example 6.11: why can a policy with a “non-maximizing” action at an unreachable state still be optimal?	Because that state is never visited under the policy, so that action never affects the realized reward.
+What is the key message of “stage-wise maximizers everywhere”?	Optimality needs maximization only along states reached with positive probability under the policy.

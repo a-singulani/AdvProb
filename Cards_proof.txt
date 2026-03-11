@@ -1,0 +1,91 @@
+Thm 1.6 (Cond. exp. existence): For X≥0, what measure Q is defined on (Ω,F) to apply Radon–Nikodym?	Q(F)=∫_F X dP
+Thm 1.6 (Cond. exp. existence): Which theorem produces an F-measurable density Z with the defining integral identity?	Radon–Nikodym theorem (since Q≪P|_F)
+Thm 1.6 (Cond. exp. existence): How do you reduce the integrable signed case to the nonnegative case?	Write X=X⁺−X⁻ and handle parts separately
+Thm 1.6 (Cond. exp. existence): Core idea for uniqueness of conditional expectation versions?	Test the difference on F-sets where one version is larger
+Thm 1.8 (Properties): How are conditional expectation properties typically proved?	Check measurability + equality of integrals on F-events (the characterization)
+Thm 1.8 (Properties): How are pull-out/independence formulas usually extended to general integrable variables?	Prove for indicators/simple functions, then extend by approximation
+Thm 1.9 (Orthogonal projection): Key orthogonality identity characterizing X₀=E[X|F] in L²?	E[(X−X₀)Y]=0 for every F-measurable Y∈L²
+Thm 1.9 (Orthogonal projection): Why does the Pythagorean identity apply in the minimization proof?	Decompose X−Y=(X−X₀)+(X₀−Y) into orthogonal parts in L²
+Thm 1.10 (Jensen): What convex-function fact is used to prove Jensen’s inequality?	Convex g is the supremum of supporting affine functions a+bx below g
+Thm 1.10 (Jensen): What is the key conditional step before taking the supremum over supporting lines?	E[g(X)|F]≥a+bE[X|F] for each supporting line a+bx
+Lemma 1.11 (Conditional density): Candidate formula for E[h(X,Y)|Y=y] using f_{X|Y}?	Φ(y)=∫ h(x,y) f_{X|Y}(x|y) dx
+Lemma 1.11 (Conditional density): Main tools to verify the defining identity on {Y∈B}?	Fubini + factorization f_{X,Y}=f_{X|Y}f_Y
+Thm 2.4 (RCD, real-valued): How is the conditional CDF first constructed?	Set F(r,ω)=P(Y≤r|F)(ω) for rational r
+Thm 2.4 (RCD, real-valued): What modification is typically needed to make r↦F(r,ω) a genuine CDF?	Modify on one null set to ensure monotone + right-continuous paths
+Thm 2.4 (RCD, real-valued): How is the RCD identity extended from half-lines to all Borel sets?	Monotone-class argument
+Thm 2.8 (Polish ⇒ Borel): Useful standard representation of a Polish space for Borel arguments?	Borel-isomorphic to a Borel subset of [0,1]
+Thm 2.10 (RCD, Borel-valued): How do you reduce to the real-valued RCD case?	Use a measurable isomorphism E→B⊂R and pull back the kernel
+Thm 2.11 (Integral representation): How do you extend the identity from indicators to nonnegative measurable functions?	Indicators → simple (linearity) → nonnegative (MCT)
+Thm 2.12 (Disintegration): How is κ(x,·) obtained on a product space?	Take an RCD of the second coordinate given σ(first coordinate)
+Thm 2.12 (Disintegration): How do you extend the disintegration identity beyond rectangles?	Monotone-class argument
+Thm 3.7 (Snell envelope): Backward recursion defining the Snell envelope U?	U_N=Z_N; U_n=max(Z_n, E[U_{n+1}|F_n])
+Thm 3.7 (Snell envelope): How is an optimal stopping time typically chosen from U?	First hitting time of the contact set {U_n=Z_n}
+Prop 3.9 (Minimal dominating SMG): Key comparison idea to show U is minimal among supermartingales ≥Z?	Optional sampling/backward induction gives Y_n≥E[Z_T|F_n]; take ess sup over T
+Thm 3.10 (Dynamic programming): How does the Markov property simplify the value process?	Write U_n=V_n(X_n) for measurable functions V_n
+Thm 3.10 (Dynamic programming): Generic Bellman form for V_n(x) in optimal stopping?	V_n(x)=max(immediate reward, expected continuation value)
+Prop 3.12 (Domination upper bound): Core inequality giving an upper bound on optimal value using Y≥Z supermartingale?	E[Z_T]≤E[Y_T]≤E[Y_0] for any stopping time T
+Thm 3.14 (Martingale optimality): What property often certifies optimality of a candidate T*?	Y_{n∧T*} is a martingale and achieves equality in the bound
+Thm 3.15 (Doob decomposition): How are compensator increments ΔA_n defined?	ΔA_n=E[Y_n−Y_{n−1}|F_{n−1}]
+Thm 3.15 (Doob decomposition): Why is the decomposition unique?	Difference of two decompositions is predictable + martingale ⇒ constant
+Prop 3.16 (Backward recursion): What symmetry/structure drives the recursion for h_n?	Symmetry of relative ranks + Markov dependence on (n,x)
+Lemma 3.19 (Continuation recursion): How do you turn conditional continuation values into explicit formulas here?	Condition on current info and average over finitely many next-rank possibilities
+Thm 3.21 (Threshold rule): Why does monotonicity imply a threshold stopping rule?	Stop/continue comparison crosses once, so “stop from some index onward”
+Thm 3.21 (Threshold rule): What asymptotic limit for the threshold index m_N/N appears?	m_N/N → 1/e
+Thm 3.21 (Threshold rule): What approximation links the discrete recursion to the 1/e limit?	Harmonic sums ≈ log(N/m) leading to a limiting equation
+Thm 4.3 (Kalman, cond. Gaussianity): Main proof method for conditional Gaussianity over time?	Induction: affine maps of Gaussians + fresh Gaussian noise stay Gaussian
+Thm 4.5 (Gaussian regression): What linear coefficient K is used (with possible singular covariance)?	K=Σ_XZ Σ_ZZ⁺ (pseudo-inverse)
+Thm 4.5 (Gaussian regression): In the Gaussian case, what does “uncorrelated remainder” imply?	Independence of the remainder from the regressor
+Prop 4.8 (Kalman update): Canonical “update” form for posterior mean?	Posterior mean = prior mean + (gain × innovation)
+Thm 5.4 (Disturbance representation): What is the key equivalence shown?	Kernel-based dynamics and noise-map dynamics have same finite-dimensional laws under any policy
+Thm 5.13 (MDP): Why can history-dependent policies be replaced by Markov policies without losing value?	The induced information-state process is Markov; DP yields a Markov policy with same value
+Lemma 6.3 (Bellman operator): Why is the (maximized) Bellman operator monotone?	Addition/integration/supremum preserve inequalities v≤w
+Thm 6.4 (Reward iteration): Which two properties drive the backward reward-iteration identity?	Tower property + Markov property
+Thm 6.6 (Verification): How does verification show v_n is an upper bound on V_n^π for any policy π?	Apply Bellman inequalities along the policy recursion (using reward iteration)
+Thm 6.6 (Verification): When does verification produce an optimal policy?	When maximizers can be selected so Bellman inequalities hold with equality
+Thm 6.8 (Structure): What does part (a) essentially assert about the value function?	The value function satisfies the Bellman equation (via verification)
+Thm 6.8 (Structure): How are optimal Markov policies typically constructed in part (b)?	Choose measurable/stage-wise maximizers achieving the Bellman supremum
+Cor 6.9 (DPP intermediate time): What is the key decomposition idea?	Total reward = past reward + continuation value (restart via tower + Markov)
+Lemma 7.10 (Cylinder sets): Why do special cylinder sets form an algebra?	Closed under complements and finite unions by aligning/refining index sets
+Lemma 7.11 (Product σ-algebra): How do special cylinder sets generate the product σ-algebra?	Rectangles in finite-dimensional projections correspond exactly to special cylinders
+Lemma 7.13 (Inner regularity): What does inner regularity provide for measurable sets?	Approximation from inside by compact sets capturing almost all mass
+Thm 7.15 (Daniell–Kolmogorov): On what collection is the initial pre-measure defined?	The algebra of special cylinder sets
+Thm 7.15 (Daniell–Kolmogorov): What theorem extends the pre-measure to a probability measure?	Carathéodory extension theorem (uniqueness on generated σ-algebra)
+Thm 7.18 (Lusin spaces): How is existence on Lusin spaces reduced to the Polish/Borel case?	Measurable isomorphism to a Borel subset of a Polish space; pushforward then pull back
+Prop 8.2 (BM mean/cov): Why is E[B_t]=0 for Brownian motion?	Stationary independent increments + B_0=0 force constant mean, hence 0
+Prop 8.2 (BM mean/cov): What is Cov(B_s,B_t) for Brownian motion?	min(s,t)
+Prop 8.3 (BM characterization): In a centered Gaussian process, why do zero covariances imply independent increments?	Gaussian uncorrelatedness implies independence
+Thm 8.4 (Lévy–Ciesielski): Which basis underlies the Lévy–Ciesielski construction?	Haar/Schauder basis
+Thm 8.4 (Lévy–Ciesielski): What convergence property yields continuous sample paths?	Almost sure uniform convergence of the Gaussian series
+Prop 9.1 (Exit time): Which two martingales are used with optional stopping for exit problems?	B_t and (B_t²−t)
+Prop 9.1 (Exit time): How are endpoint exit probabilities typically obtained?	Solve linear equations coming from optional stopping identities
+Thm 9.2 (OST): First step to prove optional stopping for bounded stopping times?	Prove for simple stopping times (finite-valued) via partition {T=t_i}
+Thm 9.2 (OST): How do you extend OST from simple bounded times to general bounded T?	Approximate T by simple T_n and pass to the limit
+Thm 9.2 (OST): How is OST handled for uniformly integrable martingales and unbounded T?	Apply to T∧n and pass n→∞ using uniform integrability
+Thm 9.3 (Skorokhod embedding): What kind of stopping time is constructed?	An exit time from a random interval (α,β)
+Thm 9.3 (Skorokhod embedding): Why choose the random interval (α,β) carefully?	So the induced exit distribution matches the target law of B_T
+Prop 9.8 (Generator): For Brownian motion, what is the generator G applied to smooth f?	Gf=(1/2)f''(x)
+Prop 9.8 (Generator): What computation yields Gf=(1/2)f''?	Second-order Taylor expansion over small Gaussian increments + divide by h
+Prop 9.10 (Martingale from generator): What process is shown to be a martingale?	M_t=f(B_t)−f(B_0)−∫_0^t (1/2)f''(B_s)ds
+Thm 9.12 (Strong Markov): How is a general stopping time T handled in the proof?	Approximate T by simple stopping times taking finitely many deterministic values
+Thm 9.14 (Reflection principle): What is the key path transformation?	Reflect the path after the first hitting time of level a
+Cor 9.16 (Maximum): What identity underlies the law of max_{s≤t} B_s?	Reflection identity + symmetry of B_t
+Prop 10.4 (Regularity): What function is used to approximate indicators of sets in metric spaces?	Distance-to-set cutoffs (continuous approximations)
+Lemma 10.8 (Uniqueness): Why do closed sets determine a probability measure (with regularity)?	Agreement class is Dynkin/monotone class; closed sets form a determining generating class
+Lemma 10.9 (Closed set approximation): Give a standard continuous approximation of 1_F for closed F.	f_n(x)=max(1−n·d(x,F),0)
+Cor 10.10 (Separating class): What does it mean that C_b(E) is separating for M_1(E)?	If ∫f dP=∫f dQ for all bounded continuous f, then P=Q
+Lemma 10.16 (Prokhorov symmetry): What key inclusion yields symmetry for the Prokhorov metric?	(E\F^η)^η ⊂ E\F
+Prop 10.17 (Triangle inequality): What inclusion supports the triangle inequality in β?	(F^α)^γ ⊂ F^{α+γ}
+Thm 10.18 (M_1(E) separable): How do you approximate arbitrary measures to prove separability?	Finitely supported measures on a countable dense set with rational weights
+Thm 10.19 (Portmanteau): What’s the main approximation trick in Portmanteau proofs?	Approximate indicators by bounded uniformly continuous distance cutoffs
+Lemma 11.2 (Tightness in Polish): Why is every probability measure tight on a Polish space?	Regularity + increasing compacts capturing mass via continuity from below
+Thm 11.4 (Prokhorov): Tightness ⇒ relative compactness—what’s the extraction idea?	Subsequence converging on a countable determining class in C_b(E), then identify the limit
+Prop 11.7 (Arzelà–Ascoli): Which two properties yield relative compactness in sup norm?	Uniform boundedness + equicontinuity
+Thm 11.9 (Path tightness): What structure defines high-probability compact sets in C([0,T])?	Sup-norm bounds + modulus-of-continuity bounds (then Arzelà–Ascoli)
+Thm 11.16 (Kolmogorov–Chentsov): Core probabilistic tools used to get Hölder control?	Markov inequality on dyadic increments + Borel–Cantelli + interpolation
+Thm 11.17 (Kolmogorov tightness): What two ingredients combine to give tightness on path space?	One-time marginal tightness + uniform modulus-of-continuity estimate in probability
+Lemma 12.6 (Two-sided extension): How are two-sided finite-dimensional distributions defined from one-sided?	Shift indices into nonnegative range and use stationarity to make it well-defined
+Lemma 12.10 (Invariant RVs): Why do invariant random variables form a σ-algebra?	Closed under linear combinations and monotone limits; measurability/invariance is preserved
+Lemma 12.11 (Hopf maximal lemma): What key object is introduced for the inequality?	Partial sums and their running maximum; analyze the first time the maximum is achieved
+Thm 12.12 (Birkhoff): What is the almost sure limit of ergodic averages A_n f?	E[f | I] (conditional expectation on the invariant σ-algebra)
+Thm 12.12 (Birkhoff): Why are limsup and liminf of averages invariant?	Shifting the average changes only boundary terms of order 1/n
+Thm 12.12 (Birkhoff): What lemma is used to sandwich limsup/liminf by E[f|I]?	Hopf maximal ergodic lemma

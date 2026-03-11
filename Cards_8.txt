@@ -1,0 +1,60 @@
+What is a standard Brownian motion on [0,1] (Definition 8.1)?	A process B=(B_t) with (1) B0=0 a.s., (2) a.s. continuous paths, (3) B_t−B_s ~ N(0,t−s), (4) independent increments on disjoint intervals.
+In Definition 8.1, what does “stationary increments” mean?	The law of B_t−B_s depends only on (t−s), not on s,t separately.
+In Definition 8.1, what does “independent increments” mean?	Increments over disjoint time intervals are independent random variables.
+In Prop 8.2, what is E[B_t] for Brownian motion on [0,1]?	E[B_t]=0 for all t∈[0,1].
+How does Prop 8.2 show t↦E[B_t] is constant?	E[B_t−B_s]=0 implies E[B_t]=E[B_s] for all s<t.
+In Prop 8.2, what is the covariance E[B_s B_t]?	E[B_sB_t]=min(s,t).
+In Prop 8.2, which decomposition is used for t≥s?	B_t = B_s + (B_t−B_s).
+Why does E[B_s(B_t−B_s)] = 0 in Prop 8.2?	(B_t−B_s) is independent of B_s and has mean 0.
+What is Var(B_s) for Brownian motion?	Var(B_s)=s (since B_s ~ N(0,s)).
+What key “entry point” fact about Brownian motion is stated in §8.1?	It is a centered Gaussian process with covariance min(s,t).
+What does Prop 8.3 assume about B besides Gaussianity to conclude it is Brownian motion?	B0=0 a.s., a.s. continuity, centered Gaussian, and covariance E[B_sB_t]=min(s,t).
+In Prop 8.3, what is Var(B_t−B_s) computed to be?	Var(B_t−B_s)=t−s.
+Why does Var(B_t−B_s)=t−s imply B_t−B_s ~ N(0,t−s) in Prop 8.3?	Linear combinations of Gaussian vectors are Gaussian, so the increment is Gaussian with that variance.
+In Prop 8.3, how is independence of disjoint increments obtained?	Disjoint increments have covariance 0; for jointly Gaussian variables, zero covariance ⇒ independence.
+What is the marginal law of B_t stated in Chapter 8?	B_t ~ N(0,t).
+How are finite-dimensional distributions described in Chapter 8?	(B_t1,...,B_tm) is multivariate normal as a linear transform of independent Gaussian increments.
+What is the increment notation Δ_j used for finite-dimensional distributions?	Δ_j := B_{t_j} − B_{t_{j-1}} with t0:=0.
+State the scaling property given in Chapter 8.	For c>0, \tilde B_t := (1/√c) B_{ct} is again standard Brownian motion (on its time domain).
+State the symmetry property given in Chapter 8.	(−B_t)_{t∈[0,1]} has the same law as (B_t)_{t∈[0,1]}.
+What “regularity” fact about paths is stated before the construction?	Brownian paths are a.s. nowhere differentiable.
+What Hölder regularity is stated (quantitatively) for Brownian paths?	For every α∈(0,1/2), paths are a.s. α-Hölder on [0,1].
+What Hölder exponent is stated to be impossible a.s.?	No exponent α ≥ 1/2 is possible almost surely.
+List one standard construction approach for Brownian motion mentioned in §8.2.	Kolmogorov extension + a continuity theorem (continuous modification).
+List another standard construction approach for Brownian motion mentioned in §8.2.	Lévy–Ciesielski (Haar–Schauder) explicit random series.
+List a third standard construction approach for Brownian motion mentioned in §8.2.	Invariance principles (scaling limits of random walks).
+What covariance characterization is emphasized as the construction target?	Build a centered Gaussian process with E[B(s)B(t)] = min(s,t).
+What “guiding principle” is used to build the process in §8.2?	Expand the indicators 1_[0,t] in an orthonormal basis of L^2([0,1]).
+What is the general L^2 expansion formula stated for h∈L^2([0,1])?	h = Σ_{k,n} ⟨h,g_{k,n}⟩ g_{k,n}.
+What identity ensures inner products are preserved by the expansion?	Parseval’s identity.
+What “formal” random-series form for B(t) is suggested before choosing Haar?	B(t)= Σ_{k,n} Z_{k,n} ∫_0^t g_{k,n}(u)du with i.i.d. N(0,1) coefficients.
+Why is the Haar basis called “particularly natural” here?	Haar functions are localized on dyadic intervals and their integrals are continuous tent functions.
+State the theorem number for the Lévy–Ciesielski/Haar–Schauder construction.	Theorem 8.4.
+What does Theorem 8.4 guarantee exists?	A probability space and a process B on [0,1] satisfying the Brownian motion axioms.
+What series representation for B(t) is given in Theorem 8.4?	B(t)= Σ_{n=0}^∞ Σ_{k=1}^{2^n} Z_{k,n} f_{k,n}(t).
+In Theorem 8.4, how is f_{k,n}(t) defined from Haar functions?	f_{k,n}(t) = ∫_0^t g_{k,n}(u)du.
+How many proof “steps” are outlined for Theorem 8.4?	Four steps: basis definition, uniform convergence, covariance identification, Brownian verification.
+How is the Haar basis element g_{k,n}(t) defined?	g_{k,n}(t)=2^{n/2}(1_{I^ℓ_{k,n}}(t) − 1_{I^r_{k,n}}(t)).
+What is the dyadic interval I_{k,n}?	I_{k,n}=[(k−1)2^{−n}, k2^{−n}).
+What is stated about the shape/support of each f_{k,n}?	Continuous, piecewise linear, supported on I_{k,n}.
+What sup-norm bound is given for f_{k,n}?	∥f_{k,n}∥_∞ ≤ 2^{-(n/2+1)}.
+How are the partial sums B_N(t) defined in Theorem 8.4?	B_N(t)= Σ_{n=0}^N Σ_{k=1}^{2^n} Z_{k,n} f_{k,n}(t).
+Why is each B_N a continuous process?	It is a finite sum of continuous functions f_{k,n}(t).
+What is the “level-n contribution” Δ_n(t)?	Δ_n(t)= Σ_{k=1}^{2^n} Z_{k,n} f_{k,n}(t).
+What disjointness property is used for fixed n?	The supports of {f_{k,n}}_{k=1}^{2^n} are disjoint.
+Give the key bound on sup_t |Δ_n(t)| used for uniform convergence.	sup_{t∈[0,1]}|Δ_n(t)| ≤ max_k |Z_{k,n}| · ∥f_{k,n}∥_∞ ≤ 2^{-(n/2+1)} max_k|Z_{k,n}|.
+Which probabilistic tools are named to control max_k|Z_{k,n}|?	Gaussian tail estimates + union bound.
+Which lemma is used to conclude finiteness of Σ sup_t|Δ_n(t)| a.s.?	Borel–Cantelli lemma.
+What conclusion is drawn from Σ sup_t|Δ_n(t)| < ∞ a.s.?	Σ Δ_n(t) converges uniformly in t a.s.
+How is the limiting process B(t) defined after uniform convergence?	B(t)= Σ_{n=0}^∞ Δ_n(t).
+Why does uniform convergence imply B has continuous sample paths?	Uniform limit of continuous functions on [0,1] is continuous.
+Why is B(t) Gaussian for each fixed t?	B_N(t) is a finite linear combo of independent Gaussians; B_N(t)→B(t) in L^2, so B(t) is Gaussian.
+What covariance formula is obtained before applying Parseval?	E[B(s)B(t)] = Σ_{n,k} f_{k,n}(s) f_{k,n}(t).
+How is f_{k,n}(t) related to the L^2 inner product with g_{k,n}?	f_{k,n}(t)=∫_0^t g_{k,n}(u)du = ⟨1_[0,t], g_{k,n}⟩_{L^2}.
+Which identity is used to compute E[B(s)B(t)] from these inner products?	The (bilinear) Parseval identity.
+What does Parseval yield for the covariance?	E[B(s)B(t)] = ⟨1_[0,s], 1_[0,t]⟩_{L^2} = ∫_0^{min(s,t)} 1 du = min(s,t).
+Given (B(s),B(t)) jointly Gaussian, what is the law of B(t)−B(s)?	B(t)−B(s) ~ N(0, t−s).
+How is independence of disjoint increments verified in Step 5?	Show Cov(B(t)−B(s), B(v)−B(u))=0 for disjoint intervals, then use Gaussianity ⇒ independence.
+How is B0 handled in the construction?	B0=0 holds trivially from the series definition.
+What practical approximation message is stated in Remark 8.5?	Truncating the series gives continuous random paths converging uniformly almost surely.
+In one sentence, why does Theorem 8.4 “identify” the constructed process as Brownian motion?	It has continuous paths, Gaussian increments with variance t−s, and independent increments—matching Definition 8.1.

@@ -1,0 +1,112 @@
+What is the “setwise viewpoint” for comparing measures?	Compare probabilities of sets: μn(A) vs μ(A).
+What is the “test-function viewpoint” for comparing measures?	Compare integrals: ∫ f dμn vs ∫ f dμ.
+What is setwise convergence of measures?	μn(A) → μ(A) for every measurable set A.
+Why is setwise convergence often “too strong”?	It forces convergence for all events and is usually too rigid for compactness arguments.
+What is weak (narrow) convergence?	∫ f dPn → ∫ f dP for all f ∈ Cb(E).
+What is vague convergence?	∫ f dPn → ∫ f dP for all f ∈ Cc(E).
+Why is vague convergence useful on non-compact spaces?	Compactly supported tests ignore what happens “at infinity”.
+What is the intuitive “mass escape” problem on non-compact spaces?	Measures can drift to infinity so weak limits may fail to exist.
+What is tightness (informal description in Ch.10 intro)?	“No loss of mass at infinity”: most mass stays in a common compact set uniformly in n.
+In Ch.10 setting, what kind of space is (E,d)?	A Polish space.
+What is B(E)?	The Borel σ-algebra of E.
+Define “totally bounded” set A ⊂ E.	For every ε>0, A is covered by finitely many ε-balls: A ⊂ ⋃_{k=1}^N B(xk,ε).
+Define “relatively compact” (as used in Ch.10).	A is relatively compact if A is compact.
+What equivalence is stated in metric spaces (Remark 10.2)?	Totally bounded ⇔ relatively compact (precompact).
+What is M1(E) (also written P(E))?	The set of Borel probability measures on (E, B(E)).
+State the regularity (inner/outer regularity) property for μ ∈ M1(E).	For Borel A: μ(A)=sup{μ(K):K⊂A compact}=inf{μ(U):A⊂U open}.
+What does “Radon regularity” refer to here?	The inner/outer regularity of Borel probability measures on metric spaces.
+Define C(E).	All continuous functions f:E→ℝ.
+Define Cb(E).	Continuous bounded functions: f∈C(E) with ∥f∥∞<∞.
+Define Cc(E).	Continuous functions with compact support.
+What is the sup norm ∥f∥∞?	∥f∥∞ := sup_{x∈E} |f(x)|.
+What is a “separating class” C for M1(E)?	If ∫ f dP = ∫ f dQ for all f∈C implies P=Q.
+Why does Ch.10 emphasize Cb(E) in weak convergence?	Cb(E) is separating yet manageable (bounded integrals + continuity for approximation).
+State Lemma 10.8 (“Closed sets determine a probability measure”).	If P(F)=Q(F) for all closed F⊂E, then P=Q.
+In Lemma 10.8, what is D := {A ∈ B(E): P(A)=Q(A)} used for?	To form a Dynkin (λ-)system and apply the π–λ theorem.
+What is a Dynkin (λ-)system property used in Lemma 10.8?	Contains E, closed under complements, and closed under countable disjoint unions.
+Why are closed sets a π-system?	The intersection of two closed sets is closed.
+Which theorem is invoked to conclude D contains B(E)?	The π–λ theorem.
+State Lemma 10.9 (“From Cb(E) to closed sets”) conclusion.	If ∫ f dP = ∫ f dQ for all f∈Cb(E), then P(F)=Q(F) for every closed F.
+What continuous function is used in Lemma 10.9 to approximate 1_F?	The distance function d(x,F) := inf_{y∈F} d(x,y).
+How is the approximating sequence fn constructed for a closed set F?	fn=1 on F; decreases linearly to 0 on the 1/n-neighborhood; 0 outside distance>1/n.
+What pointwise limit property does fn satisfy?	fn(x) ↑ 1_F(x) pointwise.
+What theorem converts equality of integrals of fn into equality of P(F) and Q(F)?	Monotone convergence theorem.
+State Corollary 10.10.	Cb(E) is separating for M1(E).
+Give the formal definition of weak convergence (Def 10.11).	Pn ⇒ P iff ∫ f dPn → ∫ f dP for all f ∈ Cb(E).
+Give the formal definition of vague convergence (Def 10.12).	Pn converges vaguely to P iff ∫ f dPn → ∫ f dP for all f ∈ Cc(E).
+What is the ε-enlargement A^ε of a set A ⊂ E?	A^ε := {x : d(x,A) < ε}.
+What is d(x,A) in the ε-enlargement definition?	d(x,A) := inf_{y∈A} d(x,y).
+If F is closed, what is F^ε (topologically)?	An open set.
+Define the Prokhorov metric β(P,Q) (Def 10.15).	β(P,Q):=inf{ε>0: P(F) ≤ Q(F^ε)+ε for all closed F}.
+What is the key intuition behind Prokhorov’s metric in Ch.10?	Close measures match mass on closed sets up to small spatial thickening and small mass error.
+State Lemma 10.16 (symmetry implication) in words.	If P(F) ≤ Q(F^η)+η for all closed F, then also Q(F) ≤ P(F^η)+η for all closed F.
+What set is used in Lemma 10.16’s proof to flip the inequality?	The complement of the enlargement: E \ F^η.
+State one property from Proposition 10.17 showing β is a metric.	Symmetry: β(P,Q)=β(Q,P).
+In Proposition 10.17, how do they show β(P,Q)=0 implies P=Q?	Use F^{1/m} ↓ F and continuity from above to get P(F)=Q(F) for all closed F.
+State the triangle inequality idea for β (Prop 10.17).	Use (F^α)^γ ⊂ F^{α+γ} to chain inequalities.
+State Theorem 10.18 (relation between E and (M1(E),β)).	If E is separable then (M1(E),β) is separable; if E is complete then (M1(E),β) is complete.
+What does Theorem 10.18 conclude when E is Polish?	(M1(E),β) is Polish.
+In Theorem 10.18, what dense countable set is suggested for separability of M1(E)?	Finitely supported measures on a countable dense D with rational weights.
+State Theorem 10.19 (Portmanteau) item (d).	lim sup_n Pn(F) ≤ P(F) for all closed F.
+State Theorem 10.19 (Portmanteau) item (e).	lim inf_n Pn(G) ≥ P(G) for all open G.
+What is a P-continuity set (in Portmanteau item (f))?	A set A with P(∂A)=0.
+In Portmanteau proof of (c)⇒(d), what is G_δ?	The open δ-neighborhood of a closed F: Gδ := F^δ.
+In Portmanteau proof of (c)⇒(d), what is the “bump” function f_{F,δ}?	f_{F,δ}(x) := (1 - d(x,F)/δ)_+ (equals 1 on F, 0 outside F^δ).
+In the proof of (f)⇒(b), what “layer-cake” identity is used for f≥0 bounded?	∫ f dP = ∫_0^{∥f∥∞} P(f>t) dt (and similarly for Pn).
+Why are there only countably many t with P(f=t)>0 (used in (f)⇒(b))?	The level sets {f=t} are disjoint in t, so only countably many can have positive mass.
+When does Theorem 10.19 state (a)⇔(b) (β metrizes weak convergence)?	When (E,d) is separable (then (a)–(f) are equivalent).
+In Theorem 10.19, what implication chain is proved to show (b)–(f) are equivalent?	(b) ⇒ (c) ⇒ (d) ⇒ (e) ⇒ (f) ⇒ (b). :contentReference[oaicite:0]{index=0}
+In Theorem 10.19, what extra assumption makes (a)–(f) all equivalent?	(E,d) is separable (then β metrizes weak convergence). :contentReference[oaicite:1]{index=1}
+In Theorem 10.19, what does statement (c) restrict the test functions to?	Bounded uniformly continuous functions f ∈ Cb(E). :contentReference[oaicite:2]{index=2}
+In the proof of (b)⇒(c), why does weak convergence imply convergence for uniformly continuous bounded f?	Uniformly continuous bounded f are a subclass of Cb(E), so the defining convergence applies. :contentReference[oaicite:3]{index=3}
+In the proof of (c)⇒(d), what neighborhood of a closed set F is introduced?	Gδ := F^δ (the open δ-neighborhood / δ-enlargement of F). :contentReference[oaicite:4]{index=4}
+In the proof of (c)⇒(d), what “bump” function is defined from F and δ?	f_{F,δ}(x) := (1 − d(x,F)/δ)_+. :contentReference[oaicite:5]{index=5}
+What key properties of f_{F,δ} are used in (c)⇒(d)?	f_{F,δ}=1 on F, f_{F,δ}=0 on (F^δ)^c, and 0≤f_{F,δ}≤1 (Lipschitz ⇒ uniformly continuous). :contentReference[oaicite:6]{index=6}
+Why does Pn(F) ≤ ∫ f_{F,δ} dPn hold in (c)⇒(d)?	Because 1_F ≤ f_{F,δ} pointwise and integrals preserve inequalities. :contentReference[oaicite:7]{index=7}
+After taking lim sup in (c)⇒(d), what upper bound appears?	lim sup_n Pn(F) ≤ ∫ f_{F,δ} dP ≤ P(F^δ). :contentReference[oaicite:8]{index=8}
+Why can you let δ↓0 to get lim sup_n Pn(F) ≤ P(F)?	Because F^δ ↓ F and P is continuous from above. :contentReference[oaicite:9]{index=9}
+In the proof of (d)⇒(e), what set is used to switch from open to closed?	The complement: if G is open, then G^c is closed. :contentReference[oaicite:10]{index=10}
+How does (d)⇒(e) translate lim sup bounds into lim inf bounds?	Use Pn(G)=1−Pn(G^c) and P(G)=1−P(G^c). :contentReference[oaicite:11]{index=11}
+In proving (d) and (e)⇒(f), what condition defines a P-continuity set A?	P(∂A)=0. :contentReference[oaicite:12]{index=12}
+In (d),(e)⇒(f), what inclusions relate A, its interior, and closure?	A° ⊂ A ⊂ \bar A and \bar A \ A° ⊂ ∂A. :contentReference[oaicite:13]{index=13}
+Why does P(∂A)=0 imply P(A)=P(A°)=P(\bar A)?	Because \bar A \ A° ⊂ ∂A and the boundary has P-mass 0. :contentReference[oaicite:14]{index=14}
+In (d),(e)⇒(f), which inequality is applied to \bar A?	Apply (d) to the closed set \bar A to control lim sup_n Pn(A). :contentReference[oaicite:15]{index=15}
+In (d),(e)⇒(f), which inequality is applied to A°?	Apply (e) to the open set A° to control lim inf_n Pn(A). :contentReference[oaicite:16]{index=16}
+In (f)⇒(b), why can we assume f≥0 without loss of generality?	Write f = f^+ − f^− and treat each nonnegative part separately. :contentReference[oaicite:17]{index=17}
+In (f)⇒(b), what constant C is introduced for a bounded f≥0?	C := ∥f∥∞. :contentReference[oaicite:18]{index=18}
+What “layer-cake” identity is used in (f)⇒(b) for bounded f≥0?	∫ f dP = ∫_0^C P(f>t) dt (and similarly for Pn). :contentReference[oaicite:19]{index=19}
+In (f)⇒(b), what boundary inclusion is used for level sets of f?	∂{f>t} ⊂ {f=t}. :contentReference[oaicite:20]{index=20}
+Why are there at most countably many t with P(f=t)>0?	The level sets {f=t} are disjoint in t, so only countably many can have positive mass. :contentReference[oaicite:21]{index=21}
+For Lebesgue-a.e. t, why is {f>t} a P-continuity set?	Because P(∂{f>t})=0 for a.e. t. :contentReference[oaicite:22]{index=22}
+How does dominated convergence finish (f)⇒(b)?	Pn(f>t)→P(f>t) a.e. and 0≤Pn(f>t)≤1 ⇒ ∫_0^C Pn(f>t)dt → ∫_0^C P(f>t)dt. :contentReference[oaicite:23]{index=23}
+In the proof of (a)⇒(b), what sequence εn is chosen from β(Pn,P)?	Choose εn ↓ 0 with εn ≥ β(Pn,P) and Pn(F) ≤ P(F^{εn}) + εn for closed F. :contentReference[oaicite:24]{index=24}
+In (a)⇒(b), what set-limit relation is used for a closed F?	F^{εn} ↓ F as εn ↓ 0. :contentReference[oaicite:25]{index=25}
+In (a)⇒(b), what property of P turns P(F^{εn}) into P(F)?	Continuity from above: P(F^{εn}) → P(F). :contentReference[oaicite:26]{index=26}
+In (a)⇒(b), which Portmanteau condition is obtained first from β→0?	lim sup_n Pn(F) ≤ P(F) for all closed F (condition (d)). :contentReference[oaicite:27]{index=27}
+In (b)⇒(a), what structure is used that requires separability of E?	A countable cover of E by open balls of diameter < ε. :contentReference[oaicite:28]{index=28}
+In (b)⇒(a), how is N1(ε) chosen from the countable ball cover?	So that P(⋃_{k=1}^{N1(ε)} A_k^ε) > 1−ε (tail has P-mass < ε). :contentReference[oaicite:29]{index=29}
+In (b)⇒(a), which Portmanteau condition is used for open sets G?	From (e): for large n, Pn(G) ≥ P(G) − ε. :contentReference[oaicite:30]{index=30}
+In (b)⇒(a), what key inequality is derived for all Borel A (equation (10.1))?	P(A) ≤ Pn(A^{2ε}) + 2ε for all n≥N(ε). :contentReference[oaicite:31]{index=31}
+In the sketch for (10.1), what is G0 (informally)?	A union of finitely many ε-balls intersecting A, plus a small P-mass tail, so that G0 ⊂ A^ε. :contentReference[oaicite:32]{index=32}
+How does (10.1) imply β(Pn,P)→0?	It matches the Prokhorov-type inequality (up to constants), giving β(Pn,P) ≤ 2ε for n large. :contentReference[oaicite:33]{index=33}
+In Definition 10.14, how is the ε-enlargement A^ε defined?	A^ε := {x : d(x,A) < ε}, where d(x,A)=inf_{y∈A} d(x,y). :contentReference[oaicite:34]{index=34}
+If F is closed, what topological property does F^ε have?	F^ε is open. :contentReference[oaicite:35]{index=35}
+In Definition 10.15, what is the Prokhorov metric β(P,Q)?	β(P,Q)=inf{ε>0 : P(F) ≤ Q(F^ε)+ε for all closed F}. :contentReference[oaicite:36]{index=36}
+What is Lemma 10.16’s key “symmetry implication” statement?	If P(F) ≤ Q(F^η)+η for all closed F, then Q(F) ≤ P(F^η)+η for all closed F. :contentReference[oaicite:37]{index=37}
+In Lemma 10.16, which closed set is plugged into the assumption to reverse roles?	E \ F^η. :contentReference[oaicite:38]{index=38}
+What set inclusion is proved in Lemma 10.16 to compare complements?	(E \ F^η)^η ⊂ E \ F. :contentReference[oaicite:39]{index=39}
+In Proposition 10.17, what shows β(P,Q)=0 ⇒ P=Q?	Use F^{1/m} ↓ F and continuity from above to get P(F)=Q(F) for all closed F, then Lemma 10.8. :contentReference[oaicite:40]{index=40}
+In Proposition 10.17, what inclusion supports the triangle inequality?	(F^α)^γ ⊂ F^{α+γ}. :contentReference[oaicite:41]{index=41}
+In Proposition 10.17 triangle proof, how are α and γ chosen?	Take α>β(P,Q) and γ>β(Q,R), then let them decrease to the β-values. :contentReference[oaicite:42]{index=42}
+According to Theorem 10.18, what happens to (M1(E),β) if E is separable?	(M1(E),β) is separable. :contentReference[oaicite:43]{index=43}
+According to Theorem 10.18, what happens to (M1(E),β) if E is complete?	(M1(E),β) is complete. :contentReference[oaicite:44]{index=44}
+According to Theorem 10.18, what is concluded if E is Polish?	(M1(E),β) is Polish. :contentReference[oaicite:45]{index=45}
+In Theorem 10.18’s separability sketch, what class is dense in (M1(E),β)?	Finitely supported measures on a countable dense set D with rational weights. :contentReference[oaicite:46]{index=46}
+In Theorem 10.18’s completeness sketch, why does a β-Cauchy sequence admit a weak limit?	Because it is tight and one can extract a weakly convergent subsequence; then check β→0 to the limit. :contentReference[oaicite:47]{index=47}
+In Lemma 10.9, what continuous function of x encodes distance to a closed set F?	d(x,F):=inf_{y∈F} d(x,y). :contentReference[oaicite:48]{index=48}
+In Lemma 10.9, how is fn(x) defined using d(x,F)?	fn=1 on F; fn=1−n d(x,F) when 0<d(x,F)≤1/n; fn=0 when d(x,F)>1/n. :contentReference[oaicite:49]{index=49}
+Why does Lemma 10.9 have fn(x) ↑ 1_F(x) pointwise?	On F, fn=1; off F, d(x,F)=r>0 so for n>1/r, fn=0. :contentReference[oaicite:50]{index=50}
+In Lemma 10.9, which theorem turns ∫ fn dP = ∫ fn dQ into P(F)=Q(F)?	Monotone convergence. :contentReference[oaicite:51]{index=51}
+In Lemma 10.8, what set D is introduced to apply a π–λ argument?	D := {A ∈ B(E) : P(A)=Q(A)}. :contentReference[oaicite:52]{index=52}
+In Lemma 10.8, why are closed sets a π-system?	Intersections of closed sets are closed. :contentReference[oaicite:53]{index=53}
+In Lemma 10.8, which theorem upgrades agreement on closed sets to agreement on B(E)?	The π–λ theorem (closed sets generate B(E)). :contentReference[oaicite:54]{index=54}

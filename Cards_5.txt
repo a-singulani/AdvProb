@@ -1,0 +1,52 @@
+In an MDP, what is the planning horizon N?	A fixed terminal stage; decisions occur at times n=0,...,N-1 and a terminal reward is received at time N.
+In Definition 5.1, what is (E, 𝓔)?	The state space E equipped with a σ-algebra 𝓔.
+In Definition 5.1, what is (A, 𝓐)?	The action space A equipped with a σ-algebra 𝓐.
+What is Dn in the Markov decision model?	A measurable set Dn ⊂ E×A of admissible state–action pairs at time n.
+How is the admissible action set Dn(x) defined?	Dn(x) := { a∈A : (x,a)∈Dn }.
+What is Qn in the Markov decision model?	A stochastic transition kernel from Dn to (E,𝓔).
+For fixed (x,a)∈Dn, what is B↦Qn(B|x,a)?	A probability measure on (E,𝓔).
+For fixed B∈𝓔, what property must (x,a)↦Qn(B|x,a) satisfy?	It must be measurable on Dn.
+What is rn in Definition 5.1?	The one-stage reward function rn: Dn → ℝ.
+What is gN in Definition 5.1?	The terminal reward function gN: E → ℝ.
+Remark 5.2: what is a typical structure for E and A in applications?	Borel subsets of Polish spaces with their Borel σ-algebras.
+Remark 5.3: what assumption ensures decision rules exist?	Dn contains the graph of at least one measurable function fn:E→A (so fn(x)∈Dn(x) for all x).
+What “system + disturbance” form is mentioned for transitions?	x_{n+1} = Tn(xn, an, z_{n+1}) for a disturbance z_{n+1}.
+Theorem 5.4: what extra ingredient is introduced in the disturbance representation?	A measurable disturbance space (Z,𝓩).
+Theorem 5.4: what is Qn^Z(·|x,a)?	A stochastic kernel on (Z,𝓩) for (x,a)∈Dn.
+Theorem 5.4: what is Tn in the disturbance representation?	A measurable map Tn: Dn×Z → E.
+How is Qn recovered from (Tn, Qn^Z) in Theorem 5.4?	Qn(B|x,a)=Qn^Z({z: Tn(x,a,z)∈B} | x,a).
+In Theorem 5.4, what trivial choice gives a disturbance representation from Qn?	Take Z=E, Tn(x,a,z)=z, and Qn^Z=Qn.
+Definition 5.5: what is a decision rule fn at time n?	A measurable map fn:E→A with fn(x)∈Dn(x) for all x.
+What is Fn?	The set of all decision rules at time n.
+Definition 5.5: what is an N-stage Markov policy?	A sequence π=(f0,...,fN-1) with fn∈Fn for each n.
+Remark 5.6: what is a randomized decision rule?	A kernel fn(·|x) on A such that fn(Dn(x)|x)=1 for all x.
+In the canonical construction, what is the sample space Ω?	Ω = E^{N+1} (all state sequences (x0,...,xN)).
+What is the σ-algebra 𝓕 on Ω in the canonical construction?	𝓕 = 𝓔^{⊗(N+1)}.
+What is the coordinate process Xn on Ω?	For ω=(x0,...,xN), Xn(ω)=xn.
+Which theorem is used to build the path measure for a policy?	The Ionescu–Tulcea theorem.
+Under P_x^π, what is the distribution of X0?	P_x^π(X0∈B)=δx(B).
+Under P_x^π, what is P(X_{n+1}∈B | X0,...,Xn)?	Qn(B | Xn, fn(Xn)).
+What Markov property is written for the controlled chain?	P(X_{n+1}∈B | X0,...,Xn)=P(X_{n+1}∈B | Xn).
+What does E_x^π denote?	Expectation under the controlled-path measure P_x^π.
+What is P_{n,x}^π(·)?	The conditional law P_x^π(· | Xn = x).
+What does E_{n,x}^π denote?	Expectation under the conditional law P_{n,x}^π.
+What is the interpretation of P_x^π?	The probability law of the entire controlled trajectory when starting at x and following policy π.
+What is the goal of the finite-horizon optimization problem?	Choose a policy maximizing expected cumulative reward over stages plus terminal reward.
+Definition 5.7: what is the value of a policy Vn^π(x)?	Vn^π(x)=E_{n,x}^π[∑_{k=n}^{N-1} rk(Xk, fk(Xk)) + gN(XN)].
+What is V_N^π by Definition 5.7?	VN^π = gN.
+Definition 5.8: what is the value function Vn(x)?	Vn(x)=sup_π Vn^π(x).
+Definition 5.8: when is a policy π* called optimal?	If V0^{π*}(x)=V0(x) for all x∈E.
+Definition 5.9: what is δ_n^N(x)?	δ_n^N(x)=sup_π E_{n,x}^π[∑_{k=n}^{N-1} r_k^+(Xk,fk(Xk)) + g_N^+(XN)].
+In Definition 5.9, what does r^+ mean?	The positive part: r^+ = max(r,0).
+What does the integrability assumption (A_N) require?	δ_n^N(x) < ∞ for all x∈E and n=0,...,N.
+Remark 5.10: when does (A_N) hold trivially?	If all rn and gN are bounded from above.
+Remark 5.11: what finiteness bound does (A_N) imply?	Vn(x) ≤ δ_n^N(x) < ∞ for all x and n.
+Why might history-dependent policies seem more powerful?	They can depend on the whole past (X0,A0,...,Xn), seemingly using “more information.”
+What is the Markov-property reason history dependence doesn’t help?	Given current state and action, the law of the next state is Qn(·|x,a) and does not depend on the earlier past.
+How are the history spaces Hn defined?	H0:=E and Hn:=H_{n-1}×A×E for n≥1.
+What is a history hn up to time n?	hn=(x0,a0,x1,...,xn) ∈ Hn.
+Definition 5.12: what is a history-dependent decision rule at time n?	A measurable fn:Hn→A with fn(hn)∈Dn(xn).
+Definition 5.12: what is a history-dependent N-stage policy?	A sequence (f0,...,fN-1) of history-dependent decision rules (denoted ΠN).
+Theorem 5.13: what equality expresses “history dependence does not improve the value”?	For each n and history hn, Vn(xn)=sup_{π∈ΠN} Vn^π(hn).
+Theorem 5.13: what is the conclusion about restricting to Markov policies?	It does not reduce the maximal expected total reward.
+Remark 5.14: what is the “Markovization” interpretation?	The current state Xn is a sufficient statistic; the past matters for the future only through Xn.

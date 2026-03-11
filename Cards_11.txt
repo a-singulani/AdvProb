@@ -1,0 +1,61 @@
+Define tightness of a family K ⊂ M1(E).	For every ε>0, ∃ compact Kε⊂E such that inf_{P∈K} P(Kε) > 1−ε.
+Give the common “complement” reformulation of tightness.	For every ε>0, ∃ compact Kε⊂E such that sup_{P∈K} P(Kε^c) < ε.
+Why is every Borel probability measure tight on a Polish space?	On Polish spaces, Borel probability measures are Radon, so mass can be approximated from inside by compacts: ∀ε>0 ∃ compact K with P(K)>1−ε.
+State Prokhorov’s theorem (Polish space version) in one line.	For E Polish and K⊂M1(E): K is tight ⇔ K is relatively compact for weak convergence (every sequence has a weakly convergent subsequence).
+Prokhorov proof sketch: why do we use a countable convergence-determining class?	Separability of E lets us test convergence on a countable C⊂Cb(E); then a diagonal subsequence can make ∫f dPnk converge for all f∈C simultaneously.
+Prokhorov proof sketch: what is the diagonal subsequence step doing?	Extract a subsequence where integrals converge for f1; then refine for f2; etc., and diagonalize so one subsequence works for all countably many tests.
+Prokhorov proof sketch: where does tightness enter after you have convergence on C?	Tightness ensures “no mass escapes,” so the limiting linear functional corresponds to a probability measure (total mass 1) rather than a sub-probability.
+Prokhorov proof sketch: how does (relative compactness ⇒ tightness) get a contradiction?	Assume not tight: pick compacts Km↑E and measures Pm with Pm(Km)≤1−ε0; take a weakly convergent subsequence; Portmanteau on closed Km forces limit to put ≥1−ε0 on every Km, contradicting P(E)=1.
+State the “Prokhorov on metric spaces” extension (Theorem 11.5) informally.	If F⊂P(X) is tight on a metric space (X,d), then every sequence in F has a weakly convergent subsequence—possibly with limit supported on the completion X̄.
+Why does Theorem 11.5 mention the completion X̄ of X?	A tight sequence may converge to a measure charging limit points that exist only in the completion if X is not complete.
+State Arzelà–Ascoli compactness criterion for A⊂C([0,∞);R^d).	A is compact iff (i) uniformly bounded on each [0,T] and (ii) equicontinuous on each [0,T] (via modulus of continuity).
+Define ||ω||_[0,T] used in the path-space criteria.	||ω||_[0,T] := sup_{t∈[0,T]} |ω(t)|.
+Define the modulus of continuity wT(ω,δ).	wT(ω,δ) := sup{ |ω(t)−ω(s)| : s,t∈[0,T], |t−s|<δ }.
+What does “wT(ω,δ) small” mean intuitively?	The path has no rapid oscillations on [0,T]; it is (uniformly) close to being equicontinuous at scale δ.
+Write the standard metric d on E=C([0,∞);R^d) used in Theorem 11.9.	d(ω,ω~) := sum_{m>=1} 2^{−m} ( min( ||ω−ω~||_[0,m], 1 ) ).
+Theorem 11.9: condition (i) (sup-norm tightness on compacts).	For every T>0: lim_{a→∞} sup_n Pn( ||ω||_[0,T] ≥ a ) = 0.
+Theorem 11.9: condition (ii) (stochastic equicontinuity).	For every T>0 and ε>0: lim_{δ↓0} sup_n Pn( wT(ω,δ) ≥ ε ) = 0.
+Sketch (Theorem 11.9) why tightness ⇒ condition (i).	Tightness gives compact K with Pn(K)≥1−γ; compactness ⇒ uniform boundedness on [0,T], so Pn(||ω||_[0,T]>λ)≤γ.
+Sketch (Theorem 11.9) why tightness ⇒ condition (ii).	Compact K ⇒ equicontinuity: ∃δ0 with wT(ω,δ)<ε for all ω∈K and δ<δ0; then Pn(wT≥ε)≤Pn(K^c)≤γ.
+Sketch (Theorem 11.9) how (i)+(ii) ⇒ tightness (big picture).	Build sets AT enforcing boundedness and small moduli on [0,T] with high probability; then K:=∩_{T>=1} AT is compact by Arzelà–Ascoli and has inf_n Pn(K) close to 1.
+In the (i)+(ii) ⇒ tightness direction, how do you pick λT?	Use (i) to choose λT so that sup_n Pn( ||ω||_[0,T] > λT ) is as small as needed (e.g. ≤ γ/2^{T+1}).
+In the (i)+(ii) ⇒ tightness direction, how do you pick δT,k?	Use (ii) with ε=1/k to pick δT,k so that sup_n Pn( wT(ω,δT,k) > 1/k ) is small (e.g. ≤ γ/2^{T+k+1}).
+Why is K=∩_{T>=1} AT compact in (E,d)?	For each fixed T, AT gives uniform boundedness and equicontinuity on [0,T]; Arzelà–Ascoli ⇒ relative compactness on each horizon; the metric d patches horizons, yielding compactness.
+Define “modification” of stochastic processes X and Y.	X and Y are modifications if for every t≥0, P(Xt=Yt)=1 (equality a.s. at each fixed time).
+Define “indistinguishability” of stochastic processes X and Y.	X and Y are indistinguishable if P( Xt(ω)=Yt(ω) for all t≥0 )=1 (one null set works for all times).
+What is the implication between indistinguishability and modification?	Indistinguishability ⇒ modification; the converse is false in general.
+When do modification and indistinguishability coincide?	When the index set is countable (e.g. discrete-time), since a countable intersection of full-measure events is full-measure.
+Why do continuous sample paths + modification imply indistinguishability?	With continuous paths, equality on a dense countable time set a.s. forces equality for all times by continuity, so one can choose a single null set.
+Define α-Hölder continuity of f on [0,T].	∃CT<∞ such that |f(t)−f(s)| ≤ CT |t−s|^α for all s,t∈[0,T].
+Define the Hölder seminorm [f]_{α;[0,T]}.	[f]_{α;[0,T]} := sup_{s≠t, s,t∈[0,T]} |f(t)−f(s)| / |t−s|^α.
+What does “locally α-Hölder continuous on [0,∞)” mean?	For every T>0, f restricted to [0,T] is α-Hölder (finite Hölder seminorm on each compact interval).
+How does α-Hölder continuity control the modulus of continuity?	If f is α-Hölder on [0,T] with constant CT, then wT(f,δ) ≤ CT δ^α for all δ>0.
+State Kolmogorov–Chentsov (Thm 11.16) assumption and conclusion.	If E|Xt−Xs|^p ≤ C|t−s|^{1+β} on [0,T], then X has a modification with a.s. α-Hölder paths for every α<β/p (hence continuous paths).
+In Kolmogorov–Chentsov, what α are allowed?	Any α in (0, β/p).
+Kolmogorov–Chentsov proof sketch: why reduce to scalar-valued first?	Control |x| via coordinates; a vector moment bound implies coordinate bounds up to constants, so proving for R-valued processes extends to R^d.
+Kolmogorov–Chentsov proof sketch: what are Dm and Δm?	Dm is the dyadic grid {kT/2^m}; Δm := max over adjacent grid points of |X_{(k+1)T/2^m}−X_{kT/2^m}|.
+Kolmogorov–Chentsov proof sketch: how do you bound P(Δm > 2^{−mα})?	Use union bound over 2^m increments + Markov: P(|increment|>λ) ≤ E|increment|^p / λ^p, then plug the moment bound.
+Kolmogorov–Chentsov proof sketch: what theorem turns ∑m P(Δm>2^{−mα})<∞ into an a.s. statement?	Borel–Cantelli: only finitely many “bad” events occur a.s., so Δm ≤ 2^{−mα} eventually.
+Kolmogorov–Chentsov proof sketch: how do you get |Xt−Xs| ≤ const·|t−s|^α on dyadic times?	For s,t in the same dyadic grid, telescope along adjacent increments: |Xt−Xs| ≤ (#steps)·Δm, then relate #steps·2^{−mα} to |t−s|^α.
+Why is D:=∪m Dm dense in [0,T]?	Dyadic rationals (with denominators 2^m) are dense, and D is exactly those grid points.
+Kolmogorov–Chentsov proof sketch: how do you extend Hölder control from D to all times?	First get Hölder on dense D; then define the modification as the limit along D→t, producing continuous paths and preserving Hölder bounds by continuity.
+Kolmogorov–Chentsov proof sketch: how do you define the continuous modification X~?	Set X~t(ω) := lim_{r→t, r∈D} Xr(ω) on the full-measure event where this limit exists; define arbitrarily outside.
+Kolmogorov–Chentsov proof sketch: why is X~ a modification of X?	For fixed t, choose rn∈D with rn→t; moment bound gives Xrn→Xt in L^p, hence a.s. along a subsequence; on the good event Xrn→X~t, so Xt=X~t a.s.
+State Kolmogorov tightness criterion (Thm 11.17) assumptions.	(i) {Law(Xn0)} is tight in R^d; (ii) uniform increment moment bound: E|Xnt−Xns|^p ≤ C|t−s|^{1+β} for all s,t∈[0,T], all n.
+Write the exact increment moment bound (11.5).	E|Xnt−Xns|^p ≤ C|t−s|^{1+β} for all s,t∈[0,T] and all n.
+In Thm 11.17 proof, what are the two targets (A) and (B) from Thm 11.9 on [0,T]?	(A) Tightness of sup_{t∈[0,T]}|Xnt|; (B) Stochastic equicontinuity: wT(Xn,δ)→0 in probability uniformly in n.
+Thm 11.17 proof sketch: how do you get a dyadic increment estimate like (11.6)?	Let Δm^n be max adjacent increment on dyadic grid; use union bound + Markov + (11.5) to bound P(Δm^n>λ) uniformly in n.
+Thm 11.17 proof sketch: how do dyadic increment bounds control wT(Xn,δ)?	Use a “chaining”/grid refinement argument: any close s,t can be connected by a short chain of dyadic points; bounding each increment controls the total oscillation.
+Why do we choose α<β/p in the dyadic estimate step?	So the probability bound becomes summable/decays: β−pα>0, giving P(Δm^n>2^{−mα}) ≤ const·2^{−m(β−pα)}.
+Thm 11.17 proof sketch: how do you control sup_{t≤T}|Xnt| using Xn0 and a grid?	On the event wT(Xn,δm)≤1, sup_{t≤T}|Xnt| ≤ max_k |Xn_{t_k}| +1, so it suffices to bound finitely many grid values plus Xn0.
+Thm 11.17 proof sketch: where do you use a union bound over grid points?	To bound P(max_k |Xn_{t_k}−Xn0| > a) by sum_k P(|Xn_{t_k}−Xn0|>a), then apply Markov to each term.
+Thm 11.17 proof sketch: how do you pick “a” to make the grid-max probability small?	Choose a so that 2^m·C·T^{1+β}/a^p is below the target (e.g. ≤η/4), using the Markov+union bound estimate.
+Why does (A)+(B) imply tightness of laws Law(Xn) in C([0,T];R^d)?	Theorem 11.9 (finite-horizon version) says exactly that sup-norm tightness + stochastic equicontinuity give tightness in path space.
+Define weak convergence µn ⇒ µ using test functions.	µn ⇒ µ iff ∫ f dµn → ∫ f dµ for all bounded continuous f∈Cb(E).
+Why does agreement on all f∈Cb(E) identify the measure?	Cb(E) is separating: if ∫f dµ = ∫f dν for all bounded continuous f, then µ=ν.
+What does Portmanteau give you besides the test-function definition?	Equivalent setwise criteria: one-sided bounds for closed/open sets and convergence on µ-continuity sets (sets whose boundary has µ-mass 0).
+What is the conceptual role of the Prokhorov metric?	It metrizes weak convergence (on Polish spaces) and lets you talk about Cauchy sequences and quantitative distance between laws.
+Why is tightness essential on non-compact spaces?	Without it, probability mass can “escape to infinity,” preventing existence of weakly convergent subsequences.
+Key takeaway of Prokhorov’s theorem for applications.	On Polish spaces: tightness ⇔ relative weak compactness, so tightness is the exact criterion for subsequence extraction.
+Standard two-step recipe to prove convergence in law.	(1) Prove tightness (compactness); (2) identify any subsequential limit by checking convergence on a convergence-determining class (e.g. finite-dimensional distributions + uniqueness).
+For process convergence, what extra condition beyond finite-dimensional convergence is typically needed?	Tightness in the path space (to prevent wild oscillations/escape) plus identification of the limit law.

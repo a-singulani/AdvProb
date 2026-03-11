@@ -346,11 +346,11 @@ Both sides of \eqref{eq:Markov_conditional} are \emph{random variables}:
 the left-hand side is $\mathcal{F}_s$--measurable by definition of conditional expectation,
 and the right-hand side depends on $\omega$ only through the random state $X_s(\omega)$. We can have another view on this equation if we define an operator $(P_t)_{t\ge 0}$ by
 \[
-(P_t f)(x) := \mathbb{E}_x\!\left[f(X_t)\right], \qquad x\in E.
+(T_t f)(x) := \mathbb{E}_x\!\left[f(X_t)\right], \qquad x\in E.
 \]
 With this notation,
 \[
-\mathbb{E}_{X_s}\!\left[f(X_t)\right] = (P_t f)(X_s),
+\mathbb{E}_{X_s}\!\left[f(X_t)\right] = (T_t f)(X_s),
 \]
 i.e.\ the right-hand side of \eqref{eq:Markov_conditional} is the function $P_t f$
 evaluated at the random point $X_s$.
@@ -366,30 +366,30 @@ For the right-hand side we use our previous notation
 \[
 \mathbb{E}_x\!\left[\mathbb{E}_{X_s}\!\left[f(X_t)\right]\right]
 =
-\mathbb{E}_x\!\left[(P_t f)(X_s)\right].
+\mathbb{E}_x\!\left[(T_t f)(X_s)\right].
 \]
 Putting these together yields
 \begin{equation}\label{eq:semigroup_intermediate}
 \mathbb{E}_x\!\left[f(X_{t+s})\right]
 =
-\mathbb{E}_x\!\left[(P_t f)(X_s)\right].
+\mathbb{E}_x\!\left[(T_t f)(X_s)\right].
 \end{equation}
 
-But by definition of $P_{t+s}$, the left-hand side of \eqref{eq:semigroup_intermediate} equals
+But by definition of $T_{t+s}$, the left-hand side of \eqref{eq:semigroup_intermediate} equals
 \[
-\mathbb{E}_x[f(X_{t+s})] = (P_{t+s} f)(x).
+\mathbb{E}_x[f(X_{t+s})] = (T_{t+s} f)(x).
 \]
-By definition of $P_s$ applied to the function $P_t f$, the right-hand side equals
+By definition of $T_s$ applied to the function $T_t f$, the right-hand side equals
 \[
-\mathbb{E}_x[(P_t f)(X_s)] = (P_s(P_t f))(x).
+\mathbb{E}_x[(T_t f)(X_s)] = (T_s(T_t f))(x).
 \]
 Therefore,
 \[
-(P_{t+s} f)(x) = (P_s(P_t f))(x), \qquad \forall\,x\in E,\ \forall\,f.
+(T_{t+s} f)(x) = (T_s(T_t f))(x), \qquad \forall\,x\in E,\ \forall\,f.
 \]
 Equivalently, as an operator identity,
 \[
-P_{t+s} = P_s \circ P_t, \qquad s,t\ge 0,
+T_{t+s} = T_s \circ T_t, \qquad s,t\ge 0,
 \]
 which is precisely the \emph{semigroup property} and $P_t$ is what we call the transition semigroup (operator).
 

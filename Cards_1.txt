@@ -1,0 +1,37 @@
+What is the purpose of conditional expectation E[X|F]?	Best prediction of X using only the information in F.
+What are the two defining properties of E[X|F]?	It is F-measurable and matches X on average over every event in F.
+What does it mean that E[X|F] is F-measurable?	It depends only on information in F (cannot distinguish points F cannot distinguish).
+What is the defining integral identity for conditional expectation?	For all A∈F: ∫_A E[X|F] dP = ∫_A X dP.
+When is E[X|F] unique?	Unique up to P-a.s. equality.
+What is the elementary conditional expectation E[X|B] for an event B with P(B)>0?	E[X|B]=E[X·1_B]/P(B).
+How is conditional probability expressed using conditional expectation?	P(A|F)=E[1_A|F].
+What is P(A|B) for B with P(B)>0?	P(A|B)=P(A∩B)/P(B).
+State linearity of conditional expectation.	E[aX+bY|F]=aE[X|F]+bE[Y|F].
+State monotonicity of conditional expectation.	If X≤Y a.s., then E[X|F]≤E[Y|F] a.s.
+If X is F-measurable, what is E[X|F]?	E[X|F]=X a.s.
+State the tower property for G⊂F.	E[E[X|F] | G] = E[X|G].
+What is the “law of total expectation”?	E[E[X|F]] = E[X].
+State the “take out what is known” property (bounded case).	If Y is F-measurable and bounded, then E[YX|F]=Y·E[X|F].
+What happens if X is independent of F?	E[X|F]=E[X] a.s.
+How can conditioning on a random variable Y be written?	E[X|Y]=E[X|σ(Y)].
+What does the factorization lemma say for σ(Y)-measurable variables?	If Z is σ(Y)-measurable, then Z=h(Y) a.s. for some measurable h.
+How is E[X|Y=y] interpreted in the notes?	If E[X|Y]=h(Y) a.s., define E[X|Y=y]=h(y) (h unique P_Y-a.s.).
+In a finite partition case, how is E[X|F] computed?	It is the weighted average of X over the atoms/cells of the information partition.
+What is the L2 interpretation of conditional expectation?	For X∈L2, E[X|F] is the orthogonal projection of X onto L2(F).
+State the best-approximation property in L2.	E[(X−E[X|F])^2] ≤ E[(X−Y)^2] for all Y∈L2(F).
+State the orthogonality property in L2.	E[(X−E[X|F])·Y]=0 for all Y∈L2(F).
+What does conditional Jensen inequality state?	For convex g: g(E[X|F]) ≤ E[g(X)|F] a.s.
+What does Jensen give for g(x)=x^2?	(E[X|F])^2 ≤ E[X^2|F] a.s., hence E[(E[X|F])^2] ≤ E[X^2].
+How does conditional expectation affect variance (informal)?	It reduces variance: Var(E[X|F]) ≤ Var(X) when X∈L2.
+What is the “measurable function” viewpoint of E[X|F] when F=σ(Y)?	E[X|F]=h(Y) a.s. for some measurable h.
+Why is h in E[X|Y]=h(Y) only unique P_Y-a.s.?	Because E[X|σ(Y)] is only defined up to P-a.s. modifications.
+What is the marginal density f_Y(y) for a continuous (X,Y) with joint density f_{X,Y}?	f_Y(y)=∫ f_{X,Y}(x,y) dx.
+How is the conditional density f_{X|Y}(x|y) defined when f_Y(y)>0?	f_{X|Y}(x|y)=f_{X,Y}(x,y)/f_Y(y).
+What does the conditional-density formula compute?	E[h(X,Y)|Y=y]=∫ h(x,y) f_{X|Y}(x|y) dx (for P_Y-a.e. y).
+What is the corresponding “key equation” for E[h(X,Y)|Y]?	E[h(X,Y)|Y]=∫ h(x,Y) f_{X|Y}(x|Y) dx a.s.
+Special case: if h depends only on X, what is E[h(X)|Y=y]?	E[h(X)|Y=y]=∫ h(x) f_{X|Y}(x|y) dx.
+If X and Y are independent, what is f_{X|Y}(x|y)?	f_{X|Y}(x|y)=f_X(x), so E[h(X)|Y]=E[h(X)].
+What positivity property holds for conditional expectation?	If X≥0 a.s., then E[X|F]≥0 a.s.
+What L1 bound follows from conditional Jensen with g(x)=|x|?	E[|E[X|F]|] ≤ E[|X|].
+How do you express the defining property using ordinary expectations?	For all A∈F: E[E[X|F]·1_A] = E[X·1_A].
+What is the main conceptual “picture” for conditional expectation in Chapter 1?	Average X over the finest information cells that F can distinguish.

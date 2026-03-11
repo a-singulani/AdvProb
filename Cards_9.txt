@@ -1,0 +1,105 @@
+In Chapter 9, what filtration is used for Brownian motion?	The completed, right-continuous natural filtration 𝓕^b_t := σ{B_s: 0≤s≤t} ∨ 𝓝.
+What does “𝓝” denote in the filtration 𝓕^b_t?	The P-null sets (completed filtration).
+In Chapter 9, what is a (Brownian) stopping time T?	A random time T:Ω→[0,∞] such that {T≤t} ∈ 𝓕^b_t for all t≥0.
+Define the exit time γ from an interval (a,b) with a<0<b.	γ := inf{t>0 : B_t ∉ (a,b)}.
+If γ is the exit time from (a,b), what are the only possible values of B_γ?	Only the endpoints: B_γ ∈ {a,b}.
+What does Proposition 9.1 state about P(γ<∞)?	P(γ<∞)=1 (exit occurs a.s.).
+For exit time γ from (a,b), what is P(B_γ = a)?	P(B_γ=a)= b/(b−a).
+For exit time γ from (a,b), what is P(B_γ = b)?	P(B_γ=b)= (−a)/(b−a).
+For exit time γ from (a,b), what is E[γ]?	E[γ]= −ab.
+Which martingale is used to compute exit probabilities in Proposition 9.1?	(B_t) (applied with optional stopping to γ∧n, then n→∞).
+Which martingale is used to compute E[γ] in Proposition 9.1?	(B_t^2 − t).
+State the Optional Stopping Theorem condition (version used in Ch.9).	If T is a.s. bounded, or (M_{t∧T}) is uniformly integrable, then E[M_T]=E[M_0].
+In Proposition 9.1, why is E[B_γ]=0?	Optional stopping on B_{γ∧n} gives E[B_{γ∧n}]=0; letting n→∞ yields E[B_γ]=0.
+How do you derive exit probabilities from E[B_γ]=0 and B_γ∈{a,b}?	Solve a·P(B_γ=a)+b·P(B_γ=b)=0 with P(B_γ=a)+P(B_γ=b)=1.
+How do you relate E[γ] to E[B_γ^2] using a martingale?	Optional stopping on (B_t^2−t) gives E[B_γ^2]=E[γ].
+Given B_γ∈{a,b}, how does E[B_γ^2] yield E[γ]?	E[B_γ^2]=a^2P(B_γ=a)+b^2P(B_γ=b)=−ab, so E[γ]=−ab.
+What is the Skorokhod embedding problem (SEP)?	Given target law F on ℝ with mean 0 and finite variance, find stopping time T s.t. B_T ∼ F.
+In Ch.9’s construction, how is T built for Skorokhod embedding?	Randomize interval endpoints (α,β) with α<0<β, then T := inf{t>0 : B_t ∉ (α,β)}.
+Conditionally on (α,β)=(a,b), what is the law of B_T?	It is supported on {a,b} with explicit weights (same as exit probabilities).
+What constraints on target law F are assumed for Skorokhod embedding theorem in Ch.9?	Mean 0 and finite variance σ^2 < ∞.
+How is F split in the Skorokhod embedding construction?	Into positive and negative parts: F^+ = F|[0,∞), F^- = F|(−∞,0).
+What is the stopping time expectation in the Skorokhod embedding theorem?	E[T]=σ^2 (the variance of F).
+How is the normalizing constant γ defined in the Skorokhod embedding proof?	γ^{-1} := ∫_0^∞ b F(db) = −∫_{−∞}^0 a F(da) = (1/2)∫|x| F(dx).
+What is the mixing measure μ on (−∞,0)×(0,∞) in Ch.9?	μ(da,db) := γ·(1/(b−a))·F^+(db)·F^−(da).
+In Ch.9, what is a Markov family {P_x}?	A family of laws P_x describing the process started from deterministic state x.
+How is P_x defined for Brownian motion in Chapter 9?	P_x(A) := P( (x + B_t)_{t≥0} ∈ A ), for A∈𝓕.
+Under P_x, what is B_0?	B_0 = x.
+What is the (ordinary) Markov property at deterministic times (informal)?	Given the present state at time s, the future after s is independent of the past and behaves like a fresh process from that state.
+What operator is defined to express the Markov property as a semigroup?	(T_t)_{t≥0} with (T_t f)(x) := E_x[f(X_t)].
+For Brownian motion, how is the transition semigroup T_t defined in Chapter 9?	For f∈C_b(ℝ): (T_t f)(x) := E_x[f(B_t)].
+What is the semigroup property of (T_t)?	T_{t+s} = T_s ∘ T_t for s,t≥0 (and T_0 = Id).
+What basic sup-norm bound holds for the semigroup in Ch.9?	∥T_t f∥_∞ ≤ ∥f∥_∞.
+What is the Gaussian transition density p_t(x,y) for Brownian motion?	p_t(x,y) = (1/√(2πt)) exp(−(x−y)^2/(2t)).
+How can T_t f be written using p_t(x,y)?	(T_t f)(x)= ∫_ℝ f(y) p_t(x,y) dy.
+What is the generator G of Brownian motion (definition)?	Gf(x) := lim_{h↓0} (T_h f(x) − f(x))/h, for functions where the limit exists.
+For f∈C_b^2(ℝ), what is Gf(x) for Brownian motion?	Gf(x)= (1/2) f''(x).
+What PDE is linked to the Brownian generator in Chapter 9?	The heat equation; G = (1/2)Δ reflects diffusion of mass.
+What is the martingale constructed from f and the generator (martingale characterization)?	M_t := f(B_t) − f(B_0) − ∫_0^t Gf(B_s) ds.
+Under what regularity on f does Proposition 9.10 assert M_t is a martingale?	f ∈ C_b^2(ℝ).
+What does “martingale characterization” capture conceptually (Ch.9)?	After subtracting the generator-prescribed drift, the remaining evolution has no systematic trend.
+What is the key conditional expectation identity used with the semigroup in the martingale proof?	E[f(B_t) | 𝓕^b_s] = T_{t−s} f(B_s) for 0≤s<t.
+What does the strong Markov property allow that the ordinary Markov property does not?	“Restart” the process at a random time that is a stopping time (not just deterministic times).
+In Chapter 9, what is the hitting time H_a?	H_a := inf{t>0 : B_t = a}.
+How is the reflected process \tilde B_t defined at level a?	\tilde B_t = B_t for t≤H_a, and \tilde B_t = 2a − B_t for t>H_a.
+State the reflection principle theorem (Ch.9).	The reflected process (\tilde B_t)_{t≥0} is a standard Brownian motion.
+In the reflection principle proof, what is W_t?	W_t := B_{H_a+t} − B_{H_a}, a Brownian motion independent of 𝓕^b_{H_a}.
+Define the running maximum S_t of Brownian motion.	S_t := sup_{0≤u≤t} B_u.
+Why is S_t not Markovian by itself (as noted in Ch.9)?	It depends on the whole past path, not just the current state.
+State the reflection identity (Proposition 9.15) for E ⊂ (−∞,a].	P(S_t ≥ a, B_t ∈ E) = P(2a − B_t ∈ E, B_t ≥ a).
+Special case of Proposition 9.15: for y≥0, what is P(S_t ≥ a, B_t ≤ a−y)?	P(S_t ≥ a, B_t ≤ a−y) = P(B_t ≥ a+y).
+Concept summary table: Markov family vs Markov property vs strong Markov property (restart time)?	Markov family: fixed initial time; Markov property: fixed deterministic time; strong Markov: random stopping time.
+In Ch.9’s “Framework”, what is the completed natural filtration written as?	𝓕^b_t := σ{B_s : 0≤s≤t} ∨ 𝓝. :contentReference[oaicite:5]{index=5}
+In Ch.9, what is the formal measurability condition for a stopping time T?	{T≤t} ∈ 𝓕^b_t for all t≥0. :contentReference[oaicite:6]{index=6}
+In the “factory/voltage deviation” motivation, what is being “manufactured” via a stopping rule?	A prescribed distribution of the stopped value B_T across repeated runs. :contentReference[oaicite:7]{index=7}
+In the exit-time setup, what assumptions on (a,b) are imposed?	a<0<b and the process starts at 0. :contentReference[oaicite:8]{index=8}
+What is the definition of the exit time γ from (a,b)?	γ := inf{t>0 : B_t ∉ (a,b)}. :contentReference[oaicite:9]{index=9}
+Why can B_γ only equal a or b?	Because the path is continuous and leaves the open interval only by hitting an endpoint. :contentReference[oaicite:10]{index=10}
+In the proof of Prop 9.1, what truncated stopping times are introduced?	γ_n := γ ∧ n. :contentReference[oaicite:11]{index=11}
+What property of 1D Brownian motion is used to show P(γ<∞)=1?	Recurrence (it exits every bounded interval a.s.). :contentReference[oaicite:12]{index=12}
+In Prop 9.1 Step 2, which martingale is stopped at γ_n?	The martingale (B_t). :contentReference[oaicite:13]{index=13}
+What identity results from optional stopping applied to B_t at γ_n?	E[B_{γ_n}] = 0. :contentReference[oaicite:14]{index=14}
+What equation for exit probabilities comes from E[B_γ]=0 and B_γ∈{a,b}?	a·P(B_γ=a)+b·P(B_γ=b)=0. :contentReference[oaicite:15]{index=15}
+In Prop 9.1 Step 3, which martingale is used to compute E[γ]?	(B_t^2 − t). :contentReference[oaicite:16]{index=16}
+What identity does optional stopping yield for (B_t^2−t) at γ?	E[B_γ^2]=E[γ]. :contentReference[oaicite:17]{index=17}
+What theorem is stated as Theorem 9.2?	The Optional Stopping Theorem. :contentReference[oaicite:18]{index=18}
+In Theorem 9.2, name one sufficient condition on T for E[M_T]=E[M_0].	T is almost surely bounded. :contentReference[oaicite:19]{index=19}
+In Theorem 9.2, name the other sufficient condition on T for E[M_T]=E[M_0].	(M_{t∧T}) is uniformly integrable. :contentReference[oaicite:20]{index=20}
+What is the Skorokhod embedding problem asking for?	A stopping time T such that B_T has a prescribed target law F. :contentReference[oaicite:21]{index=21}
+What conditions on F appear in the Skorokhod embedding theorem?	Mean 0 and finite variance σ^2<∞. :contentReference[oaicite:22]{index=22}
+How are F^+ and F^- defined in the proof?	F^+=F restricted to [0,∞), F^-=F restricted to (−∞,0). :contentReference[oaicite:23]{index=23}
+How is the normalizing constant γ defined in Theorem 9.3?	γ^{-1}:=∫_0^∞ b F(db)=−∫_{−∞}^0 a F(da)= (1/2)∫_ℝ |x|F(dx). :contentReference[oaicite:24]{index=24}
+What probability measure μ on (−∞,0)×(0,∞) is used?	μ(da,db):= γ·(1/(b−a))·F^+(db)·F^−(da). :contentReference[oaicite:25]{index=25}
+In Theorem 9.3, what random pair is sampled independently of B?	(α,β) ~ μ, independent of the Brownian motion. :contentReference[oaicite:26]{index=26}
+How is the Skorokhod stopping time T defined using (α,β)?	T := inf{t>0 : B_t ∉ (α,β)}. :contentReference[oaicite:27]{index=27}
+Conditioned on (α,β)=(a,b), what is P(B_T=b | α=a,β=b)?	(−a)/(b−a). :contentReference[oaicite:28]{index=28}
+Conditioned on (α,β)=(a,b), what is P(B_T=a | α=a,β=b)?	b/(b−a). :contentReference[oaicite:29]{index=29}
+In Theorem 9.3, what is the claimed expectation of T?	E[T]=σ^2. :contentReference[oaicite:30]{index=30}
+In the Markov property derivation, how is B_{t+s} decomposed?	B_{t+s}=B_s+(B_{t+s}−B_s). :contentReference[oaicite:31]{index=31}
+Why does E[f(B_{t+s}) | 𝓕^b_s] depend only on B_s?	The increment B_{t+s}−B_s is independent of 𝓕^b_s and has the law of B_t. :contentReference[oaicite:32]{index=32}
+What function g is introduced so that E[f(B_{t+s})|𝓕^b_s]=g(B_s)?	g(x):=E[f(x+B_t)]. :contentReference[oaicite:33]{index=33}
+What is Definition 9.6 (transition semigroup)?	T_t f(x):=E_x[f(B_t)], for f∈C_b(ℝ). :contentReference[oaicite:34]{index=34}
+What explicit kernel representation is given for T_t f?	T_t f(x)=∫_ℝ f(y)p_t(x,y)dy with Gaussian p_t. :contentReference[oaicite:35]{index=35}
+Write the Gaussian transition density p_t(x,y).	p_t(x,y)=(1/√(2πt)) exp(−(x−y)^2/(2t)). :contentReference[oaicite:36]{index=36}
+What is the semigroup operator identity stated in Ch.9?	T_{t+s}=T_s∘T_t (and T_0=Id). :contentReference[oaicite:37]{index=37}
+What sup-norm inequality is listed for the semigroup?	∥T_t f∥_∞ ≤ ∥f∥_∞. :contentReference[oaicite:38]{index=38}
+What is Definition 9.7 (generator)?	Gf(x):= lim_{h↓0} (T_h f(x)−f(x))/h (when the limit exists). :contentReference[oaicite:39]{index=39}
+In Proposition 9.8, what class of functions is assumed for computing G?	f ∈ C_b^2(ℝ). :contentReference[oaicite:40]{index=40}
+What is the generator of Brownian motion for f∈C_b^2(ℝ)?	Gf(x) = (1/2) f''(x). :contentReference[oaicite:41]{index=41}
+In Prop 9.8’s proof, what change of variables is used in the Gaussian integral?	y = x + z. :contentReference[oaicite:42]{index=42}
+In Prop 9.8’s proof, why does the first Gaussian-moment integral vanish?	The integrand is odd: ∫ z (Gaussian density) dz = 0. :contentReference[oaicite:43]{index=43}
+What interpretive remark links G=(1/2)Δ to a PDE?	It reflects spreading mass according to the heat equation. :contentReference[oaicite:44]{index=44}
+State Proposition 9.10’s martingale M_t built from f and G.	M_t := f(B_t)−f(B_0)−∫_0^t Gf(B_s)ds. :contentReference[oaicite:45]{index=45}
+What key Markov/semigroup identity begins Prop 9.10’s proof?	E[f(B_t) | 𝓕^b_s] = T_{t−s}f(B_s). :contentReference[oaicite:46]{index=46}
+In Prop 9.10, what derivative identity is proved for u↦T_u f(x)?	d/du T_u f(x) = T_u Gf(x). :contentReference[oaicite:47]{index=47}
+What integral identity follows (equation like (9.8)) for T_{t−s}f(x)−f(x)?	T_{t−s}f(x)−f(x)=∫_0^{t−s} T_u Gf(x) du. :contentReference[oaicite:48]{index=48}
+In Prop 9.10, what conditional expectation is claimed for Gf(B_r) given 𝓕^b_s?	E[Gf(B_r)|𝓕^b_s]=T_{r−s}Gf(B_s). :contentReference[oaicite:49]{index=49}
+What is the exponential martingale used in proving strong Markov (given in Ch.9)?	M_t(θ):=exp(iθB_t + (1/2)θ^2 t), θ∈ℝ. :contentReference[oaicite:50]{index=50}
+In Theorem 9.12, what shifted process is defined at a stopping time T?	B^T_t := B_{T+t} − B_T. :contentReference[oaicite:51]{index=51}
+What does Theorem 9.12 assert about B^T_t for each fixed t≥0?	B^T_t ∼ N(0,t). :contentReference[oaicite:52]{index=52}
+What does Theorem 9.12 assert about dependence between (B^T_t) and 𝓕^b_T?	For each t≥0, B^T_t is independent of 𝓕^b_T. :contentReference[oaicite:53]{index=53}
+In Theorem 9.12, what bounded approximations of T are used?	T_n := T ∧ n. :contentReference[oaicite:54]{index=54}
+What conditional characteristic function identity is derived (equation like (9.12))?	E[exp(iθ(B_{T_n+t}−B_{T_n})) | 𝓕^b_{T_n}] = exp(−(1/2)θ^2 t). :contentReference[oaicite:55]{index=55}
+What is the running maximum S_t defined as?	S_t := sup_{0≤u≤t} B_u. :contentReference[oaicite:56]{index=56}
+What is Proposition 9.15 (reflection identity) for E⊂(−∞,a]?	P(S_t≥a, B_t∈E)=P(2a−B_t∈E, B_t≥a). :contentReference[oaicite:57]{index=57}
+What corollary gives the distribution of the maximum for a≥0?	P(S_t≥a)=2P(B_t≥a)=2∫_a^∞ (1/√(2πt))e^{−x^2/(2t)}dx. :contentReference[oaicite:58]{index=58}

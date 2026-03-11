@@ -1,0 +1,40 @@
+What is a filtered probability space (finite horizon)?	(Ω, F, P, (F_n)_{0≤n≤N}) with F_0⊆F_1⊆…⊆F_N⊆F.
+What is an adapted process Z=(Z_n)?	Z_n is F_n-measurable for every n.
+What is a stopping time T (finite horizon)?	T:Ω→{0,…,N} such that {T=n}∈F_n for all n.
+Equivalent stopping time condition using {T≤n}?	{T≤n}∈F_n for all n.
+Why require stopping times in optimal stopping?	Decisions must be based only on information available at the time (no “future peeking”).
+What is the finite-horizon optimal stopping objective?	Maximize sup_{T≤N} E[Z_T].
+What is the key subtlety in optimizing E[Z_T]?	The reward depends on the random time T, so you optimize over random times.
+What is the “essential supremum” of random variables?	The smallest (a.s.) random variable that dominates the family, defined up to null sets.
+Why use essential supremum in optimal stopping theory?	To define pointwise sup over possibly uncountably many admissible stopping times.
+What is the Snell envelope U of Z?	U_n = ess sup_{T≥n} E[Z_T | F_n].
+What is the terminal condition for the Snell envelope?	U_N = Z_N.
+What is the Snell envelope backward recursion?	U_n = max(Z_n, E[U_{n+1} | F_n]).
+Why is U a supermartingale?	E[U_{n+1}|F_n] ≤ U_n by the recursion.
+What domination property does the Snell envelope satisfy?	U_n ≥ Z_n for all n.
+What minimality property characterizes the Snell envelope?	U is the smallest supermartingale that dominates Z.
+What is the “stop vs continue” interpretation of U_n?	U_n is the best achievable expected reward from time n given F_n.
+What is the stopping (contact) set at time n?	{U_n = Z_n}.
+What is the canonical candidate optimal stopping time T*?	T* = min{n : U_n = Z_n}.
+Why is T* a stopping time?	The event {T*≤n} depends only on comparisons up to time n (F_n-measurable).
+What value does the Snell envelope give for the optimal objective?	sup_{T≤N}E[Z_T] = E[U_0].
+State the supermartingale domination principle.	If Y is a supermartingale with Y_n≥Z_n, then sup_T E[Z_T] ≤ E[Y_0].
+How do you prove the domination principle (idea)?	Use optional sampling: E[Y_T] ≤ E[Y_0] and Y_T≥Z_T.
+How does the Snell envelope relate to the domination principle?	It achieves equality: E[U_0]=sup_T E[Z_T].
+What is Doob decomposition for an integrable adapted supermartingale Y?	Y_n = M_n − A_n with M a martingale and A predictable increasing.
+In Doob decomposition, what are the initial conditions?	M_0=Y_0 and A_0=0.
+Give the increment formula for A in Doob decomposition.	ΔA_n = Y_{n−1} − E[Y_n | F_{n−1}] ≥ 0.
+How can you recover M from (Y,A)?	M_n = Y_n + A_n.
+What happens when you apply Doob decomposition to the Snell envelope U?	U = M − A with A increasing and M a martingale.
+For the Snell envelope, when can ΔA_n be positive?	Only when it is optimal to stop at time n−1 (the contact set is hit).
+What is the “practical martingale recipe” Step 1?	Guess an adapted process Y that dominates Z (candidate value process).
+Recipe Step 2: what must be verified?	Y is a supermartingale and Y_n≥Z_n for all n.
+Recipe Step 3: how define a candidate optimal time?	T = min{n : Y_n = Z_n}.
+Recipe Step 4: what proves optimality?	Show E[Y_T]=E[Y_0] and Y_T=Z_T, giving E[Z_T]=E[Y_0].
+What is the Markovian optimal stopping setup?	Z_n = g_n(X_n) where (X_n) is a Markov chain.
+What is the Markovian value function V_n(x)?	V_n(x)=sup_{T≥n} E[g_T(X_T) | X_n=x].
+What is the Markovian Bellman recursion for stopping?	V_N=g_N and V_n(x)=max(g_n(x), ∫ V_{n+1}(x') Q(dx'|x)).
+What does the “continue value” represent in the recursion?	The expected next-step value if you do not stop now.
+What is the Markovian optimal stopping rule (form)?	Stop when g_n(X_n)=V_n(X_n).
+Why does backward induction work in finite-horizon stopping?	Only finitely many times, so recursion from N down to 0 is exact.
+What is the key computational output of the Snell envelope recursion?	A value process and a (first-hit) optimal stopping time.
